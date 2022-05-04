@@ -82,7 +82,7 @@ occ <- max(nest_data$LastChecked)
 filter(nest_data, LastPresent > occ | LastPresent < 1 | is.na(LastPresent))
 
 # create processed RMARK data format as NestSurvival with Year as group
-nest_fate.processed <- RMark::process.data(nest_data, 
+nest_data.processed <- RMark::process.data(nest_data, 
                                            model = "Nest",
                                            nocc = occ)
 
@@ -127,7 +127,7 @@ plover_nest_survival <- function()
   
   # run model list in MARK. Supress generation of MARK files.
   model.list <- RMark::mark.wrapper(cml,
-                                    data = nest_fate.processed, 
+                                    data = nest_data.processed, 
                                     ddl = nest_fate.ddl,
                                     threads = 4, 
                                     brief = TRUE, 
@@ -157,8 +157,6 @@ plover_nest_survival_reals$day_of_season <-
   as.numeric(unlist(substr(plover_nest_survival_reals$X4, 2, 4)))
 plover_nest_survival_reals <- 
   plover_nest_survival_reals[1:nrow(plover_nest_survival_reals) - 1,]
-plover_nest_survival_reals <- 
-  left_join(plover_nest_survival_reals, dates_for_plot, by = "day_of_season")
 
 #### plotting ----
 # make a dataframe of dates from start to end of season for plot
@@ -167,6 +165,9 @@ dates_for_plot <-
                               max(as.numeric(nest_data$last_checked)), 
                             origin = "1899-12-30"),
              day_of_season = c(1:160))
+
+plover_nest_survival_reals <- 
+  left_join(plover_nest_survival_reals, dates_for_plot, by = "day_of_season")
 
 # plot the seasonal variation in daily nest survival
 hooded_plover_nest_survival_season_20_21_plot <-
