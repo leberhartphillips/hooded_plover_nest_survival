@@ -1,22 +1,43 @@
-# install.packages(RMark) 
-# install.packages(stringr)
-# install.packages(ggplot2)
-# install.packages(extrafont)
-# install.packages(dplyr)
-# install.packages(reshape2)
-# install.packages(popbio)
+# R script to wrangle, model, and plot Hooded Plover nest survival
+
+# code: Luke Eberhart-Hertel (luke.eberhart@orn.mpg.de)
+# data: Lucinda Plowman, Grainne Maguire, and Mike Weston
+
+# 4 May, 2022
+
+#### setup R environment ----
+# load and install packages
+# install.packages(tidyverse) 
+# install.packages(readxl)
+# install.packages(RMark)
+# install.packages(RColorBrewer)
+# install.packages(patchwork)
 library(tidyverse)
 library(readxl)
 library(RMark)
+library(RColorBrewer)
+library(patchwork)
 
-library(stringr)
-library(ggplot2)
-library(extrafont)
-library(dplyr)
-library(reshape2)
-library(popbio)
+# specify personal theme for ggplots
+luke_theme <- 
+  theme_bw() +
+  theme(
+    text = element_text(family = "Franklin Gothic Book"),
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 8),
+    axis.title.x = element_text(size = 10),
+    axis.text.x  = element_text(size = 8), 
+    axis.title.y = element_text(size = 10),
+    axis.text.y = element_text(size = 8),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.ticks = element_line(size = 0.5, colour = "grey40"),
+    axis.ticks.length = unit(0.2, "cm"),
+    panel.border = element_rect(linetype = "solid", colour = "grey")
+  )
 
-# import the nest history file
+#### inport data ----
+# import the nest history file and clean up NAs
 nest_data <-
   read_excel("data/MP  nesting summary for Honours.xlsx", 
              sheet = "MP 2020_2021", col_types = "text") %>% 
@@ -43,27 +64,18 @@ nest_data <-
                         ifelse(is.na(last_alive) & Fate == "1" & !is.na(last_checked),
                                first_found,
                                last_alive))) %>%
-  mutate(first_found = as.Date(as.numeric(first_found), 
+  mutate(first_found2 = as.Date(as.numeric(first_found), 
                                origin = "1899-12-30"),
-         last_alive = as.Date(as.numeric(last_alive), 
+         last_alive2 = as.Date(as.numeric(last_alive), 
                               origin = "1899-12-30"),
-         last_checked = as.Date(as.numeric(last_checked), 
+         last_checked2 = as.Date(as.numeric(last_checked), 
                                 origin = "1899-12-30")) %>%
-  mutate(FirstFound = as.numeric(first_found - min(first_found) + 1),
-         LastPresent = as.numeric(last_alive - min(first_found) + 1),
-         LastChecked =  as.numeric(last_checked - min(first_found) + 1)) %>% 
+  mutate(FirstFound = as.numeric(first_found2 - min(first_found2) + 1),
+         LastPresent = as.numeric(last_alive2 - min(first_found2) + 1),
+         LastChecked =  as.numeric(last_checked2 - min(first_found2) + 1)) %>% 
   filter(!is.na(Fate))
 
-nest_data %>% 
-  filter(Fate == 0)
-  # filter(FirstFound > LastPresent | LastPresent > LastChecked)
-  # filter(last_checked == "07/01/21 or 09-01-2021?")
-  filter(is.na(last_checked) | is.na(last_alive) | is.na(first_found) | is.na(Fate))
-  # filter(nest_ID == "BMRight(Orange)Unbanded1")
-  # filter(Fate == 1)
-
-levels(as.factor(nest_data$LastPresent))
-
+#### prepare nest surivial data for RMark ----
 # define the number of occasions
 occ <- max(nest_data$LastChecked)
 
@@ -80,12 +92,15 @@ nest_fate.ddl <- RMark::make.design.data(nest_data.processed)
 # add a new variable to the design data that is the quadratic transformation of
 # time
 time <- c(0:(occ-1))
+Cubic <- time^3
 Quadratic <- time^2
-quad_time <- data.frame(time, Quadratic)
+quad_time <- data.frame(time, Quadratic, Cubic)
 quad_time$time <- c(1:occ)
 nest_fate.ddl$S <- 
   RMark::merge_design.covariates(nest_fate.ddl$S, quad_time, 
                                  bygroup = FALSE, bytime = TRUE)
+
+#### specify models to test ----
 # Create model list as function
 plover_nest_survival <- function()
 {
@@ -95,89 +110,113 @@ plover_nest_survival <- function()
   S.dot <- 
     list(formula = ~1)
   
-  # DSR varies with Time (i.e., linearly across the season)
+  # Linear trend in DSR
   S.Time <-
     list(formula = ~Time)
   
-  # DSR varies quadratically with Time
+  # Quadratic trend in DSR
   S.Quadratic_Time <- 
-    list(formula = ~Quadratic)
+    list(formula = ~Time + Quadratic)
   
-  # # DSR varies with standardized time
-  # S.Std_time <- 
-  #   list(formula = ~std_time)
-  
-  # # DSR varies with nest age
-  # S.Age <- 
-  #   list(formula = ~NestAge)
-  
-  # # DSR varies year and time
-  # S.yearTime <- 
-  #   list(formula = ~Year + Time)
-  # 
-  # # DSR varies year and time
-  # S.yearxTime <- 
-  #   list(formula = ~Year * Time)
-  # 
-  # # DSR varies with year and nest age
-  # S.yearAge <- 
-  #   list(formula = ~Year + NestAge)
-  # 
-  # # DSR varies with year and nest age
-  # S.yearxAge <- 
-  #   list(formula = ~Year * NestAge)
-  # 
-  # # DSR varies with time and nest age
-  # S.TimeAge <-
-  #   list(formula = ~Time + NestAge)
-  # 
-  # # DSR varies with time and nest age
-  # S.TimexAge <-
-  #   list(formula = ~Time * NestAge)
-  # 
-  # # DSR varies with year, habitat, time and nest age
-  # S.global <- 
-  #   list(formula = ~Year + Time + NestAge)
-  # 
-  # # DSR varies with year, habitat, time and nest age
-  # S.globalx <- 
-  #   list(formula = ~Year * Time * NestAge)
+  # Cubic trend in DSR
+  S.Cubic_Time <- 
+    list(formula = ~Time + Quadratic + Cubic)
   
   # specify to run as a nest survival model in program MARK
   cml <- RMark::create.model.list("Nest")
   
   # run model list in MARK. Supress generation of MARK files.
   model.list <- RMark::mark.wrapper(cml,
-                                    data = nest_fate.processed, ddl = nest_fate.ddl,
-                                    threads = 4, brief = TRUE, delete = TRUE) 
+                                    data = nest_fate.processed, 
+                                    ddl = nest_fate.ddl,
+                                    threads = 4, 
+                                    brief = TRUE, 
+                                    delete = TRUE) 
   
   # store completed model list
   return(model.list)
 }
 
+#### run model selection in RMark ----
 # run the model list
 plover_nest_survival_run <- plover_nest_survival()
 
+#### extract and wrangle modeling results ----
 # examine AIC table
 plover_nest_survival_run
 
-# Extract estimates of survival from top model
+# Extract estimates of survival from Cubic model (performs as well as constant model)
 plover_nest_survival_reals <- 
-  plover_nest_survival_run[[3]]$results$real
+  plover_nest_survival_run[[1]]$results$real
 
-# wrangle dataframe to get annual estimates (grouped by "Year")
+# wrangle dataframe to tidy up model predictions in prep for plotting
 Groups <- data.frame(
-  str_split_fixed(rownames(Nest_survival_reals), " ", n = 4))
-Nest_survival_reals <- cbind(Groups, Nest_survival_reals)
-Nest_survival_reals$Year <- unlist(substr(Nest_survival_reals$X2, 2, 5))
-# summarize the seasonal estimates by averaging within Year
-Yearly_nest_survival_avgs <- Nest_survival_reals %>%
-  group_by(Year) %>%
-  summarise_each(funs(mean))
-# calculate the apparent nest survival by raising daily nest survival to ^25
-Yearly_nest_survival_avgs$Year_apparent <- 
-  Yearly_nest_survival_avgs$estimate^25
-Yearly_nest_survival_avgs$Year_apparent_lcl <- 
-  Yearly_nest_survival_avgs$lcl^25
-Yearly_nest_survival_avgs$Year_apparent_ucl <- 
-  Yearly_nest_survival_avgs$ucl^25
+  str_split_fixed(rownames(plover_nest_survival_reals), " ", n = 4))
+plover_nest_survival_reals <- cbind(Groups, plover_nest_survival_reals)
+plover_nest_survival_reals$day_of_season <- 
+  as.numeric(unlist(substr(plover_nest_survival_reals$X4, 2, 4)))
+plover_nest_survival_reals <- 
+  plover_nest_survival_reals[1:nrow(plover_nest_survival_reals) - 1,]
+plover_nest_survival_reals <- 
+  left_join(plover_nest_survival_reals, dates_for_plot, by = "day_of_season")
+
+#### plotting ----
+# make a dataframe of dates from start to end of season for plot
+dates_for_plot <- 
+  data.frame(date = as.Date(min(as.numeric(nest_data$first_found)):
+                              max(as.numeric(nest_data$last_checked)), 
+                            origin = "1899-12-30"),
+             day_of_season = c(1:160))
+
+# plot the seasonal variation in daily nest survival
+hooded_plover_nest_survival_season_20_21_plot <-
+  ggplot(data = plover_nest_survival_reals) +
+  geom_ribbon(aes(x = date, ymin = lcl, ymax = ucl),
+              fill = brewer.pal(8, "Set1")[c(2)], alpha = 0.3) +
+  geom_line(aes(x = date, y = estimate), 
+            color = brewer.pal(8, "Set1")[c(2)],
+            size = 1) +
+  scale_x_date(date_labels = "%B", 
+               expand = c(0.01, 0.01), 
+               date_breaks = "1 months") +
+  ylab("daily nest survival ± 95% CI") +
+  scale_y_continuous(limits = c(0.6, 1)) +
+  luke_theme +
+  theme(legend.position = "none",
+        panel.grid.major = element_line(colour = "grey70", 
+                                        size = 0.15),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 45, 
+                                   hjust = 1, 
+                                   vjust = 1))
+
+# plot the seasonal variation in daily nest discovery
+hooded_plover_nest_discovery_season_20_21_plot <- 
+  ggplot(nest_data, aes(FirstFound)) +
+  geom_histogram(bins = 22,
+                 fill = brewer.pal(8, "Set1")[c(2)], alpha = 0.5) +
+  ylab("nests found\nweekly") +
+  scale_y_continuous(breaks = c(2, 4, 6)) +
+  luke_theme +
+  theme(legend.position = "none",
+        panel.grid.major = element_line(colour = "grey70", 
+                                        size = 0.15),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())
+
+# merge plots together
+hooded_plover_nest_plot_20_21 <- 
+  hooded_plover_nest_discovery_season_20_21_plot + 
+  hooded_plover_nest_survival_season_20_21_plot +
+  plot_layout(widths = c(5), 
+              heights = unit(c(0.75, 3), c('in', 'in'))) +
+  plot_annotation(tag_levels = 'A', title = "Hooded Plovers", 
+                  subtitle = "2020-2021 breeding season")
+
+# export plots
+ggsave(plot = hooded_plover_nest_plot_20_21,
+       filename = "tabs_figs/hooded_plover_nest_plot_20_21.jpg",
+       width = 4,
+       height = 6, units = "in",
+       dpi = 300)
