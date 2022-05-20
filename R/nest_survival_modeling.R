@@ -41,38 +41,59 @@ luke_theme <-
 nest_data <-
   read_excel("data/MP  nesting summary for Honours.xlsx", 
              sheet = "MP 2020_2021", col_types = "text") %>% 
+  
+  # make a nest ID
   mutate(nest_ID = str_remove_all(paste0(`Pair ID (Bird 1)`, 
                                          `Pair ID (Bird 2)`, 
                                          `Attempt #`), " ")) %>% 
+  
+  # consolidate columns
   select(nest_ID, `Date found`, `Date last seen alive (nest)`, 
          `Nest fail date`, `Hatch?`) %>% 
+  
+  # simplify column names
   rename(first_found = `Date found`,
          last_alive = `Date last seen alive (nest)`,
          last_checked = `Nest fail date`, 
          Fate = `Hatch?`) %>% 
+  
+  # wrangle: if date last alive is "Unk." make it "NA"
   mutate(last_alive = ifelse(str_detect(last_alive, "Unk."), NA, last_alive),
+         # change Fate to 1 or 0 (1 = failed, 0 = hatched)
          Fate = ifelse(Fate == "Y", 0, 1)) %>%
   mutate(
+    # wrangle: if last_alive has a date and last_checked is NA, then change 
+    # last_checked to the date in last_alive
     last_checked = ifelse(!is.na(last_alive) & is.na(last_checked),
                           last_alive,
+                          # if both last_alive and last_checked is "NA", then
+                          # change last_checked to the first_found date
                           ifelse(is.na(last_alive) & is.na(last_checked),
                                  first_found,
                                  last_checked))) %>%
   mutate(
+    # wrangle: if last_alive is NA and the nest hatched and last_checked has a
+    # date, then specify last_alive as the date from last_checked
     last_alive = ifelse(is.na(last_alive) & Fate == "0" & !is.na(last_checked),
                         last_checked,
+                        # if the last_alive is NA and the nest failed and 
+                        # last_checked has a date, then specify last_alive as the
+                        # date from first_found
                         ifelse(is.na(last_alive) & Fate == "1" & !is.na(last_checked),
                                first_found,
                                last_alive))) %>%
+  # specify date columns as a date string
   mutate(first_found2 = as.Date(as.numeric(first_found), 
                                origin = "1899-12-30"),
          last_alive2 = as.Date(as.numeric(last_alive), 
                               origin = "1899-12-30"),
          last_checked2 = as.Date(as.numeric(last_checked), 
                                 origin = "1899-12-30")) %>%
+  # rename column headers for RMark nest survival model
   mutate(FirstFound = as.numeric(first_found2 - min(first_found2) + 1),
          LastPresent = as.numeric(last_alive2 - min(first_found2) + 1),
          LastChecked =  as.numeric(last_checked2 - min(first_found2) + 1)) %>% 
+  # remove all nests that have unknown fate
   filter(!is.na(Fate))
 
 #### prepare nest surivial data for RMark ----
