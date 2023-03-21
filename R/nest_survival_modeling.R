@@ -95,10 +95,6 @@ lucinda_nest_import <-
       mutate(FirstFound = as.numeric(format(first_found2 + 180, "%j")),
              LastPresent = as.numeric(format(last_alive2 + 180, "%j")),
              LastChecked = as.numeric(format(last_checked2 + 180, "%j"))) %>% 
-      # rename column headers for RMark nest survival model
-      # mutate(FirstFound = as.numeric(FirstFound_J - min(FirstFound_J, na.rm = TRUE) + 1),
-      #        LastPresent = as.numeric(LastPresent_J - min(FirstFound_J, na.rm = TRUE) + 1),
-      #        LastChecked =  as.numeric(LastChecked_J - min(FirstFound_J, na.rm = TRUE) + 1)) %>%
       # remove all nests that have unknown fate
       filter(!is.na(Fate))
   }
@@ -193,17 +189,17 @@ plover_nest_survival <- function()
   S.season <-
     list(formula = ~season)
   
-  # # Linear trend in DSR
-  # S.Time_season <-
-  #   list(formula = ~Time + season)
-  # 
-  # # Quadratic trend in DSR
-  # S.Quadratic_Time_season <-
-  #   list(formula = ~Time + Quadratic + season)
-  # 
-  # # Cubic trend in DSR
-  # S.Cubic_Time_season <-
-  #   list(formula = ~Time + Quadratic + Cubic + season)
+  # Linear trend in DSR
+  S.Time_season <-
+    list(formula = ~Time + season)
+
+  # Quadratic trend in DSR
+  S.Quadratic_Time_season <-
+    list(formula = ~Time + Quadratic + season)
+
+  # Cubic trend in DSR
+  S.Cubic_Time_season <-
+    list(formula = ~Time + Quadratic + Cubic + season)
   
   S.habitat <-
     list(formula = ~nest_habitat)
