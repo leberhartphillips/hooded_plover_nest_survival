@@ -208,17 +208,17 @@ plover_nest_survival <- function()
   S.habitat <-
     list(formula = ~nest_habitat)
   
-  # # Linear trend in DSR
-  # S.Time_habitat <-
-  #   list(formula = ~Time + nest_habitat)
-  # 
-  # # Quadratic trend in DSR
-  # S.Quadratic_Time_habitat <-
-  #   list(formula = ~Time + Quadratic + nest_habitat)
-  # 
-  # # Cubic trend in DSR
-  # S.Cubic_Time_habitat <-
-  #   list(formula = ~Time + Quadratic + Cubic + nest_habitat)
+  # Linear trend in DSR
+  S.Time_habitat <-
+    list(formula = ~Time + nest_habitat)
+
+  # Quadratic trend in DSR
+  S.Quadratic_Time_habitat <-
+    list(formula = ~Time + Quadratic + nest_habitat)
+
+  # Cubic trend in DSR
+  S.Cubic_Time_habitat <-
+    list(formula = ~Time + Quadratic + Cubic + nest_habitat)
   
   S.management <-
     list(formula = ~management_status)
@@ -230,10 +230,14 @@ plover_nest_survival <- function()
   # Quadratic trend in DSR
   S.Quadratic_Time_management <-
     list(formula = ~Time + Quadratic + management_status)
-
+  
   # Cubic trend in DSR
   S.Cubic_Time_management <-
     list(formula = ~Time + Quadratic + Cubic + management_status)
+
+  # Cubic trend in DSR
+  S.Cubic_Time_management_x_habitat <-
+    list(formula = ~Time + Quadratic + Cubic + management_status*nest_habitat)
   
   S.management_x_habitat <-
     list(formula = ~management_status*nest_habitat)
@@ -263,7 +267,7 @@ plover_nest_survival_run
 
 # Extract estimates of survival from Cubic model (performs as well as constant model)
 plover_nest_survival_reals <- 
-  plover_nest_survival_run[[2]]$results$real
+  plover_nest_survival_run[[3]]$results$real
 
 # wrangle dataframe to tidy up model predictions in prep for plotting
 Groups <- data.frame(
@@ -272,7 +276,11 @@ plover_nest_survival_reals <- cbind(Groups, plover_nest_survival_reals)
 plover_nest_survival_reals$day_of_season <- 
   as.numeric(unlist(substr(plover_nest_survival_reals$X4, 2, 4)))
 plover_nest_survival_reals$management_status <- 
-  as.factor(str_sub(plover_nest_survival_reals$X2, 2, nchar(plover_nest_survival_reals$X2)))
+  as.factor(str_sub(plover_nest_survival_reals$X2, 
+                    nchar(plover_nest_survival_reals$X2), nchar(plover_nest_survival_reals$X2)))
+plover_nest_survival_reals$nest_habitat <- 
+  gsub(x = plover_nest_survival_reals$X2, pattern = "[^a-zA-Z]", replacement = "") %>% 
+  str_sub(., start = 2, end = nchar(.)-1) %>% as.factor()
 plover_nest_survival_reals <- 
   plover_nest_survival_reals[1:nrow(plover_nest_survival_reals) - 1,]
 
@@ -303,10 +311,10 @@ hooded_plover_nest_survival_season_20_21_plot <-
                date_breaks = "1 months") +
   ylab("daily nest survival ± 95% CI") +
   scale_y_continuous(limits = c(0.4, 1)) +
-  scale_fill_manual(values = brewer.pal(8, "Set1")[c(1, 2)],
-                    labels = c("Managed", "Unmanaged")) +
-  scale_color_manual(values = brewer.pal(8, "Set1")[c(1, 2)],
-                     labels = c("Managed", "Unmanaged")) +
+  scale_fill_manual(values = brewer.pal(8, "Set1")[c(2, 1)],
+                    labels = c("Unmanaged", "Managed")) +
+  scale_color_manual(values = brewer.pal(8, "Set1")[c(2, 1)],
+                     labels = c("Unmanaged", "Managed")) +
   luke_theme +
   theme(legend.position = "bottom",
         legend.title = element_blank(),
@@ -325,7 +333,7 @@ hooded_plover_nest_discovery_season_20_21_plot <-
                  # fill = brewer.pal(8, "Set1")[c(2)], 
                  alpha = 0.5) +
   scale_fill_manual(values = brewer.pal(8, "Set1")[c(2, 1)],
-                    labels = c("Managed", "Unmanaged")) +
+                    labels = c("Unmanaged", "Managed")) +
   ylab("nests found\nweekly") +
   scale_x_date(date_labels = "%B", 
                expand = c(0.01, 0.01), 
