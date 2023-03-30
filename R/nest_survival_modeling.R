@@ -1,9 +1,9 @@
 # R script to wrangle, model, and plot Hooded Plover nest survival
 
-# code: Luke Eberhart-Hertel (luke.eberhart@orn.mpg.de)
+# code: Luke Eberhart-Hertel (luke.eberhart@bi.mpg.de)
 # data: Lucinda Plowman, Grainne Maguire, and Mike Weston
 
-# 4 May, 2022
+# 30 March, 2023
 
 #### setup R environment ----
 # load and install packages
@@ -185,56 +185,59 @@ plover_nest_survival <- function()
   S.Cubic_Time <- 
     list(formula = ~Time + Quadratic + Cubic)
   
-  # Linear trend in DSR
+  # annual variation in DSR
   S.season <-
     list(formula = ~season)
   
-  # Linear trend in DSR
+  # Linear trend and annual variation in DSR
   S.Time_season <-
     list(formula = ~Time + season)
 
-  # Quadratic trend in DSR
+  # Quadratic trend and annual variation DSR
   S.Quadratic_Time_season <-
     list(formula = ~Time + Quadratic + season)
 
-  # Cubic trend in DSR
+  # Cubic trend and annual variation DSR
   S.Cubic_Time_season <-
     list(formula = ~Time + Quadratic + Cubic + season)
   
+  # habitat-specific variation in DSR
   S.habitat <-
     list(formula = ~nest_habitat)
   
-  # Linear trend in DSR
+  # Linear trend habitat-specific variation in DSR
   S.Time_habitat <-
     list(formula = ~Time + nest_habitat)
 
-  # Quadratic trend in DSR
+  # Quadratic trend habitat-specific variation in DSR
   S.Quadratic_Time_habitat <-
     list(formula = ~Time + Quadratic + nest_habitat)
 
-  # Cubic trend in DSR
+  # Cubic trend habitat-specific variation in DSR
   S.Cubic_Time_habitat <-
     list(formula = ~Time + Quadratic + Cubic + nest_habitat)
   
+  # managment-specific variation in DSR
   S.management <-
     list(formula = ~management_status)
   
-  # Linear trend in DSR
+  # Linear trend managment-specific variation in DSR
   S.Time_management <-
     list(formula = ~Time + management_status)
 
-  # Quadratic trend in DSR
+  # Quadratic trend managment-specific variation in DSR
   S.Quadratic_Time_management <-
     list(formula = ~Time + Quadratic + management_status)
   
-  # Cubic trend in DSR
+  # Cubic trend managment-specific variation in DSR
   S.Cubic_Time_management <-
     list(formula = ~Time + Quadratic + Cubic + management_status)
 
-  # Cubic trend in DSR
+  # Cubic trend and interaction between habitat and managment on DSR
   S.Cubic_Time_management_x_habitat <-
     list(formula = ~Time + Quadratic + Cubic + management_status*nest_habitat)
   
+  # interaction between habitat and managment on DSR
   S.management_x_habitat <-
     list(formula = ~management_status*nest_habitat)
   
