@@ -592,26 +592,37 @@ nest_survival_FP <- function()
 }
 
 #### run model selection in RMark ----
-# run the model list
-nest_survival_run_MP <- nest_survival_MP()
-nest_survival_run_BSC <- nest_survival_BSC()
-nest_survival_run_FP <- nest_survival_FP()
+# run the model list (uncomment the following 3 lines to run...takes ~15 mins each!)
+# nest_survival_run_MP <- nest_survival_MP()
+# nest_survival_run_BSC <- nest_survival_BSC()
+# nest_survival_run_FP <- nest_survival_FP()
+
+# save model output to save time with future sessions (uncomment if you ran the previous 3 lines)
+# saveRDS(nest_survival_run_MP, file = "output/nest_survival_run_MP.rds")
+# saveRDS(nest_survival_run_BSC, file = "output/nest_survival_run_BSC.rds")
+# saveRDS(nest_survival_run_FP, file = "output/nest_survival_run_FP.rds")
+
+# load the saved results into R
+nest_survival_run_MP_out <- readRDS(file = "output/nest_survival_run_MP.rds")
+nest_survival_run_BSC_out <- readRDS(file = "output/nest_survival_run_BSC.rds")
+nest_survival_run_FP_out <- readRDS(file = "output/nest_survival_run_FP.rds")
 
 #### extract and wrangle modeling results ----
 # examine AIC table
-nest_survival_run_MP
-nest_survival_run_BSC
-nest_survival_run_FP
+nest_survival_run_MP_out
+nest_survival_run_BSC_out
+nest_survival_run_FP_out
 
-# Extract estimates of survival from Cubic model (performs as well as constant model)
+# Extract estimates of survival from Cubic model with management 
+# (non-linear season variation and management effect)
 nest_survival_reals_MP <- 
-  nest_survival_run_MP[[3]]$results$real
+  nest_survival_run_MP_out[[3]]$results$real
 
 nest_survival_reals_BSC <- 
-  nest_survival_run_BSC[[3]]$results$real
+  nest_survival_run_BSC_out[[3]]$results$real
 
 nest_survival_reals_FP <- 
-  nest_survival_run_FP[[3]]$results$real
+  nest_survival_run_FP_out[[3]]$results$real
 
 # wrangle dataframe to tidy up model predictions in prep for plotting
 RMark_pred_tidy <- 
