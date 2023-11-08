@@ -1,9 +1,10 @@
-# R script to wrangle, model, and plot Hooded Plover nest survival
+# R script to wrangle, model, and plot Hooded Plover nest survival at 
+# Mornington Peninsula (2006-2021), Bellarine / Surf Coast (2006-2021), and Fleurieu Peninsula (2019-2021)
 
 # code: Luke Eberhart-Hertel (luke.eberhart@bi.mpg.de)
 # data: Lucinda Plowman, Grainne Maguire, and Mike Weston
 
-# 30 March, 2023
+# 8 November, 2023
 
 #### setup R environment ----
 # load and install packages
