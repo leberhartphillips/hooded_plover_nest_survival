@@ -236,6 +236,12 @@ nest_data_FP <-
   filter(management_status %in% c("Y", "N")) %>% 
   filter(nest_habitat %in% c("Beach", "Dune", "Foredune/face"))
 
+#### TO DO ----
+# check the number of nests that have long temporal visits
+# annual variation in BSC DSR
+# climate data?
+# human disturbance data for climate-human model
+
 #### prepare nest survival data for RMark ----
 ##### define the number of occasions ----
 occ_MP <- max(nest_data_MP$LastChecked, na.rm = TRUE)
@@ -623,6 +629,75 @@ nest_survival_reals_BSC <-
 
 nest_survival_reals_FP <- 
   nest_survival_run_FP_out[[3]]$results$real
+
+#### BSC annual nest survival output ----
+# extract parameter estimates of annual model
+nest_survival_reals_BSC_season <- 
+  nest_survival_run_BSC_out[[14]]$results$real
+Groups <- data.frame(
+  str_split_fixed(rownames(nest_survival_reals_BSC_season), " ", n = 4))
+nest_survival_reals_BSC_season <- cbind(Groups, nest_survival_reals_BSC_season)
+nest_survival_reals_BSC_season$season <- 
+  as.numeric(str_sub(nest_survival_reals_BSC_season$X2, 2, 5))
+nest_survival_reals_BSC_season$management_status <- 
+  as.factor(str_sub(nest_survival_reals_BSC_season$X2, 
+                    nchar(nest_survival_reals_BSC_season$X2), nchar(nest_survival_reals_BSC_season$X2)))
+nest_survival_reals_BSC_season$nest_habitat <- 
+  gsub(x = nest_survival_reals_BSC_season$X2, pattern = "[^a-zA-Z]", replacement = "") %>% 
+  str_sub(., start = 2, end = nchar(.)-1) %>% as.factor()
+nest_survival_reals_BSC_season <- 
+  nest_survival_reals_BSC_season %>% 
+  dplyr::select(season, management_status, nest_habitat, estimate, se, lcl, ucl) %>% 
+  arrange(season)
+row.names(nest_survival_reals_BSC_season) <- NULL
+
+# summarise habitats for each year in BSC
+nest_data_BSC %>% 
+  mutate(season = str_sub(season, 1, 4)) %>% 
+  group_by(season) %>% 
+  summarise(n_habitats = n_distinct(nest_habitat))
+
+nest_data_BSC %>% 
+  mutate(season = str_sub(season, 1, 4)) %>% 
+  group_by(season, nest_habitat) %>% 
+  summarise(n_nests = n_distinct(nest_ID)) %>% 
+  pivot_wider(names_from = nest_habitat, values_from = n_nests)
+
+nest_data_BSC %>% 
+  filter(season %in% ("2009"))
+
+# plot the annual variation in daily nest survival
+nest_survival_year_plot <-
+  ggplot() +
+  geom_errorbar(data = nest_survival_reals_BSC_season, 
+                aes(x = season, ymax = ucl, ymin = lcl),
+                alpha = 1, color = "black", width = 0.05, lwd = 0.5) + 
+  geom_point(data = nest_survival_reals_BSC_season, 
+             aes(x = season, y = estimate),
+             # lwd = 1, 
+             shape = 21, color= "black") +
+  scale_x_continuous(breaks =  c(2006:2020)) +
+  ylab("daily nest survival ± 95% CI") +
+  scale_y_continuous(limits = c(0.4, 1)) +
+  scale_fill_manual(values = brewer.pal(8, "Set1")[c(2, 1)],
+                    labels = c("Unmanaged", "Managed")) +
+  scale_color_manual(values = brewer.pal(8, "Set1")[c(2, 1)],
+                     labels = c("Unmanaged", "Managed")) +
+  luke_theme +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 45, 
+                                   hjust = 1, 
+                                   vjust = 1))
+
+# export plots
+ggsave(plot = nest_survival_year_plot,
+       filename = "tabs_figs/nest_survival_year_plot_BSC.jpg",
+       width = 5,
+       height = 3, units = "in",
+       dpi = 300)
 
 # wrangle dataframe to tidy up model predictions in prep for plotting
 RMark_pred_tidy <- 
