@@ -374,49 +374,49 @@ First we import the data and run a few checks to assess if there are any rows wi
 ```{r}
 suppressMessages(
   bind_rows(
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2020", "_", str_sub("2021", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2019", "_", str_sub("2020", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2018", "_", str_sub("2019", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2017", "_", str_sub("2018", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2016", "_", str_sub("2017", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2015", "_", str_sub("2016", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2014", "_", str_sub("2015", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2013", "_", str_sub("2014", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2012", "_", str_sub("2013", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2011", "_", str_sub("2012", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2010", "_", str_sub("2011", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2009", "_", str_sub("2010", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2008", "_", str_sub("2009", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2007", "_", str_sub("2008", 3, 4)), 
              col_types = "text", na = "n/a"), 
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("MP", " ", "2006", "_", str_sub("2007", 3, 4)), 
              col_types = "text", na = "n/a"))) %>% 
     filter(!is.na(Season)) %>% 
@@ -541,77 +541,77 @@ suppressMessages(
 nest_data_MP <-
   bind_rows(
     lucinda_nest_import(year_1 = "2020", year_2 = "2021", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2019", year_2 = "2020", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2018", year_2 = "2019", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2017", year_2 = "2018", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2016", year_2 = "2017", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2015", year_2 = "2016", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2014", year_2 = "2015", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2013", year_2 = "2014", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2012", year_2 = "2013", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2011", year_2 = "2012", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2010", year_2 = "2011", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2009", year_2 = "2010", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2008", year_2 = "2009", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2007", year_2 = "2008", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32),
     lucinda_nest_import(year_1 = "2006", year_2 = "2007", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix up post GM meeting 15_2_24.xlsx", site = "MP",
+                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
                         first_found_date_col = 10, 
                         last_alive_date_col = 27, 
                         last_checked_col = 32)) %>% 
@@ -803,40 +803,40 @@ nest_data_MP <-
 As above, first we import the data and run a few checks to assess if there are any rows with the issues listed above
 ```{r}
 suppressMessages(bind_rows(
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2020", "_", str_sub("2021", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2019", "_", str_sub("2020", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2018", "_", str_sub("2019", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2017", "_", str_sub("2018", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2016", "_", str_sub("2017", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2015", "_", str_sub("2016", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2014", "_", str_sub("2015", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2013", "_", str_sub("2014", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2012", "_", str_sub("2013", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2011", "_", str_sub("2012", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2010", "_", str_sub("2011", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx"), 
              sheet = paste0("FP", " ", "2009", "_", str_sub("2010", 3, 4), " Nest summary"), 
              col_types = "text", na = "n/a"))) %>% 
     rename(first_found = 10,
@@ -959,62 +959,62 @@ suppressMessages(bind_rows(
 nest_data_FP <-
   bind_rows(
     lucinda_nest_import(year_1 = "2020", year_2 = "2021", 
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2019", year_2 = "2020", 
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2018", year_2 = "2019", 
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2017", year_2 = "2018",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2016", year_2 = "2017",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2015", year_2 = "2016",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2014", year_2 = "2015",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2013", year_2 = "2014",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2012", year_2 = "2013",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2011", year_2 = "2012",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2010", year_2 = "2011",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2009", year_2 = "2010",
-                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- checking names consistent for threat data.xlsx", site = "FP", extra_text = " Nest summary",
+                        file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
                         first_found_date_col = 10, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36)) %>% 
@@ -1203,49 +1203,49 @@ nest_data_FP <-
 As above, first we import the data and run a few checks to assess if there are any rows with the issues listed above
 ```{r}
 suppressMessages(bind_rows(
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2020", "_", str_sub("2021", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2019", "_", str_sub("2020", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2018", "_", str_sub("2019", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2017", "_", str_sub("2018", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2016", "_", str_sub("2017", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2015", "_", str_sub("2016", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2014", "_", str_sub("2015", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2013", "_", str_sub("2014", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2012", "_", str_sub("2013", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2011", "_", str_sub("2012", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2010", "_", str_sub("2011", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2009", "_", str_sub("2010", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2008", "_", str_sub("2009", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2007", "_", str_sub("2008", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx"), 
+  read_excel(paste0("data/final/final_final/final_final_final/", "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx"), 
              sheet = paste0("BellSurfCoast", " ", "2006", "_", str_sub("2007", 3, 4)), 
              col_types = "text", na = "n/a"))) %>% 
     rename(first_found = 10,
@@ -1370,49 +1370,49 @@ nest_data_BSC <-
   bind_rows(
     lucinda_nest_import(year_1 = "2020", year_2 = "2021", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2019", year_2 = "2020", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2018", year_2 = "2019", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2017", year_2 = "2018", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2016", year_2 = "2017", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2015", year_2 = "2016", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2014", year_2 = "2015", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2013", year_2 = "2014", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2012", year_2 = "2013", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2011", year_2 = "2012", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2010", year_2 = "2011", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2009", year_2 = "2010", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2008", year_2 = "2009", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2007", year_2 = "2008", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2006", year_2 = "2007", 
                         first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
-                        file_name = "Bellarine_Surf Coast Nesting with site names matching with threat data doc.xlsx", site = "BellSurfCoast"),
+                        file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
   ) %>%
   group_by(season) %>%
   mutate(nocc = max(max(LastChecked, na.rm = TRUE), max(LastPresent, na.rm = TRUE)),
@@ -1594,7 +1594,6 @@ nest_data_BSC <-
 ```
 
 ## Importing and checking threat data
-
 ```{r}
 FP_threat_data <- 
   read_excel("data/final/final_final/Merged threat data_FP_MP.xlsx",
@@ -1763,7 +1762,7 @@ threat_data_ <-
                                           `Magpies (wet sand)`, 
                                           `Magpies (dry sand)`, 
                                           `Magpies (signs/fence)`, 
-                                          `Magpies (Dune)`, 
+                                          `Magpies (Dune)`#, 
                                           # `Silver Gulls (wet sand)`,
                                           # `Silver Gulls (dry sand)`,
                                           # `Silver Gulls (signs/fence)`,
@@ -1772,14 +1771,40 @@ threat_data_ <-
                                           # `Pacific/Kelp Gulls (dry sand)`,
                                           # `Pacific/Kelp Gulls (signs/fence)`,
                                           # `Pacific/Kelp Gulls (Dune)`,
-                                          `Nankeen Kestrels (wet sand)`, 
-                                          `Nankeen Kestrels (dry sand)`, 
-                                          `Nankeen Kestrels (signs/fence)`, 
-                                          `Nankeen Kestrels (Dune)`, 
-                                          `Other bird of prey (wet sand)`, 
-                                          `Other bird of prey (dry sand)`, 
-                                          `Other bird of prey (signs/fence)`, 
-                                          `Other bird of prey (Dune)`), na.rm = TRUE),
+                                          # `Nankeen Kestrels (wet sand)`, 
+                                          # `Nankeen Kestrels (dry sand)`, 
+                                          # `Nankeen Kestrels (signs/fence)`, 
+                                          # `Nankeen Kestrels (Dune)`, 
+                                          # `Other bird of prey (wet sand)`, 
+                                          # `Other bird of prey (dry sand)`, 
+                                          # `Other bird of prey (signs/fence)`, 
+                                          # `Other bird of prey (Dune)`
+                                          ), na.rm = TRUE),
+       gulls = rowSums(dplyr::select(., #`Ravens (wet sand)`, 
+                                          # `Ravens (dry sand)`, 
+                                          # `Ravens (signs/fence)`, 
+                                          # `Ravens (Dune)`, 
+                                          # `Magpies (wet sand)`, 
+                                          # `Magpies (dry sand)`, 
+                                          # `Magpies (signs/fence)`, 
+                                          # `Magpies (Dune)` 
+                                          `Silver Gulls (wet sand)`,
+                                          `Silver Gulls (dry sand)`,
+                                          `Silver Gulls (signs/fence)`,
+                                          `Silver Gulls (Dune)`,
+                                          `Pacific/Kelp Gulls (wet sand)`,
+                                          `Pacific/Kelp Gulls (dry sand)`,
+                                          `Pacific/Kelp Gulls (signs/fence)`,
+                                          `Pacific/Kelp Gulls (Dune)`
+                                          # `Nankeen Kestrels (wet sand)`, 
+                                          # `Nankeen Kestrels (dry sand)`, 
+                                          # `Nankeen Kestrels (signs/fence)`, 
+                                          # `Nankeen Kestrels (Dune)`, 
+                                          # `Other bird of prey (wet sand)`, 
+                                          # `Other bird of prey (dry sand)`, 
+                                          # `Other bird of prey (signs/fence)`, 
+                                          # `Other bird of prey (Dune)`
+                                          ), na.rm = TRUE),
        vehicles = rowSums(dplyr::select(., `Permitted vehicle (wet sand)`, 
                                         `Permitted vehicle (dry sand)`, 
                                         `Permitted vehicle (signs/fence)`, 
@@ -2040,6 +2065,7 @@ threat_data_ <-
             hoofed_animals = max(hoofed_animals, na.rm = TRUE),
             vehicles = max(vehicles, na.rm = TRUE),
             pred_birds = max(pred_birds, na.rm = TRUE),
+            gulls = max(gulls, na.rm = TRUE),
             dogs_off = max(dogs_off, na.rm = TRUE),
             dogs_on = max(dogs_on, na.rm = TRUE),
             dogs = max(dogs, na.rm = TRUE),
@@ -2149,17 +2175,17 @@ threat_data_ <-
   # consolidate the threat data into a clean dataframe
   dplyr::select(region, site, season, obs_date, obs_date2, obs_lon, obs_lat, 
          humans, vehicles, dogs, dogs_on, dogs_off, hoofed_animals, pred_birds,
-         hum_pri, fox_pri, dog_pri, vehicle_pri, hoofed_pri) %>% 
+         gulls, hum_pri, fox_pri, dog_pri, vehicle_pri, hoofed_pri) %>% 
   ungroup()
 ```
 
 ### Visual inspection of threat data
-determine the 99% quantile limit for each threat (i.e., to remove outlier data) - shown as the red verticle line here
+determine the 99% quantile limit for each threat (i.e., to remove outlier data) - shown as the red vertical line here
 ```{r}
 # determine the 99% quantile limit for each threat (i.e., to remove outlier data)
 threat_data_99_ql <- 
   threat_data_ %>% 
-  summarise_at(c("humans", "vehicles", "dogs", "dogs_on", "dogs_off", "hoofed_animals", "pred_birds"), 
+  summarise_at(c("humans", "vehicles", "dogs", "dogs_on", "dogs_off", "hoofed_animals", "pred_birds", "gulls"), 
                ~ quantile(.x, probs = c(0.99)))
 
 threat_data_99_ql
@@ -2180,6 +2206,12 @@ threat_data_ %>%
 threat_data_ %>% 
   ggplot() +
   geom_histogram(aes(log(pred_birds + 1))) +
+  geom_vline(xintercept = log(as.numeric(threat_data_99_ql$pred_birds[1])), color = "red") +
+  luke_theme
+
+threat_data_ %>% 
+  ggplot() +
+  geom_histogram(aes(log(gulls + 1))) +
   geom_vline(xintercept = log(as.numeric(threat_data_99_ql$pred_birds[1])), color = "red") +
   luke_theme
 
@@ -2430,13 +2462,14 @@ threat_data__ <-
   mutate(day_type = ifelse(holiday == 1 | weekday %in% 
                              c("Saturday", "Sunday"), "funday", "workday")) %>% 
   mutate(funday = ifelse(day_type == "funday", 1, 0)) %>% 
-  mutate(humans_ = ifelse(humans > 65, NA, humans),
-         vehicles_ = ifelse(vehicles > 6, NA, vehicles),
-         dogs_ = ifelse(dogs > 14, NA, dogs),
-         dogs_off_ = ifelse(dogs_off > 10, NA, dogs_off),
-         dogs_on_ = ifelse(dogs_on > 7, NA, dogs_on),
-         hoofed_animals_ = ifelse(hoofed_animals > 2, NA, hoofed_animals),
-         pred_birds_ = ifelse(pred_birds > 200, NA, pred_birds)) %>% 
+  mutate(humans_ = ifelse(humans > as.numeric(threat_data_99_ql$humans[1]), NA, humans),
+         vehicles_ = ifelse(vehicles > as.numeric(threat_data_99_ql$vehicles[1]), NA, vehicles),
+         dogs_ = ifelse(dogs > as.numeric(threat_data_99_ql$dogs[1]), NA, dogs),
+         dogs_off_ = ifelse(dogs_off > as.numeric(threat_data_99_ql$dogs_off[1]), NA, dogs_off),
+         dogs_on_ = ifelse(dogs_on > as.numeric(threat_data_99_ql$dogs_on[1]), NA, dogs_on),
+         hoofed_animals_ = ifelse(hoofed_animals > as.numeric(threat_data_99_ql$hoofed_animals[1]), NA, hoofed_animals),
+         pred_birds_ = ifelse(pred_birds > as.numeric(threat_data_99_ql$pred_birds[1]), NA, pred_birds),
+         gulls_ = ifelse(gulls > as.numeric(threat_data_99_ql$gulls[1]), NA, pred_birds)) %>% 
   mutate(weekdayN = as.numeric(weekday) - 1) %>% 
   mutate(weekdayC = circular::circular(weekdayN, type = "angles", units = "radians")) %>% 
   filter(!is.na(weekday))
@@ -2469,6 +2502,9 @@ summary(mod_dogs_off_zi)
 
 mod_pred_birds_zi <- pscl::zeroinfl(pred_birds_ ~ day_type, data = threat_data__, dist = "poisson")
 summary(mod_pred_birds_zi)
+
+mod_gulls_zi <- pscl::zeroinfl(gulls_ ~ day_type, data = threat_data__, dist = "poisson")
+summary(mod_gulls_zi)
 
 mod_vehicles_zi <- pscl::zeroinfl(vehicles_ ~ day_type, data = threat_data__, dist = "poisson")
 summary(mod_vehicles_zi)
@@ -2651,7 +2687,7 @@ threat_data__ %>%
   ylab("number of dogs off leashes counted (log)")
 ```
 
-how do predatory bird counts vary over the week?
+how do corvid counts vary over the week?
 ```{r}
 mod_pred_birds <- 
   mgcv::gam(pred_birds_ ~ s(weekdayN, bs = "cc", k = 7), data = threat_data__)
@@ -2690,7 +2726,49 @@ threat_data__ %>%
   # geom_smooth(aes(x = as.numeric(weekday), y = pred_birds_), method = lm, formula = y ~ splines::bs(x, 5)) +
   luke_theme +
   xlab("day of the week") +
-  ylab("number of predatory birds counted")
+  ylab("number of corvids counted (log)")
+```
+
+how do gulls counts vary over the week?
+```{r}
+mod_pred_birds <- 
+  mgcv::gam(gulls_ ~ s(weekdayN, bs = "cc", k = 7), data = threat_data__)
+summary(mod_pred_birds)
+
+# plot the weekly variation in the predatory bird counts
+mod_gulls_fits <- 
+  predict(mod_pred_birds, 
+          newdata = newdata_weekdays, 
+          type = 'response', se = TRUE)
+
+mod_gulls_predicts <-  
+  data.frame(newdata_weekdays, mod_gulls_fits) %>% 
+  mutate(lower = fit - 1.96 * se.fit,
+         upper = fit + 1.96 * se.fit) %>% 
+  left_join(., threat_data__ %>% dplyr::select(weekdayN, weekday) %>% distinct(), by = "weekdayN")
+
+threat_data__ %>% 
+  ggplot() +
+  gghalves::geom_half_point(aes(x = weekday, y = log(gulls_ + 1)),
+      size = 1,
+      width = 0.5,
+      side = "l", 
+      range_scale = .4, 
+      alpha = 0.1
+    ) + 
+    gghalves::geom_half_boxplot(aes(x = weekday, y = log(gulls_ + 1)),
+      size = 0.5,
+      width = 0.5,
+      side = "r",
+      alpha = 0.1, outlier.color = NA
+    ) +
+  geom_ribbon(data = mod_gulls_predicts,
+              aes(x = as.numeric(weekday), ymin = log(lower + 1), ymax = log(upper + 1))) +
+  geom_line(data = mod_gulls_predicts, aes(x = as.numeric(weekday), y = log(fit + 1)), color = "white") +
+  # geom_smooth(aes(x = as.numeric(weekday), y = gulls_), method = lm, formula = y ~ splines::bs(x, 5)) +
+  luke_theme +
+  xlab("day of the week") +
+  ylab("number of gulls counted (log)")
 ```
 
 how do vehicle counts vary over the week?
@@ -2735,7 +2813,7 @@ threat_data__ %>%
   ylab("number of vehicles counted")
 ```
 
-Inspect the weekly varition in human prints
+Inspect the weekly variation in human prints
 ```{r}
 # plot the weekly variation in the human print detections
 threat_data__ %>% 
@@ -2759,7 +2837,7 @@ threat_data__ %>%
   ylab("level of human prints recorded")
 ```
 
-Inspect the weekly varition in dog prints
+Inspect the weekly variation in dog prints
 ```{r}
 # plot the weekly variation in the dog print detections
 threat_data__ %>% 
@@ -2783,7 +2861,7 @@ threat_data__ %>%
   ylab("level of dogs prints recorded")
 ```
 
-Inspect the weekly varition in vehicle prints
+Inspect the weekly variation in vehicle prints
 ```{r}
 # plot the weekly variation in the vehicle print detections
 threat_data__ %>% 
@@ -2807,7 +2885,7 @@ threat_data__ %>%
   ylab("level of vehicle prints recorded")
 ```
 
-Inspect the weekly varition in fox prints
+Inspect the weekly variation in fox prints
 ```{r}
 # plot the weekly variation in the fox print detections
 threat_data__ %>% 
@@ -2849,14 +2927,23 @@ threat_data__ %>%
   xlab("Number of humans counted") +
   ylab("Number of dogs counted")
 
-# relationship between human counts and predatory bird counts
+# relationship between human counts and corvid counts
 threat_data__ %>% 
   ggplot() +
   geom_jitter(aes(x = humans_, y = pred_birds_), alpha = 0.1) +
   geom_smooth(aes(x = humans_, y = pred_birds_)) +#, method = lm) +
   luke_theme +
   xlab("Number of humans counted") +
-  ylab("Number of predatory birds counted")
+  ylab("Number of corvids counted")
+
+# relationship between human counts and gull counts
+threat_data__ %>% 
+  ggplot() +
+  geom_jitter(aes(x = humans_, y = gulls_), alpha = 0.1) +
+  geom_smooth(aes(x = humans_, y = gulls_)) +#, method = lm) +
+  luke_theme +
+  xlab("Number of humans counted") +
+  ylab("Number of gulls counted")
 
 # relationship between human counts and vehicle counts
 threat_data__ %>% 
@@ -2914,6 +3001,7 @@ nest_data_FP_with_threat_data <-
     dof_a = NA,
     hof_a = NA,
     pbd_a = NA,
+    gul_a = NA,
     hum_m = NA,
     veh_m = NA,
     dog_m = NA,
@@ -2921,12 +3009,14 @@ nest_data_FP_with_threat_data <-
     dof_m = NA,
     hof_m = NA,
     pbd_m = NA,
+    gul_m = NA,
     hum_b = NA,
     veh_b = NA,
     dog_b = NA,
     don_b = NA,
     dof_b = NA,
     pbd_b = NA,
+    gul_b = NA,
     hof_b = NA,
     hum_p = NA,
     veh_p = NA,
@@ -3003,6 +3093,7 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
              dogs_off_bi = ifelse(dogs_off > 0, 1, 0),
              dogs_on_bi = ifelse(dogs_on > 0, 1, 0),
              p_birds_bi = ifelse(pred_birds > 0, 1, 0),
+             gulls_bi = ifelse(gulls > 0, 1, 0),
              hoof_bi = ifelse(hoofed_animals > 0 | (!is.na(hoofed_pri)), 1, 0)) %>%
       dplyr::summarise(
         # fundays = sum(funday),
@@ -3013,6 +3104,7 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
         dogs_off_avg = mean(dogs_off, na.rm = TRUE),
         hoof_avg = mean(hoofed_animals, na.rm = TRUE),
         p_birds_avg = mean(pred_birds, na.rm = TRUE),
+        gulls_avg = mean(gulls, na.rm = TRUE),
         hum_max = max(humans, na.rm = TRUE),
         vehicles_max = max(vehicles, na.rm = TRUE),
         dogs_max = max(dogs, na.rm = TRUE),
@@ -3020,12 +3112,14 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
         dogs_off_max = max(dogs_off, na.rm = TRUE),
         hoof_max = max(hoofed_animals, na.rm = TRUE),
         p_birds_max = max(pred_birds, na.rm = TRUE),
+        gulls_max = max(gulls, na.rm = TRUE),
         hum_bi = max(hum_bi, na.rm = TRUE),
         vehicle_bi = max(vehicle_bi, na.rm = TRUE),
         dogs_bi = max(dogs_bi, na.rm = TRUE),
         dogs_on_bi = max(dogs_on_bi, na.rm = TRUE),
         dogs_off_bi = max(dogs_off_bi, na.rm = TRUE),
         p_birds_bi = max(p_birds_bi, na.rm = TRUE),
+        gulls_bi = max(gulls_bi, na.rm = TRUE),
         hoof_bi = max(hoof_bi, na.rm = TRUE),
         hum_pr = max(hum_pri, na.rm = TRUE),
         vehicle_pr = max(vehicle_pri, na.rm = TRUE),
@@ -3045,6 +3139,7 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
     nest_data_FP_with_threat_data$dof_a[i] <- avgeraged_threats$dogs_off_avg
     nest_data_FP_with_threat_data$hof_a[i] <- avgeraged_threats$hoof_avg
     nest_data_FP_with_threat_data$pbd_a[i] <- avgeraged_threats$p_birds_avg
+    nest_data_FP_with_threat_data$gul_a[i] <- avgeraged_threats$gulls_avg
     
     nest_data_FP_with_threat_data$hum_m[i] <- avgeraged_threats$hum_max
     nest_data_FP_with_threat_data$veh_m[i] <- avgeraged_threats$vehicles_max
@@ -3053,6 +3148,7 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
     nest_data_FP_with_threat_data$dof_m[i] <- avgeraged_threats$dogs_off_max
     nest_data_FP_with_threat_data$hof_m[i] <- avgeraged_threats$hoof_max
     nest_data_FP_with_threat_data$pbd_m[i] <- avgeraged_threats$p_birds_max
+    nest_data_FP_with_threat_data$gul_m[i] <- avgeraged_threats$gulls_max
     
     nest_data_FP_with_threat_data$hum_b[i] <- avgeraged_threats$hum_bi
     nest_data_FP_with_threat_data$veh_b[i] <- avgeraged_threats$vehicle_bi
@@ -3061,6 +3157,7 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
     nest_data_FP_with_threat_data$dof_b[i] <- avgeraged_threats$dogs_off_bi
     nest_data_FP_with_threat_data$pbd_b[i] <- avgeraged_threats$p_birds_bi
     nest_data_FP_with_threat_data$hof_b[i] <- avgeraged_threats$hoof_bi
+    nest_data_FP_with_threat_data$gul_b[i] <- avgeraged_threats$gulls_bi
     
     nest_data_FP_with_threat_data$hum_p[i] <- avgeraged_threats$hum_pr
     nest_data_FP_with_threat_data$veh_p[i] <- avgeraged_threats$vehicle_pr
@@ -3082,6 +3179,7 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
     nest_data_FP_with_threat_data$dof_a[i] <- NA
     nest_data_FP_with_threat_data$hof_a[i] <- NA
     nest_data_FP_with_threat_data$pbd_a[i] <- NA
+    nest_data_FP_with_threat_data$gul_a[i] <- NA
     nest_data_FP_with_threat_data$hum_m[i] <- NA
     nest_data_FP_with_threat_data$veh_m[i] <- NA
     nest_data_FP_with_threat_data$dog_m[i] <- NA
@@ -3089,12 +3187,14 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
     nest_data_FP_with_threat_data$dof_m[i] <- NA
     nest_data_FP_with_threat_data$hof_m[i] <- NA
     nest_data_FP_with_threat_data$pbd_m[i] <- NA
+    nest_data_FP_with_threat_data$gul_m[i] <- NA
     nest_data_FP_with_threat_data$hum_b[i] <- NA
     nest_data_FP_with_threat_data$veh_b[i] <- NA
     nest_data_FP_with_threat_data$dog_b[i] <- NA
     nest_data_FP_with_threat_data$don_b[i] <- NA
     nest_data_FP_with_threat_data$dof_b[i] <- NA
     nest_data_FP_with_threat_data$pbd_b[i] <- NA
+    nest_data_FP_with_threat_data$gul_b[i] <- NA
     nest_data_FP_with_threat_data$hof_b[i] <- NA
     nest_data_FP_with_threat_data$hum_p[i] <- NA
     nest_data_FP_with_threat_data$veh_p[i] <- NA
@@ -3138,6 +3238,7 @@ nest_data_MP_with_threat_data <-
     dof_a = NA,
     hof_a = NA,
     pbd_a = NA,
+    gul_a = NA,
     hum_m = NA,
     veh_m = NA,
     dog_m = NA,
@@ -3145,12 +3246,14 @@ nest_data_MP_with_threat_data <-
     dof_m = NA,
     hof_m = NA,
     pbd_m = NA,
+    gul_m = NA,
     hum_b = NA,
     veh_b = NA,
     dog_b = NA,
     don_b = NA,
     dof_b = NA,
     pbd_b = NA,
+    gul_b = NA,
     hof_b = NA,
     hum_p = NA,
     veh_p = NA,
@@ -3164,7 +3267,6 @@ nest_data_MP_with_threat_data <-
     halfway = NA) %>% 
   filter(FirstFound <= LastPresent & FirstFound <= LastChecked & LastPresent <= LastChecked) %>% 
   filter(first_found2 <= last_alive2 & first_found2 <= last_checked2 & last_alive2 <= last_checked2)
-
 
 MP_threat_data_subset <- 
   threat_data__ %>% 
@@ -3193,7 +3295,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
                             levels = c("Monday", "Tuesday", "Wednesday", 
                                        "Thursday", "Friday", "Saturday", 
                                        "Sunday")),
-           region = "FP") %>% 
+           region = "MP") %>% 
     mutate(year = year(date)) %>% 
     mutate(season = ifelse(month(date) < 6, year - 1, year)) %>% 
     mutate(season = ifelse(month(date) >= 6, 
@@ -3228,6 +3330,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
              dogs_off_bi = ifelse(dogs_off > 0, 1, 0),
              dogs_on_bi = ifelse(dogs_on > 0, 1, 0),
              p_birds_bi = ifelse(pred_birds > 0, 1, 0),
+             gulls_bi = ifelse(gulls > 0, 1, 0),
              hoof_bi = ifelse(hoofed_animals > 0 | (!is.na(hoofed_pri)), 1, 0)) %>%
       dplyr::summarise(
         # fundays = sum(funday),
@@ -3238,6 +3341,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
         dogs_off_avg = mean(dogs_off, na.rm = TRUE),
         hoof_avg = mean(hoofed_animals, na.rm = TRUE),
         p_birds_avg = mean(pred_birds, na.rm = TRUE),
+        gulls_avg = mean(gulls, na.rm = TRUE),
         hum_max = max(humans, na.rm = TRUE),
         vehicles_max = max(vehicles, na.rm = TRUE),
         dogs_max = max(dogs, na.rm = TRUE),
@@ -3245,12 +3349,14 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
         dogs_off_max = max(dogs_off, na.rm = TRUE),
         hoof_max = max(hoofed_animals, na.rm = TRUE),
         p_birds_max = max(pred_birds, na.rm = TRUE),
+        gulls_max = max(gulls, na.rm = TRUE),
         hum_bi = max(hum_bi, na.rm = TRUE),
         vehicle_bi = max(vehicle_bi, na.rm = TRUE),
         dogs_bi = max(dogs_bi, na.rm = TRUE),
         dogs_on_bi = max(dogs_on_bi, na.rm = TRUE),
         dogs_off_bi = max(dogs_off_bi, na.rm = TRUE),
         p_birds_bi = max(p_birds_bi, na.rm = TRUE),
+        gulls_bi = max(gulls_bi, na.rm = TRUE),
         hoof_bi = max(hoof_bi, na.rm = TRUE),
         hum_pr = max(hum_pri, na.rm = TRUE),
         vehicle_pr = max(vehicle_pri, na.rm = TRUE),
@@ -3270,6 +3376,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
     nest_data_MP_with_threat_data$dof_a[i] <- avgeraged_threats$dogs_off_avg
     nest_data_MP_with_threat_data$hof_a[i] <- avgeraged_threats$hoof_avg
     nest_data_MP_with_threat_data$pbd_a[i] <- avgeraged_threats$p_birds_avg
+    nest_data_MP_with_threat_data$gul_a[i] <- avgeraged_threats$gulls_avg
     
     nest_data_MP_with_threat_data$hum_m[i] <- avgeraged_threats$hum_max
     nest_data_MP_with_threat_data$veh_m[i] <- avgeraged_threats$vehicles_max
@@ -3278,6 +3385,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
     nest_data_MP_with_threat_data$dof_m[i] <- avgeraged_threats$dogs_off_max
     nest_data_MP_with_threat_data$hof_m[i] <- avgeraged_threats$hoof_max
     nest_data_MP_with_threat_data$pbd_m[i] <- avgeraged_threats$p_birds_max
+    nest_data_MP_with_threat_data$gul_m[i] <- avgeraged_threats$gulls_max
     
     nest_data_MP_with_threat_data$hum_b[i] <- avgeraged_threats$hum_bi
     nest_data_MP_with_threat_data$veh_b[i] <- avgeraged_threats$vehicle_bi
@@ -3286,6 +3394,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
     nest_data_MP_with_threat_data$dof_b[i] <- avgeraged_threats$dogs_off_bi
     nest_data_MP_with_threat_data$pbd_b[i] <- avgeraged_threats$p_birds_bi
     nest_data_MP_with_threat_data$hof_b[i] <- avgeraged_threats$hoof_bi
+    nest_data_MP_with_threat_data$gul_b[i] <- avgeraged_threats$gulls_bi
     
     nest_data_MP_with_threat_data$hum_p[i] <- avgeraged_threats$hum_pr
     nest_data_MP_with_threat_data$veh_p[i] <- avgeraged_threats$vehicle_pr
@@ -3307,6 +3416,7 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
     nest_data_MP_with_threat_data$dof_a[i] <- NA
     nest_data_MP_with_threat_data$hof_a[i] <- NA
     nest_data_MP_with_threat_data$pbd_a[i] <- NA
+    nest_data_MP_with_threat_data$gul_a[i] <- NA
     nest_data_MP_with_threat_data$hum_m[i] <- NA
     nest_data_MP_with_threat_data$veh_m[i] <- NA
     nest_data_MP_with_threat_data$dog_m[i] <- NA
@@ -3314,12 +3424,14 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
     nest_data_MP_with_threat_data$dof_m[i] <- NA
     nest_data_MP_with_threat_data$hof_m[i] <- NA
     nest_data_MP_with_threat_data$pbd_m[i] <- NA
+    nest_data_MP_with_threat_data$gul_m[i] <- NA
     nest_data_MP_with_threat_data$hum_b[i] <- NA
     nest_data_MP_with_threat_data$veh_b[i] <- NA
     nest_data_MP_with_threat_data$dog_b[i] <- NA
     nest_data_MP_with_threat_data$don_b[i] <- NA
     nest_data_MP_with_threat_data$dof_b[i] <- NA
     nest_data_MP_with_threat_data$pbd_b[i] <- NA
+    nest_data_MP_with_threat_data$gul_b[i] <- NA
     nest_data_MP_with_threat_data$hof_b[i] <- NA
     nest_data_MP_with_threat_data$hum_p[i] <- NA
     nest_data_MP_with_threat_data$veh_p[i] <- NA
@@ -3363,6 +3475,7 @@ nest_data_BSC_with_threat_data <-
     dof_a = NA,
     hof_a = NA,
     pbd_a = NA,
+    gul_a = NA,
     hum_m = NA,
     veh_m = NA,
     dog_m = NA,
@@ -3370,12 +3483,14 @@ nest_data_BSC_with_threat_data <-
     dof_m = NA,
     hof_m = NA,
     pbd_m = NA,
+    gul_m = NA,
     hum_b = NA,
     veh_b = NA,
     dog_b = NA,
     don_b = NA,
     dof_b = NA,
     pbd_b = NA,
+    gul_b = NA,
     hof_b = NA,
     hum_p = NA,
     veh_p = NA,
@@ -3417,7 +3532,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
                             levels = c("Monday", "Tuesday", "Wednesday", 
                                        "Thursday", "Friday", "Saturday", 
                                        "Sunday")),
-           region = "FP") %>% 
+           region = "BSC") %>% 
     mutate(year = year(date)) %>% 
     mutate(season = ifelse(month(date) < 6, year - 1, year)) %>% 
     mutate(season = ifelse(month(date) >= 6, 
@@ -3452,6 +3567,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
              dogs_off_bi = ifelse(dogs_off > 0, 1, 0),
              dogs_on_bi = ifelse(dogs_on > 0, 1, 0),
              p_birds_bi = ifelse(pred_birds > 0, 1, 0),
+             gulls_bi = ifelse(gulls > 0, 1, 0),
              hoof_bi = ifelse(hoofed_animals > 0 | (!is.na(hoofed_pri)), 1, 0)) %>%
       dplyr::summarise(
         # fundays = sum(funday),
@@ -3462,6 +3578,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
         dogs_off_avg = mean(dogs_off, na.rm = TRUE),
         hoof_avg = mean(hoofed_animals, na.rm = TRUE),
         p_birds_avg = mean(pred_birds, na.rm = TRUE),
+        gulls_avg = mean(gulls, na.rm = TRUE),
         hum_max = max(humans, na.rm = TRUE),
         vehicles_max = max(vehicles, na.rm = TRUE),
         dogs_max = max(dogs, na.rm = TRUE),
@@ -3469,12 +3586,14 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
         dogs_off_max = max(dogs_off, na.rm = TRUE),
         hoof_max = max(hoofed_animals, na.rm = TRUE),
         p_birds_max = max(pred_birds, na.rm = TRUE),
+        gulls_max = max(gulls, na.rm = TRUE),
         hum_bi = max(hum_bi, na.rm = TRUE),
         vehicle_bi = max(vehicle_bi, na.rm = TRUE),
         dogs_bi = max(dogs_bi, na.rm = TRUE),
         dogs_on_bi = max(dogs_on_bi, na.rm = TRUE),
         dogs_off_bi = max(dogs_off_bi, na.rm = TRUE),
         p_birds_bi = max(p_birds_bi, na.rm = TRUE),
+        gulls_bi = max(gulls_bi, na.rm = TRUE),
         hoof_bi = max(hoof_bi, na.rm = TRUE),
         hum_pr = max(hum_pri, na.rm = TRUE),
         vehicle_pr = max(vehicle_pri, na.rm = TRUE),
@@ -3494,6 +3613,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
     nest_data_BSC_with_threat_data$dof_a[i] <- avgeraged_threats$dogs_off_avg
     nest_data_BSC_with_threat_data$hof_a[i] <- avgeraged_threats$hoof_avg
     nest_data_BSC_with_threat_data$pbd_a[i] <- avgeraged_threats$p_birds_avg
+    nest_data_BSC_with_threat_data$gul_a[i] <- avgeraged_threats$gulls_avg
     
     nest_data_BSC_with_threat_data$hum_m[i] <- avgeraged_threats$hum_max
     nest_data_BSC_with_threat_data$veh_m[i] <- avgeraged_threats$vehicles_max
@@ -3502,6 +3622,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
     nest_data_BSC_with_threat_data$dof_m[i] <- avgeraged_threats$dogs_off_max
     nest_data_BSC_with_threat_data$hof_m[i] <- avgeraged_threats$hoof_max
     nest_data_BSC_with_threat_data$pbd_m[i] <- avgeraged_threats$p_birds_max
+    nest_data_BSC_with_threat_data$gul_m[i] <- avgeraged_threats$gulls_max
     
     nest_data_BSC_with_threat_data$hum_b[i] <- avgeraged_threats$hum_bi
     nest_data_BSC_with_threat_data$veh_b[i] <- avgeraged_threats$vehicle_bi
@@ -3510,6 +3631,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
     nest_data_BSC_with_threat_data$dof_b[i] <- avgeraged_threats$dogs_off_bi
     nest_data_BSC_with_threat_data$pbd_b[i] <- avgeraged_threats$p_birds_bi
     nest_data_BSC_with_threat_data$hof_b[i] <- avgeraged_threats$hoof_bi
+    nest_data_BSC_with_threat_data$gul_b[i] <- avgeraged_threats$gulls_bi
     
     nest_data_BSC_with_threat_data$hum_p[i] <- avgeraged_threats$hum_pr
     nest_data_BSC_with_threat_data$veh_p[i] <- avgeraged_threats$vehicle_pr
@@ -3531,6 +3653,7 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
     nest_data_BSC_with_threat_data$dof_a[i] <- NA
     nest_data_BSC_with_threat_data$hof_a[i] <- NA
     nest_data_BSC_with_threat_data$pbd_a[i] <- NA
+    nest_data_BSC_with_threat_data$gul_a[i] <- NA
     nest_data_BSC_with_threat_data$hum_m[i] <- NA
     nest_data_BSC_with_threat_data$veh_m[i] <- NA
     nest_data_BSC_with_threat_data$dog_m[i] <- NA
@@ -3538,12 +3661,14 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
     nest_data_BSC_with_threat_data$dof_m[i] <- NA
     nest_data_BSC_with_threat_data$hof_m[i] <- NA
     nest_data_BSC_with_threat_data$pbd_m[i] <- NA
+    nest_data_BSC_with_threat_data$gul_m[i] <- NA
     nest_data_BSC_with_threat_data$hum_b[i] <- NA
     nest_data_BSC_with_threat_data$veh_b[i] <- NA
     nest_data_BSC_with_threat_data$dog_b[i] <- NA
     nest_data_BSC_with_threat_data$don_b[i] <- NA
     nest_data_BSC_with_threat_data$dof_b[i] <- NA
     nest_data_BSC_with_threat_data$pbd_b[i] <- NA
+    nest_data_BSC_with_threat_data$gul_b[i] <- NA
     nest_data_BSC_with_threat_data$hof_b[i] <- NA
     nest_data_BSC_with_threat_data$hum_p[i] <- NA
     nest_data_BSC_with_threat_data$veh_p[i] <- NA
@@ -3569,7 +3694,7 @@ nest_data_with_threat_data <-
   filter(n_surveys > 0) %>% 
   # mutate(dof_b = ifelse(dof_b == 1, "Y", "N")) %>%
   # dplyr::select(-fox_p) %>%
-  mutate_at(vars(hum_b, veh_b, dog_b, don_b, dof_b, pbd_b, hof_b),
+  mutate_at(vars(hum_b, veh_b, dog_b, don_b, dof_b, pbd_b, gul_b, hof_b),
             ~ as.factor(.)) %>% 
   mutate_at(vars(hum_p, veh_p, dog_p, hof_p, fox_p),
             ~ ifelse(is.na(.), 0, .)) 
@@ -3603,8 +3728,8 @@ nest_data_with_threat_data_7d <-
 # determine the 99% quantile limit for each threat (i.e., to remove outlier data)
 threat_data_99_ql_ <- 
   nest_data_with_threat_data_7d %>% 
-  summarise_at(c("hum_a", "veh_a", "dog_a", "don_a", "dof_a", 
-                 "hum_m", "veh_m", "dog_m", "don_m", "dof_m",
+  summarise_at(c("hum_a", "pbd_a", "gul_a", "veh_a", "dog_a", "don_a", "dof_a", 
+                 "hum_m", "pbd_m", "gul_m", "veh_m", "dog_m", "don_m", "dof_m",
                  "hum_p", "veh_p", "dog_p", "hof_p", "fox_p"), 
                ~ quantile(.x, probs = c(0.99)))
 
@@ -3644,6 +3769,20 @@ nest_data_with_threat_data_7d %>%
   xlab("average number of dogs off leashes counted in territory during active nest")
 
 nest_data_with_threat_data_7d %>% 
+  filter(dof_a <= ceiling(as.numeric(threat_data_99_ql_$pbd_a[1]))) %>% 
+  ggplot() +
+  geom_histogram(aes(pbd_a), binwidth = 1) +
+  luke_theme +
+  xlab("average number of corvids counted in territory during active nest")
+
+nest_data_with_threat_data_7d %>% 
+  filter(dof_a <= ceiling(as.numeric(threat_data_99_ql_$gul_a[1]))) %>% 
+  ggplot() +
+  geom_histogram(aes(gul_a), binwidth = 1) +
+  luke_theme +
+  xlab("average number of gulls counted in territory during active nest")
+
+nest_data_with_threat_data_7d %>% 
   filter(hum_m <= ceiling(as.numeric(threat_data_99_ql_$hum_m[1]))) %>% 
   ggplot() +
   geom_histogram(aes(hum_m), binwidth = 1) +
@@ -3677,6 +3816,20 @@ nest_data_with_threat_data_7d %>%
   geom_histogram(aes(dof_m), binwidth = 1) +
   luke_theme +
   xlab("maximum number of dogs off leashes counted in territory during active nest")
+
+nest_data_with_threat_data_7d %>% 
+  filter(dof_a <= ceiling(as.numeric(threat_data_99_ql_$pbd_m[1]))) %>% 
+  ggplot() +
+  geom_histogram(aes(pbd_m), binwidth = 1) +
+  luke_theme +
+  xlab("maximum number of corvids counted in territory during active nest")
+
+nest_data_with_threat_data_7d %>% 
+  filter(dof_a <= ceiling(as.numeric(threat_data_99_ql_$gul_m[1]))) %>% 
+  ggplot() +
+  geom_histogram(aes(gul_m), binwidth = 1) +
+  luke_theme +
+  xlab("maximum number of gulls counted in territory during active nest")
 
 nest_data_with_threat_data_7d %>% 
   filter(hum_p <= ceiling(as.numeric(threat_data_99_ql_$hum_p[1]))) %>% 
@@ -3721,11 +3874,15 @@ nest_data_with_threat_data_7d_ <-
   filter(dog_a <= ceiling(as.numeric(threat_data_99_ql_$dog_a[1]))) %>% 
   filter(don_a <= ceiling(as.numeric(threat_data_99_ql_$don_a[1]))) %>% 
   filter(dof_a <= ceiling(as.numeric(threat_data_99_ql_$dof_a[1]))) %>% 
+  filter(pbd_a <= ceiling(as.numeric(threat_data_99_ql_$pbd_a[1]))) %>% 
+  filter(gul_a <= ceiling(as.numeric(threat_data_99_ql_$gul_a[1]))) %>% 
   filter(hum_m <= ceiling(as.numeric(threat_data_99_ql_$hum_m[1]))) %>% 
   filter(veh_m <= ceiling(as.numeric(threat_data_99_ql_$veh_m[1]))) %>% 
   filter(dog_m <= ceiling(as.numeric(threat_data_99_ql_$dog_m[1]))) %>% 
   filter(don_m <= ceiling(as.numeric(threat_data_99_ql_$don_m[1]))) %>% 
-  filter(dof_m <= ceiling(as.numeric(threat_data_99_ql_$dof_m[1]))) %>% 
+  filter(dof_m <= ceiling(as.numeric(threat_data_99_ql_$dof_m[1]))) %>%
+  filter(pbd_m <= ceiling(as.numeric(threat_data_99_ql_$pbd_m[1]))) %>% 
+  filter(gul_m <= ceiling(as.numeric(threat_data_99_ql_$gul_m[1]))) %>% 
   filter(hum_p <= ceiling(as.numeric(threat_data_99_ql_$hum_p[1]))) %>% 
   filter(veh_p <= ceiling(as.numeric(threat_data_99_ql_$veh_p[1]))) %>% 
   filter(dog_p <= ceiling(as.numeric(threat_data_99_ql_$dog_p[1]))) %>% 
@@ -3898,9 +4055,13 @@ nest_survival_FP <- function()
   S.hof_a <-
     list(formula = ~hof_a)
   
-  # average predatory birds detected
+  # average corvids detected
   S.pbd_a <-
     list(formula = ~pbd_a)
+  
+  # average gulls detected
+  S.gul_a <-
+    list(formula = ~gul_a)
   
   # fox print levels
   S.fox_p <-
@@ -3923,9 +4084,13 @@ nest_survival_FP <- function()
   S.dof_m <-
     list(formula = ~dof_m)
   
-  # max predatory birds detected
+  # max corvids detected
   S.pbd_m <-
     list(formula = ~pbd_m)
+  
+  # max gulls detected
+  S.gul_m <-
+    list(formula = ~gul_m)
   
   #### interaction with management levels
   # average humans detected and management levels
@@ -3944,9 +4109,13 @@ nest_survival_FP <- function()
   S.dof_a_level <-
     list(formula = ~dof_a + level)
   
-  # average predatory birds detected and management levels
+  # average corvids detected and management levels
   S.pbd_a_level <-
     list(formula = ~pbd_a + level)
+  
+  # average gulls detected and management levels
+  S.gul_a_level <-
+    list(formula = ~gul_a + level)
   
   #### interaction with management levels and management levels
   # max humans detected
@@ -3965,9 +4134,13 @@ nest_survival_FP <- function()
   S.dof_m_level <-
     list(formula = ~dof_m + level)
   
-  # max predatory birds detected and management levels
+  # max corvids detected and management levels
   S.pbd_m_level <-
     list(formula = ~pbd_m + level)
+  
+  # max gulls detected and management levels
+  S.gul_m_level <-
+    list(formula = ~gul_m + level)
   
   # between-year variation in DSR
   S.season <-
@@ -4122,9 +4295,13 @@ nest_survival_MP <- function()
   S.hof_a <-
     list(formula = ~hof_a)
   
-  # average predatory birds detected
+  # average corvids detected
   S.pbd_a <-
     list(formula = ~pbd_a)
+  
+  # average gulls detected
+  S.gul_a <-
+    list(formula = ~gul_a)
   
   # fox print levels
   S.fox_p <-
@@ -4147,9 +4324,13 @@ nest_survival_MP <- function()
   S.dof_m <-
     list(formula = ~dof_m)
   
-  # max predatory birds detected
+  # max corvids detected
   S.pbd_m <-
     list(formula = ~pbd_m)
+  
+  # max gulls detected
+  S.gul_m <-
+    list(formula = ~gul_m)
   
   #### interaction with management levels
   # average humans detected and management levels
@@ -4168,9 +4349,13 @@ nest_survival_MP <- function()
   S.dof_a_level <-
     list(formula = ~dof_a + level)
   
-  # average predatory birds detected and management levels
+  # average corvids detected and management levels
   S.pbd_a_level <-
     list(formula = ~pbd_a + level)
+  
+  # average gulls detected and management levels
+  S.gul_a_level <-
+    list(formula = ~gul_a + level)
   
   #### interaction with management levels and management levels
   # max humans detected
@@ -4189,9 +4374,13 @@ nest_survival_MP <- function()
   S.dof_m_level <-
     list(formula = ~dof_m + level)
   
-  # max predatory birds detected and management levels
+  # max corvids detected and management levels
   S.pbd_m_level <-
     list(formula = ~pbd_m + level)
+  
+  # max gulls detected and management levels
+  S.gul_m_level <-
+    list(formula = ~gul_m + level)
   
   # between-year variation in DSR
   S.season <-
@@ -4346,9 +4535,13 @@ nest_survival_BSC <- function()
   S.hof_a <-
     list(formula = ~hof_a)
   
-  # average predatory birds detected
+  # average corvids detected
   S.pbd_a <-
     list(formula = ~pbd_a)
+  
+  # average gulls detected
+  S.gul_a <-
+    list(formula = ~gul_a)
   
   # fox print levels
   S.fox_p <-
@@ -4371,9 +4564,13 @@ nest_survival_BSC <- function()
   S.dof_m <-
     list(formula = ~dof_m)
   
-  # max predatory birds detected
+  # max corvids detected
   S.pbd_m <-
     list(formula = ~pbd_m)
+  
+  # max gulls detected
+  S.gul_m <-
+    list(formula = ~gul_m)
   
   #### interaction with management levels
   # average humans detected and management levels
@@ -4392,9 +4589,13 @@ nest_survival_BSC <- function()
   S.dof_a_level <-
     list(formula = ~dof_a + level)
   
-  # average predatory birds detected and management levels
+  # average corvids detected and management levels
   S.pbd_a_level <-
     list(formula = ~pbd_a + level)
+  
+  # average gulls detected and management levels
+  S.gul_a_level <-
+    list(formula = ~gul_a + level)
   
   #### interaction with management levels and management levels
   # max humans detected
@@ -4413,9 +4614,13 @@ nest_survival_BSC <- function()
   S.dof_m_level <-
     list(formula = ~dof_m + level)
   
-  # max predatory birds detected and management levels
+  # max corvids detected and management levels
   S.pbd_m_level <-
     list(formula = ~pbd_m + level)
+  
+  # max gulls detected and management levels
+  S.gul_m_level <-
+    list(formula = ~gul_m + level)
   
   # between-year variation in DSR
   S.season <-
@@ -4637,7 +4842,7 @@ pred.fundays_FP <-
   pred.fundays$estimates %>% 
   mutate(region = "FP")
 
-S.fundays <- nest_survival_run_MP[[27]]
+S.fundays <- nest_survival_run_MP[[28]]
 # S.fundays$results$beta
 min.fundays = min(RMark_data_MP$nest_data.processed$data$fundays)
 max.fundays = max(RMark_data_MP$nest_data.processed$data$fundays)
@@ -4688,7 +4893,7 @@ ggplot(pred.fundays,
 ## Effect of management Levels on nest survival
 ```{r}
 nest_survival_reals_FP_levels <- 
-  nest_survival_run_FP[[36]]$results$real
+  nest_survival_run_FP[[40]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_FP_levels), " ", n = 4))
 nest_survival_reals_FP_levels <- cbind(Groups, nest_survival_reals_FP_levels)
@@ -4703,7 +4908,7 @@ nest_survival_reals_FP_levels <-
 row.names(nest_survival_reals_FP_levels) <- NULL
 
 nest_survival_reals_MP_levels <- 
-  nest_survival_run_MP[[35]]$results$real
+  nest_survival_run_MP[[40]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_levels), " ", n = 4))
 nest_survival_reals_MP_levels <- cbind(Groups, nest_survival_reals_MP_levels)
@@ -4718,7 +4923,7 @@ nest_survival_reals_MP_levels <-
 row.names(nest_survival_reals_MP_levels) <- NULL
 
 nest_survival_reals_BSC_levels <- 
-  nest_survival_run_BSC[[36]]$results$real
+  nest_survival_run_BSC[[40]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_BSC_levels), " ", n = 4))
 nest_survival_reals_BSC_levels <- cbind(Groups, nest_survival_reals_BSC_levels)
@@ -4756,7 +4961,7 @@ ggplot() +
         strip.background = element_blank()) +
   xlab("management level") + 
   ylab("estimated daily survival rate (± 95% CI)") +
-  ylim(c(0.5, 1)) +
+  ylim(c(0.4, 1)) +
   scale_colour_brewer(palette = "Dark2", 
                       name = "Region", 
                       labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
@@ -4768,7 +4973,7 @@ ggplot() +
 ## Effect of Habitat on nest survival
 ```{r}
 nest_survival_reals_FP_habitat <- 
-  nest_survival_run_FP[[30]]$results$real
+  nest_survival_run_FP[[34]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_FP_habitat), " ", n = 4))
 nest_survival_reals_FP_habitat <- cbind(Groups, nest_survival_reals_FP_habitat)
@@ -4780,7 +4985,7 @@ nest_survival_reals_FP_habitat <-
 row.names(nest_survival_reals_FP_habitat) <- NULL
 
 nest_survival_reals_MP_habitat <- 
-  nest_survival_run_MP[[29]]$results$real
+  nest_survival_run_MP[[34]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_habitat), " ", n = 4))
 nest_survival_reals_MP_habitat <- cbind(Groups, nest_survival_reals_MP_habitat)
@@ -4792,7 +4997,7 @@ nest_survival_reals_MP_habitat <-
 row.names(nest_survival_reals_MP_habitat) <- NULL
 
 nest_survival_reals_BSC_habitat <- 
-  nest_survival_run_BSC[[30]]$results$real
+  nest_survival_run_BSC[[34]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_BSC_habitat), " ", n = 4))
 nest_survival_reals_BSC_habitat <- cbind(Groups, nest_survival_reals_BSC_habitat)
@@ -4848,7 +5053,7 @@ pred.dog_m_FP <-
   pred.dog_m$estimates %>% 
   mutate(region = "FP")
 
-S.dog_m <- nest_survival_run_MP[[23]]
+S.dog_m <- nest_survival_run_MP[[24]]
 # S.dog_m$results$beta
 min.dog_m = min(RMark_data_MP$nest_data.processed$data$dog_m)
 max.dog_m = max(RMark_data_MP$nest_data.processed$data$dog_m)
@@ -4961,7 +5166,7 @@ ggplot(pred.dof_m,
 
 ## Effect of humans on nest survival (max counted)
 ```{r}
-S.hum_m <- nest_survival_run_FP[[34]]
+S.hum_m <- nest_survival_run_FP[[38]]
 # S.hum_m$results$beta
 min.hum_m = min(RMark_data_FP$nest_data.processed$data$hum_m)
 max.hum_m = max(RMark_data_FP$nest_data.processed$data$hum_m)
@@ -4974,7 +5179,7 @@ pred.hum_m_FP <-
   pred.hum_m$estimates %>% 
   mutate(region = "FP")
 
-S.hum_m <- nest_survival_run_MP[[33]]
+S.hum_m <- nest_survival_run_MP[[38]]
 # S.hum_m$results$beta
 min.hum_m = min(RMark_data_MP$nest_data.processed$data$hum_m)
 max.hum_m = max(RMark_data_MP$nest_data.processed$data$hum_m)
@@ -4988,7 +5193,7 @@ pred.hum_m_MP <-
   pred.hum_m$estimates %>% 
   mutate(region = "MP")
 
-S.hum_m <- nest_survival_run_BSC[[34]]
+S.hum_m <- nest_survival_run_BSC[[38]]
 # S.hum_m$results$beta
 min.hum_m = min(RMark_data_BSC$nest_data.processed$data$hum_m)
 max.hum_m = max(RMark_data_BSC$nest_data.processed$data$hum_m)
@@ -5022,9 +5227,9 @@ ggplot(pred.hum_m,
   facet_grid(. ~ region, labeller = as_labeller(region_names))
 ```
 
-## Effect of predatory birds on nest survival (max counted)
+## Effect of corvids on nest survival (max counted)
 ```{r}
-S.pbd_m <- nest_survival_run_FP[[39]]
+S.pbd_m <- nest_survival_run_FP[[43]]
 # S.pbd_m$results$beta
 min.pbd_m = min(RMark_data_FP$nest_data.processed$data$pbd_m)
 max.pbd_m = max(RMark_data_FP$nest_data.processed$data$pbd_m)
@@ -5037,7 +5242,7 @@ pred.pbd_m_FP <-
   pred.pbd_m$estimates %>% 
   mutate(region = "FP")
 
-S.pbd_m <- nest_survival_run_MP[[38]]
+S.pbd_m <- nest_survival_run_MP[[43]]
 # S.pbd_m$results$beta
 min.pbd_m = min(RMark_data_MP$nest_data.processed$data$pbd_m)
 max.pbd_m = max(RMark_data_MP$nest_data.processed$data$pbd_m)
@@ -5051,7 +5256,7 @@ pred.pbd_m_MP <-
   pred.pbd_m$estimates %>% 
   mutate(region = "MP")
 
-S.pbd_m <- nest_survival_run_BSC[[39]]
+S.pbd_m <- nest_survival_run_BSC[[43]]
 # S.pbd_m$results$beta
 min.pbd_m = min(RMark_data_BSC$nest_data.processed$data$pbd_m)
 max.pbd_m = max(RMark_data_BSC$nest_data.processed$data$pbd_m)
@@ -5085,6 +5290,69 @@ ggplot(pred.pbd_m,
   facet_grid(. ~ region, labeller = as_labeller(region_names))
 ```
 
+## Effect of gulls on nest survival (max counted)
+```{r}
+S.gul_m <- nest_survival_run_FP[[32]]
+# S.gul_m$results$beta
+min.gul_m = min(RMark_data_FP$nest_data.processed$data$gul_m)
+max.gul_m = max(RMark_data_FP$nest_data.processed$data$gul_m)
+gul_m.values = seq(from = min.gul_m, to = max.gul_m, length = 100)
+pred.gul_m <- 
+  covariate.predictions(model = S.gul_m, 
+                        data = data.frame(gul_m = gul_m.values),
+                        indices = 1)
+pred.gul_m_FP <- 
+  pred.gul_m$estimates %>% 
+  mutate(region = "FP")
+
+S.gul_m <- nest_survival_run_MP[[32]]
+# S.gul_m$results$beta
+min.gul_m = min(RMark_data_MP$nest_data.processed$data$gul_m)
+max.gul_m = max(RMark_data_MP$nest_data.processed$data$gul_m)
+gul_m.values = seq(from = min.gul_m, to = max.gul_m, length = 100)
+pred.gul_m <- 
+  covariate.predictions(model = S.gul_m, 
+                        data = data.frame(gul_m = gul_m.values),
+                        indices = 1)
+
+pred.gul_m_MP <- 
+  pred.gul_m$estimates %>% 
+  mutate(region = "MP")
+
+S.gul_m <- nest_survival_run_BSC[[32]]
+# S.gul_m$results$beta
+min.gul_m = min(RMark_data_BSC$nest_data.processed$data$gul_m)
+max.gul_m = max(RMark_data_BSC$nest_data.processed$data$gul_m)
+gul_m.values = seq(from = min.gul_m, to = max.gul_m, length = 100)
+pred.gul_m <- 
+  covariate.predictions(model = S.gul_m, 
+                        data = data.frame(gul_m = gul_m.values),
+                        indices = 1)
+
+pred.gul_m_BSC <- 
+  pred.gul_m$estimates %>% 
+  mutate(region = "BSC")
+
+pred.gul_m <- 
+  bind_rows(pred.gul_m_FP, pred.gul_m_MP, pred.gul_m_BSC)
+
+ggplot(pred.gul_m, 
+       aes(x = covdata, y = estimate, color = region, fill = region)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
+  scale_colour_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  scale_x_continuous(breaks = c(0, 50, 100, 150, 200)) +
+  luke_theme +
+  theme(legend.position = "none",
+        legend.justification = c(1, 0),
+        strip.background = element_blank()) +
+  xlab("maximum number of ravens and magpies exposed to") + 
+  ylab("estimated daily survival rate (± 95% CI)") +
+  ylim(c(0, 1)) +
+  facet_grid(. ~ region, labeller = as_labeller(region_names))
+```
+
 ## Effect of Fox activity on nest survival (max print level)
 ```{r}
 nest_survival_reals_FP_fox_p <- 
@@ -5107,7 +5375,7 @@ nest_survival_reals_FP_fox_p <-
 row.names(nest_survival_reals_FP_fox_p) <- NULL
 
 nest_survival_reals_MP_fox_p <- 
-  nest_survival_run_MP[[26]]$results$real
+  nest_survival_run_MP[[27]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_fox_p), " ", n = 4))
 nest_survival_reals_MP_fox_p <- cbind(Groups, nest_survival_reals_MP_fox_p)
@@ -5177,7 +5445,7 @@ ggplot() +
 
 ## Effect of vehicles on nest survival (max)
 ```{r}
-S.veh_m <- nest_survival_run_FP[[47]]
+S.veh_m <- nest_survival_run_FP[[51]]
 # S.veh_m$results$beta
 min.veh_m = min(RMark_data_FP$nest_data.processed$data$veh_m)
 max.veh_m = max(RMark_data_FP$nest_data.processed$data$veh_m)
@@ -5190,7 +5458,7 @@ pred.veh_m_FP <-
   pred.veh_m$estimates %>% 
   mutate(region = "FP")
 
-S.veh_m <- nest_survival_run_MP[[46]]
+S.veh_m <- nest_survival_run_MP[[51]]
 # S.veh_m$results$beta
 min.veh_m = min(RMark_data_MP$nest_data.processed$data$veh_m)
 max.veh_m = max(RMark_data_MP$nest_data.processed$data$veh_m)
@@ -5204,7 +5472,7 @@ pred.veh_m_MP <-
   pred.veh_m$estimates %>% 
   mutate(region = "MP")
 
-S.veh_m <- nest_survival_run_BSC[[47]]
+S.veh_m <- nest_survival_run_BSC[[51]]
 # S.veh_m$results$beta
 min.veh_m = min(RMark_data_BSC$nest_data.processed$data$veh_m)
 max.veh_m = max(RMark_data_BSC$nest_data.processed$data$veh_m)
@@ -5241,7 +5509,7 @@ ggplot(pred.veh_m,
 ## Annual variation in nest survival
 ```{r}
 nest_survival_reals_FP_season <- 
-  nest_survival_run_FP[[42]]$results$real
+  nest_survival_run_FP[[46]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_FP_season), " ", n = 4))
 nest_survival_reals_FP_season <- cbind(Groups, nest_survival_reals_FP_season)
@@ -5255,7 +5523,7 @@ nest_survival_reals_FP_season <-
 row.names(nest_survival_reals_FP_season) <- NULL
 
 nest_survival_reals_MP_season <- 
-  nest_survival_run_MP[[41]]$results$real
+  nest_survival_run_MP[[46]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_season), " ", n = 4))
 nest_survival_reals_MP_season <- cbind(Groups, nest_survival_reals_MP_season)
@@ -5269,7 +5537,7 @@ nest_survival_reals_MP_season <-
 row.names(nest_survival_reals_MP_season) <- NULL
 
 nest_survival_reals_BSC_season <- 
-  nest_survival_run_BSC[[42]]$results$real
+  nest_survival_run_BSC[[46]]$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_BSC_season), " ", n = 4))
 nest_survival_reals_BSC_season <- cbind(Groups, nest_survival_reals_BSC_season)
@@ -5554,6 +5822,724 @@ hooded_plover_nest_plot_FP
 hooded_plover_nest_plot_MP
 hooded_plover_nest_plot_BSC
 ```
+
+## Explore correlations between "Fun days" and the threats
+We can see in our model selection of nest survival all three sites that our variable "fun days" (a measure of the number of weekends or holidays a nest is exposed to) was the best at explaining variation in daily nest survival. To interpret this effect, it essentially means that if a nest is initiated on, for example, a Friday right before a long period of consecutive holidays, this nest is expected to have extremely low survival compared to a nest initiated on, for example, a Monday at the early or late part of the season when there are no holidays.
+
+Despite "fun days" having such a strong relationship to daily nest survival, our threat variables (e.g., maximum number of dogs off leash counted, maximum number of humans counted, etc.) all showed little relationship with daily nest survival, which we interpret as a methodological effect: the surveys conducted to quantify specific threats were too infrequent to capture a meaningful measure of the pressure that these threats have on nest survival. To link "Fun days" to the threats, we here do an exploratory relationship between fundays and the threats.
+```{r}
+library(lme4)
+library(gtsummary)
+library(ggeffects)
+library(effects)
+
+threat_data__scaled_FP <- 
+  threat_data__ %>% 
+  mutate(no_fun = ifelse(funday == 0, 1, 0),
+                 fun = ifelse(funday == 1, 1, 0)) %>% 
+          filter(region == "FP") %>% 
+  mutate(humans_s = scale(humans_),
+         dogs_s = scale(dogs_),
+         pred_birds_s = scale(pred_birds_),
+         gull_s = scale(gulls_),
+         dogs_off_s = scale(dogs_off_),
+         obs_date2_s = scale(obs_date2))
+
+threat_data__scaled_MP <- 
+  threat_data__ %>% 
+  mutate(no_fun = ifelse(funday == 0, 1, 0),
+                 fun = ifelse(funday == 1, 1, 0)) %>% 
+          filter(region == "MP") %>% 
+  mutate(humans_s = scale(humans_),
+         dogs_s = scale(dogs_),
+         pred_birds_s = scale(pred_birds_),
+         gull_s = scale(gulls_),
+         dogs_off_s = scale(dogs_off_),
+         obs_date2_s = scale(obs_date2))
+
+threat_data__scaled_BSC <- 
+  threat_data__ %>% 
+  mutate(no_fun = ifelse(funday == 0, 1, 0),
+                 fun = ifelse(funday == 1, 1, 0)) %>% 
+          filter(region == "BSC") %>% 
+  mutate(humans_s = scale(humans_),
+         dogs_s = scale(dogs_),
+         pred_birds_s = scale(pred_birds_),
+         gull_s = scale(gulls_),
+         dogs_off_s = scale(dogs_off_),
+         obs_date2_s = scale(obs_date2))
+```
+
+### Humans and fun days relationships at the three regions
+strong relationship between the number of humans detected and the occurrence of a weekend or a holiday at all 3 regions
+```{r}
+humans_fun_day_FP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          humans_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_FP,
+        family = "binomial")
+
+humans_fun_day_MP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          humans_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_MP,
+        family = "binomial")
+
+humans_fun_day_BSC <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          humans_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_BSC,
+        family = "binomial")
+```
+
+Fleurieu Peninsula
+```{r}
+tbl_regression(humans_fun_day_FP, intercept = TRUE)
+```
+
+Mornington Peninsula
+```{r}
+tbl_regression(humans_fun_day_MP, intercept = TRUE)
+```
+
+Bellarine / Surf Coast
+```{r}
+tbl_regression(humans_fun_day_BSC, intercept = TRUE)
+```
+
+```{r, include=FALSE}
+humans_fun_day_FP_fits <-
+  as.data.frame(effect(term = "humans_", mod = humans_fun_day_FP,
+                       xlevels = list(humans_ = seq(min(threat_data__scaled_FP[, "humans_"], na.rm = TRUE), max(threat_data__scaled_FP[, "humans_"], na.rm = TRUE), 1))))
+
+humans_fun_day_FP_plot <-
+  threat_data__scaled_FP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = humans_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = humans_fun_day_FP_fits,
+            aes(x = humans_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = humans_fun_day_FP_fits,
+              aes(x = humans_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5)) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of humans detected") +
+  ggtitle("Fleurieu Peninsula")
+
+humans_fun_day_MP_fits <-
+  as.data.frame(effect(term = "humans_", mod = humans_fun_day_MP,
+                       xlevels = list(humans_ = seq(min(threat_data__scaled_MP[, "humans_"], na.rm = TRUE), max(threat_data__scaled_MP[, "humans_"], na.rm = TRUE), 1))))
+
+humans_fun_day_MP_plot <-
+  threat_data__scaled_MP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = humans_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = humans_fun_day_MP_fits,
+            aes(x = humans_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = humans_fun_day_MP_fits,
+              aes(x = humans_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of humans detected") +
+  ggtitle("Mornington Peninsula")
+
+humans_fun_day_BSC_fits <-
+  as.data.frame(effect(term = "humans_", mod = humans_fun_day_BSC,
+                       xlevels = list(humans_ = seq(min(threat_data__scaled_BSC[, "humans_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "humans_"], na.rm = TRUE), 1))))
+
+humans_fun_day_BSC_plot <-
+  threat_data__scaled_BSC %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = humans_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = humans_fun_day_BSC_fits,
+            aes(x = humans_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = humans_fun_day_BSC_fits,
+              aes(x = humans_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of humans detected") +
+  ggtitle("Bellarine / Surf Coast")
+
+humans_fun_day_FP_plot + humans_fun_day_MP_plot + humans_fun_day_BSC_plot +
+  plot_layout(ncol = 3,
+              heights = unit(c(8), 'cm'),
+              widths = unit(c(8, 8, 8), 'cm'))
+```
+
+### Dogs and fun days relationships at the three regions
+strong relationship between the number of dogs detected and the occurrence of a weekend or a holiday at all 3 regions
+```{r}
+dogs_fun_day_FP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          dogs_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_FP,
+        family = "binomial")
+
+dogs_fun_day_MP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          dogs_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_MP,
+        family = "binomial")
+
+dogs_fun_day_BSC <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          dogs_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_BSC,
+        family = "binomial")
+```
+
+Fleurieu Peninsula
+```{r}
+tbl_regression(dogs_fun_day_FP, intercept = TRUE)
+```
+
+Mornington Peninsula
+```{r}
+tbl_regression(dogs_fun_day_MP, intercept = TRUE)
+```
+
+Bellarine / Surf Coast
+```{r}
+tbl_regression(dogs_fun_day_BSC, intercept = TRUE)
+```
+
+```{r, include=FALSE}
+dogs_fun_day_FP_fits <-
+  as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_FP,
+                       xlevels = list(dogs_ = seq(min(threat_data__scaled_FP[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_FP[, "dogs_"], na.rm = TRUE), 1))))
+
+dogs_fun_day_FP_plot <-
+  threat_data__scaled_FP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = dogs_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = dogs_fun_day_FP_fits,
+            aes(x = dogs_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = dogs_fun_day_FP_fits,
+              aes(x = dogs_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5)) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of dogs detected") +
+  ggtitle("Fleurieu Peninsula")
+
+dogs_fun_day_MP_fits <-
+  as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_MP,
+                       xlevels = list(dogs_ = seq(min(threat_data__scaled_MP[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_MP[, "dogs_"], na.rm = TRUE), 1))))
+
+dogs_fun_day_MP_plot <-
+  threat_data__scaled_MP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = dogs_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = dogs_fun_day_MP_fits,
+            aes(x = dogs_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = dogs_fun_day_MP_fits,
+              aes(x = dogs_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of dogs detected") +
+  ggtitle("Mornington Peninsula")
+
+dogs_fun_day_BSC_fits <-
+  as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_BSC,
+                       xlevels = list(dogs_ = seq(min(threat_data__scaled_BSC[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "dogs_"], na.rm = TRUE), 1))))
+
+dogs_fun_day_BSC_plot <-
+  threat_data__scaled_BSC %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = dogs_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = dogs_fun_day_BSC_fits,
+            aes(x = dogs_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = dogs_fun_day_BSC_fits,
+              aes(x = dogs_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of dogs detected") +
+  ggtitle("Bellarine / Surf Coast")
+
+dogs_fun_day_FP_plot + dogs_fun_day_MP_plot + dogs_fun_day_BSC_plot +
+  plot_layout(ncol = 3,
+              heights = unit(c(8), 'cm'),
+              widths = unit(c(8, 8, 8), 'cm'))
+```
+
+### Dogs off leashes and fun days relationships at the three regions
+strong relationship between the number of dogs off leash detected and the occurrence of a weekend or a holiday at all 3 regions
+```{r}
+dogs_off_fun_day_FP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          dogs_off_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_FP,
+        family = "binomial")
+
+dogs_off_fun_day_MP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          dogs_off_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_MP,
+        family = "binomial")
+
+dogs_off_fun_day_BSC <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          dogs_off_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_BSC,
+        family = "binomial")
+```
+
+Fleurieu Peninsula
+```{r}
+tbl_regression(dogs_off_fun_day_FP, intercept = TRUE)
+```
+
+Mornington Peninsula
+```{r}
+tbl_regression(dogs_off_fun_day_MP, intercept = TRUE)
+```
+
+Bellarine / Surf Coast
+```{r}
+tbl_regression(dogs_off_fun_day_BSC, intercept = TRUE)
+```
+
+```{r, include=FALSE}
+dogs_off_fun_day_FP_fits <-
+  as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_FP,
+                       xlevels = list(dogs_off_ = seq(min(threat_data__scaled_FP[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_FP[, "dogs_off_"], na.rm = TRUE), 1))))
+
+dogs_off_fun_day_FP_plot <-
+  threat_data__scaled_FP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = dogs_off_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = dogs_off_fun_day_FP_fits,
+            aes(x = dogs_off_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = dogs_off_fun_day_FP_fits,
+              aes(x = dogs_off_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5)) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of dogs off leash detected") +
+  ggtitle("Fleurieu Peninsula")
+
+dogs_off_fun_day_MP_fits <-
+  as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_MP,
+                       xlevels = list(dogs_off_ = seq(min(threat_data__scaled_MP[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_MP[, "dogs_off_"], na.rm = TRUE), 1))))
+
+dogs_off_fun_day_MP_plot <-
+  threat_data__scaled_MP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = dogs_off_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = dogs_off_fun_day_MP_fits,
+            aes(x = dogs_off_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = dogs_off_fun_day_MP_fits,
+              aes(x = dogs_off_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of dogs off leash detected") +
+  ggtitle("Mornington Peninsula")
+
+dogs_off_fun_day_BSC_fits <-
+  as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_BSC,
+                       xlevels = list(dogs_off_ = seq(min(threat_data__scaled_BSC[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "dogs_off_"], na.rm = TRUE), 1))))
+
+dogs_off_fun_day_BSC_plot <-
+  threat_data__scaled_BSC %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = dogs_off_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = dogs_off_fun_day_BSC_fits,
+            aes(x = dogs_off_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = dogs_off_fun_day_BSC_fits,
+              aes(x = dogs_off_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of dogs off leash detected") +
+  ggtitle("Bellarine / Surf Coast")
+
+dogs_off_fun_day_FP_plot + dogs_off_fun_day_MP_plot + dogs_off_fun_day_BSC_plot +
+  plot_layout(ncol = 3,
+              heights = unit(c(8), 'cm'),
+              widths = unit(c(8, 8, 8), 'cm'))
+```
+
+### Ravens and Magpies and fun days relationships at the three regions
+no relationship (but slightly negative) between the number of corvids detected and the occurrence of a weekend or a holiday at all 3 regions
+```{r}
+pred_birds_fun_day_FP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          pred_birds_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_FP,
+        family = "binomial")
+
+pred_birds_fun_day_MP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          pred_birds_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_MP,
+        family = "binomial")
+
+pred_birds_fun_day_BSC <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          pred_birds_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_BSC,
+        family = "binomial")
+```
+
+Fleurieu Peninsula
+```{r}
+tbl_regression(pred_birds_fun_day_FP, intercept = TRUE)
+```
+
+Mornington Peninsula
+```{r}
+tbl_regression(pred_birds_fun_day_MP, intercept = TRUE)
+```
+
+Bellarine / Surf Coast
+```{r}
+tbl_regression(pred_birds_fun_day_BSC, intercept = TRUE)
+```
+
+```{r, include=FALSE}
+pred_birds_fun_day_FP_fits <-
+  as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_FP,
+                       xlevels = list(pred_birds_ = seq(min(threat_data__scaled_FP[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_FP[, "pred_birds_"], na.rm = TRUE), 1))))
+
+pred_birds_fun_day_FP_plot <-
+  threat_data__scaled_FP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = pred_birds_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = pred_birds_fun_day_FP_fits,
+            aes(x = pred_birds_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = pred_birds_fun_day_FP_fits,
+              aes(x = pred_birds_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5)) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of ravens or magpies detected") +
+  ggtitle("Fleurieu Peninsula")
+
+pred_birds_fun_day_MP_fits <-
+  as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_MP,
+                       xlevels = list(pred_birds_ = seq(min(threat_data__scaled_MP[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_MP[, "pred_birds_"], na.rm = TRUE), 1))))
+
+pred_birds_fun_day_MP_plot <-
+  threat_data__scaled_MP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = pred_birds_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = pred_birds_fun_day_MP_fits,
+            aes(x = pred_birds_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = pred_birds_fun_day_MP_fits,
+              aes(x = pred_birds_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of ravens or magpies detected") +
+  ggtitle("Mornington Peninsula")
+
+pred_birds_fun_day_BSC_fits <-
+  as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_BSC,
+                       xlevels = list(pred_birds_ = seq(min(threat_data__scaled_BSC[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "pred_birds_"], na.rm = TRUE), 1))))
+
+pred_birds_fun_day_BSC_plot <-
+  threat_data__scaled_BSC %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = pred_birds_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = pred_birds_fun_day_BSC_fits,
+            aes(x = pred_birds_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = pred_birds_fun_day_BSC_fits,
+              aes(x = pred_birds_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of ravens or magpies detected") +
+  ggtitle("Bellarine / Surf Coast")
+
+pred_birds_fun_day_FP_plot + pred_birds_fun_day_MP_plot + pred_birds_fun_day_BSC_plot +
+  plot_layout(ncol = 3,
+              heights = unit(c(8), 'cm'),
+              widths = unit(c(8, 8, 8), 'cm'))
+```
+
+### Gulls and fun days relationships at the three regions
+no relationship (but slightly negative) between the number of corvids detected and the occurrence of a weekend or a holiday at all 3 regions
+```{r}
+gulls_fun_day_FP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          gulls_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_FP,
+        family = "binomial")
+
+gulls_fun_day_MP <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          gulls_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_MP,
+        family = "binomial")
+
+gulls_fun_day_BSC <-
+  glmer(cbind(fun, no_fun) ~ 
+          poly(obs_date2, 3) + 
+          gulls_ + (1 | season) + (1 | site),
+        data = threat_data__scaled_BSC,
+        family = "binomial")
+```
+
+Fleurieu Peninsula
+```{r}
+tbl_regression(gulls_fun_day_FP, intercept = TRUE)
+```
+
+Mornington Peninsula
+```{r}
+tbl_regression(gulls_fun_day_MP, intercept = TRUE)
+```
+
+Bellarine / Surf Coast
+```{r}
+tbl_regression(gulls_fun_day_BSC, intercept = TRUE)
+```
+
+```{r, include=FALSE}
+gulls_fun_day_FP_fits <-
+  as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_FP,
+                       xlevels = list(gulls_ = seq(min(threat_data__scaled_FP[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_FP[, "gulls_"], na.rm = TRUE), 1))))
+
+gulls_fun_day_FP_plot <-
+  threat_data__scaled_FP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = gulls_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = gulls_fun_day_FP_fits,
+            aes(x = gulls_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = gulls_fun_day_FP_fits,
+              aes(x = gulls_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5)) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of ravens or magpies detected") +
+  ggtitle("Fleurieu Peninsula")
+
+gulls_fun_day_MP_fits <-
+  as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_MP,
+                       xlevels = list(gulls_ = seq(min(threat_data__scaled_MP[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_MP[, "gulls_"], na.rm = TRUE), 1))))
+
+gulls_fun_day_MP_plot <-
+  threat_data__scaled_MP %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = gulls_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = gulls_fun_day_MP_fits,
+            aes(x = gulls_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = gulls_fun_day_MP_fits,
+              aes(x = gulls_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of ravens or magpies detected") +
+  ggtitle("Mornington Peninsula")
+
+gulls_fun_day_BSC_fits <-
+  as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_BSC,
+                       xlevels = list(gulls_ = seq(min(threat_data__scaled_BSC[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "gulls_"], na.rm = TRUE), 1))))
+
+gulls_fun_day_BSC_plot <-
+  threat_data__scaled_BSC %>%
+  ungroup() %>%
+  ggplot() +
+  geom_jitter(aes(x = gulls_, y = fun),
+             alpha = 0.4, height = 0.05,
+             shape = 19,
+             color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_line(data = gulls_fun_day_BSC_fits,
+            aes(x = gulls_, y = fit),
+            lwd = 1,
+            color = brewer.pal(9, "Set1")[c(2)]) +
+  geom_ribbon(data = gulls_fun_day_BSC_fits,
+              aes(x = gulls_, ymax = upper, ymin = lower),
+              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+  luke_theme +
+  theme(panel.border = element_blank(),
+        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylab("probability of being a weekend or holiday") +
+  xlab("number of ravens or magpies detected") +
+  ggtitle("Bellarine / Surf Coast")
+
+gulls_fun_day_FP_plot + gulls_fun_day_MP_plot + gulls_fun_day_BSC_plot +
+  plot_layout(ncol = 3,
+              heights = unit(c(8), 'cm'),
+              widths = unit(c(8, 8, 8), 'cm'))
+```
+
 
 ```{r, evaluate = FALSE, echo=FALSE}
 # S.fundays_level <- nest_survival_run_FP[[28]]
