@@ -1641,7 +1641,7 @@ threat_data <-
 
 ```
 
-```{r, cache=TRUE}
+```{r, eval=FALSE}
 threat_data_ <-
   threat_data %>% 
   rename(site = `Site name`) %>% 
@@ -2177,6 +2177,11 @@ threat_data_ <-
          humans, vehicles, dogs, dogs_on, dogs_off, hoofed_animals, pred_birds,
          gulls, hum_pri, fox_pri, dog_pri, vehicle_pri, hoofed_pri) %>% 
   ungroup()
+saveRDS(threat_data_, file = "output/threat_data_.rds")
+```
+
+```{r, echo=FALSE}
+threat_data_ <- readRDS(file = "output/threat_data_.rds")
 ```
 
 ### Visual inspection of threat data
@@ -3208,8 +3213,12 @@ for(i in 1:nrow(nest_data_FP_with_threat_data)){
     nest_data_FP_with_threat_data$fundays[i] <- NA
   }
 }
+saveRDS(nest_data_FP_with_threat_data, file = "output/nest_data_FP_with_threat_data.rds")
 ```
 
+```{r, echo=FALSE}
+nest_data_FP_with_threat_data <- readRDS(file = "output/nest_data_FP_with_threat_data.rds")
+```
 
 ```{r}
 ##### Mornington Peninsula: summarise threat data
@@ -3445,8 +3454,12 @@ for(i in 1:nrow(nest_data_MP_with_threat_data)){
     nest_data_MP_with_threat_data$fundays[i] <- NA
   }
 }
+saveRDS(nest_data_MP_with_threat_data, file = "output/nest_data_MP_with_threat_data.rds")
 ```
 
+```{r, echo=FALSE}
+nest_data_MP_with_threat_data <- readRDS(file = "output/nest_data_MP_with_threat_data.rds")
+```
 
 ```{r}
 ##### Bellarine / Surf Coast: summarise threat data
@@ -3682,6 +3695,11 @@ for(i in 1:nrow(nest_data_BSC_with_threat_data)){
     nest_data_BSC_with_threat_data$fundays[i] <- NA
   }
 }
+saveRDS(nest_data_BSC_with_threat_data, file = "output/nest_data_BSC_with_threat_data.rds")
+```
+
+```{r, echo=FALSE}
+nest_data_BSC_with_threat_data <- readRDS(file = "output/nest_data_BSC_with_threat_data.rds")
 ```
 
 remove outlier data and those with very infrequent threat surveys (cut off: visited at least once per week)
@@ -5581,7 +5599,7 @@ ggplot() +
   facet_grid(region ~ ., labeller = as_labeller(region_names))
 ```
 
-### Variation within years
+## Variation within years
 ```{r, fig.height=8}
 # Extract estimates of survival from Cubic model with management 
 # (non-linear season variation and management effect)
@@ -5910,7 +5928,7 @@ Bellarine / Surf Coast
 tbl_regression(humans_fun_day_BSC, intercept = TRUE)
 ```
 
-```{r, include=FALSE}
+```{r, fig.width=10}
 humans_fun_day_FP_fits <-
   as.data.frame(effect(term = "humans_", mod = humans_fun_day_FP,
                        xlevels = list(humans_ = seq(min(threat_data__scaled_FP[, "humans_"], na.rm = TRUE), max(threat_data__scaled_FP[, "humans_"], na.rm = TRUE), 1))))
@@ -6044,7 +6062,7 @@ Bellarine / Surf Coast
 tbl_regression(dogs_fun_day_BSC, intercept = TRUE)
 ```
 
-```{r, include=FALSE}
+```{r, fig.width=10}
 dogs_fun_day_FP_fits <-
   as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_FP,
                        xlevels = list(dogs_ = seq(min(threat_data__scaled_FP[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_FP[, "dogs_"], na.rm = TRUE), 1))))
@@ -6135,7 +6153,7 @@ dogs_fun_day_BSC_plot <-
 dogs_fun_day_FP_plot + dogs_fun_day_MP_plot + dogs_fun_day_BSC_plot +
   plot_layout(ncol = 3,
               heights = unit(c(8), 'cm'),
-              widths = unit(c(8, 8, 8), 'cm'))
+              widths = unit(c(7, 7, 7), 'cm'))
 ```
 
 ### Dogs off leashes and fun days relationships at the three regions
@@ -6178,7 +6196,7 @@ Bellarine / Surf Coast
 tbl_regression(dogs_off_fun_day_BSC, intercept = TRUE)
 ```
 
-```{r, include=FALSE}
+```{r, fig.width=10}
 dogs_off_fun_day_FP_fits <-
   as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_FP,
                        xlevels = list(dogs_off_ = seq(min(threat_data__scaled_FP[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_FP[, "dogs_off_"], na.rm = TRUE), 1))))
@@ -6269,11 +6287,11 @@ dogs_off_fun_day_BSC_plot <-
 dogs_off_fun_day_FP_plot + dogs_off_fun_day_MP_plot + dogs_off_fun_day_BSC_plot +
   plot_layout(ncol = 3,
               heights = unit(c(8), 'cm'),
-              widths = unit(c(8, 8, 8), 'cm'))
+              widths = unit(c(7, 7, 7), 'cm'))
 ```
 
 ### Ravens and Magpies and fun days relationships at the three regions
-no relationship (but slightly negative) between the number of corvids detected and the occurrence of a weekend or a holiday at all 3 regions
+weak negative relationship at Fleurieu Peninsula and Mornington Peninsula between the number of corvids detected and the occurrence of a weekend or a holiday
 ```{r}
 pred_birds_fun_day_FP <-
   glmer(cbind(fun, no_fun) ~ 
@@ -6312,7 +6330,7 @@ Bellarine / Surf Coast
 tbl_regression(pred_birds_fun_day_BSC, intercept = TRUE)
 ```
 
-```{r, include=FALSE}
+```{r, fig.width=10}
 pred_birds_fun_day_FP_fits <-
   as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_FP,
                        xlevels = list(pred_birds_ = seq(min(threat_data__scaled_FP[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_FP[, "pred_birds_"], na.rm = TRUE), 1))))
@@ -6403,11 +6421,11 @@ pred_birds_fun_day_BSC_plot <-
 pred_birds_fun_day_FP_plot + pred_birds_fun_day_MP_plot + pred_birds_fun_day_BSC_plot +
   plot_layout(ncol = 3,
               heights = unit(c(8), 'cm'),
-              widths = unit(c(8, 8, 8), 'cm'))
+              widths = unit(c(7, 7, 7), 'cm'))
 ```
 
 ### Gulls and fun days relationships at the three regions
-no relationship (but slightly negative) between the number of corvids detected and the occurrence of a weekend or a holiday at all 3 regions
+negative relationship (albeit only significant at Mornington Peninsula) between the number of corvids detected and the occurrence of a weekend or a holiday
 ```{r}
 gulls_fun_day_FP <-
   glmer(cbind(fun, no_fun) ~ 
@@ -6446,7 +6464,7 @@ Bellarine / Surf Coast
 tbl_regression(gulls_fun_day_BSC, intercept = TRUE)
 ```
 
-```{r, include=FALSE}
+```{r, fig.width=10}
 gulls_fun_day_FP_fits <-
   as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_FP,
                        xlevels = list(gulls_ = seq(min(threat_data__scaled_FP[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_FP[, "gulls_"], na.rm = TRUE), 1))))
@@ -6471,7 +6489,7 @@ gulls_fun_day_FP_plot <-
         plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
         plot.title = element_text(hjust = 0.5)) +
   ylab("probability of being a weekend or holiday") +
-  xlab("number of ravens or magpies detected") +
+  xlab("number of gulls detected") +
   ggtitle("Fleurieu Peninsula")
 
 gulls_fun_day_MP_fits <-
@@ -6501,7 +6519,7 @@ gulls_fun_day_MP_plot <-
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank()) +
   ylab("probability of being a weekend or holiday") +
-  xlab("number of ravens or magpies detected") +
+  xlab("number of gulls detected") +
   ggtitle("Mornington Peninsula")
 
 gulls_fun_day_BSC_fits <-
@@ -6531,13 +6549,13 @@ gulls_fun_day_BSC_plot <-
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank()) +
   ylab("probability of being a weekend or holiday") +
-  xlab("number of ravens or magpies detected") +
+  xlab("number of gulls detected") +
   ggtitle("Bellarine / Surf Coast")
 
 gulls_fun_day_FP_plot + gulls_fun_day_MP_plot + gulls_fun_day_BSC_plot +
   plot_layout(ncol = 3,
               heights = unit(c(8), 'cm'),
-              widths = unit(c(8, 8, 8), 'cm'))
+              widths = unit(c(7, 7, 7), 'cm'))
 ```
 
 
