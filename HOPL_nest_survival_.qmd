@@ -74,7 +74,8 @@ packages_required_in_project <- c("tidyverse",
                                   "gam",
                                   "pscl",
                                   "gamlss",
-                                  "gt")
+                                  "gt",
+                                  "lme4")
                                   
 # of the required packages, check if some need to be installed
 new.packages <- 
@@ -1638,7 +1639,6 @@ BSC_threat_data <-
 
 threat_data <- 
   bind_rows(FP_threat_data, MP_threat_data, BSC_threat_data)
-
 ```
 
 ```{r, eval=FALSE}
@@ -3908,6 +3908,46 @@ nest_data_with_threat_data_7d_ <-
   mutate(fox_p = ifelse(is.infinite(fox_p), 0, fox_p) %>% as.factor())
 ```
 
+### Sample size summary
+Number of nests
+```{r}
+nest_data_with_threat_data_7d_ %>%
+  summarise(n_obs = n())
+```
+
+Number of nests at each region
+```{r}
+nest_data_with_threat_data_7d_ %>% 
+  group_by(region) %>% 
+  summarise(n_obs = n())
+```
+
+Number of nests at each region for each year
+```{r}
+nest_data_with_threat_data_7d_ %>% 
+  group_by(region, season) %>% 
+  summarise(n_obs = n()) %>% 
+  pivot_wider(names_from = region, values_from = n_obs) %>% 
+  mutate(season = as.numeric(as.character(season))) %>% 
+  arrange(season)
+```
+
+Number of nests at each region in each management level
+```{r}
+nest_data_with_threat_data_7d_ %>% 
+  group_by(region, level) %>% 
+  summarise(n_obs = n()) %>% 
+  pivot_wider(names_from = region, values_from = n_obs) 
+```
+
+Number of nests at each region in each management status
+```{r}
+nest_data_with_threat_data_7d_ %>% 
+  group_by(region, status) %>% 
+  summarise(n_obs = n()) %>% 
+  pivot_wider(names_from = region, values_from = n_obs) 
+```
+
 ## Nest survival modeling
 ### Prepare data for RMark
 ```{r}
@@ -4028,64 +4068,16 @@ RMark_data_BSC <-
 nest_survival_FP <- function()
 {
   # Specify models to test
+  
   # constant daily survival rate (DSR)
   S.dot <- 
     list(formula = ~1)
   
-  # Linear trend in DSR
-  S.Time <-
-    list(formula = ~Time)
-
-  # Quadratic trend in DSR
-  S.Quadratic_Time <-
-    list(formula = ~Time + Quadratic)
-
-  # Cubic trend in DSR
-  S.Cubic_Time <-
-    list(formula = ~Time + Quadratic + Cubic)
+  # fox print status
+  # S.fox_p <-
+  #   list(formula = ~fox_p)
   
-  # Linear trend of weekends and holidays on DSR
-  S.fundays <-
-    list(formula = ~fundays)
-  
-  # weekends and holidays and management levels
-  S.fundays_level <-
-    list(formula = ~fundays + level)
-  
-  #### average counts
-  # average humans detected
-  S.hum_a <-
-    list(formula = ~hum_a)
-  
-  # average vehicles detected
-  S.veh_a <-
-    list(formula = ~veh_a)
-  
-  # average dogs detected
-  S.dog_a <-
-    list(formula = ~dog_a)
-  
-  # average dogs off leash detected
-  S.dof_a <-
-    list(formula = ~dof_a)
-  
-  # average hoofed animals detected
-  S.hof_a <-
-    list(formula = ~hof_a)
-  
-  # average corvids detected
-  S.pbd_a <-
-    list(formula = ~pbd_a)
-  
-  # average gulls detected
-  S.gul_a <-
-    list(formula = ~gul_a)
-  
-  # fox print levels
-  S.fox_p <-
-    list(formula = ~fox_p)
-  
-  #### maximum counts
+  #### maximum counts of threats
   # max humans detected
   S.hum_m <-
     list(formula = ~hum_m)
@@ -4110,135 +4102,30 @@ nest_survival_FP <- function()
   S.gul_m <-
     list(formula = ~gul_m)
   
-  #### interaction with management levels
-  # average humans detected and management levels
-  S.hum_a_level <-
-    list(formula = ~hum_a + level)
-  
-  # average vehicles detected and management levels
-  S.veh_a_level <-
-    list(formula = ~veh_a + level)
-  
-  # average dogs detected and management levels
-  S.dog_a_level <-
-    list(formula = ~dog_a + level)
-  
-  # average dogs off leash detected and management levels
-  S.dof_a_level <-
-    list(formula = ~dof_a + level)
-  
-  # average corvids detected and management levels
-  S.pbd_a_level <-
-    list(formula = ~pbd_a + level)
-  
-  # average gulls detected and management levels
-  S.gul_a_level <-
-    list(formula = ~gul_a + level)
-  
-  #### interaction with management levels and management levels
+  #### interaction of max threat counts and management status 
   # max humans detected
-  S.hum_m_level <-
-    list(formula = ~hum_m + level)
+  S.hum_m_x_status <-
+    list(formula = ~hum_m * status)
   
-  # max vehicles detected and management levels
-  S.veh_m_level <-
-    list(formula = ~veh_m + level)
+  # max vehicles detected and management status
+  S.veh_m_x_status <-
+    list(formula = ~veh_m * status)
   
-  # max dogs detected and management levels
-  S.dog_m_level <-
-    list(formula = ~dog_m + level)
+  # max dogs detected and management status
+  S.dog_m_x_status <-
+    list(formula = ~dog_m * status)
   
-  # max dogs off leash detected and management levels
-  S.dof_m_level <-
-    list(formula = ~dof_m + level)
+  # max dogs off leash detected and management status
+  S.dof_m_x_status <-
+    list(formula = ~dof_m * status)
   
-  # max corvids detected and management levels
-  S.pbd_m_level <-
-    list(formula = ~pbd_m + level)
+  # max corvids detected and management status
+  S.pbd_m_x_status <-
+    list(formula = ~pbd_m * status)
   
-  # max gulls detected and management levels
-  S.gul_m_level <-
-    list(formula = ~gul_m + level)
-  
-  # between-year variation in DSR
-  S.season <-
-    list(formula = ~season)
-
-  # Cubic trend and annual variation DSR among years
-  S.Cubic_Time_season <-
-    list(formula = ~Time + Quadratic + Cubic + season)
-
-  # habitat-specific variation in DSR
-  S.habitat <-
-    list(formula = ~nest_hab)
-
-  # Cubic trend habitat-specific variation in DSR
-  S.Cubic_Time_habitat <-
-    list(formula = ~Time + Quadratic + Cubic + nest_hab)
-  
-  # Cubic trend and interaction between habitat and management levels on DSR
-  S.Cubic_Time_level_habitat <-
-    list(formula = ~Time + Quadratic + Cubic + level + nest_hab)
-  
-  # habitat and management on DSR
-  S.status_habitat <-
-    list(formula = ~level + nest_hab)
-
-  # managsment-specific variation in DSR
-  S.level<-
-    list(formula = ~level)
-
-  # Cubic trend management-specific variation in DSR
-  S.Cubic_Time_level <-
-    list(formula = ~Time + Quadratic + Cubic + level)
-
-  # Cubic trend management-specific variation in DSR and max humans
-  S.Cubic_Time_level_hum_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + hum_m)
-  
-  # Cubic trend management-specific variation in DSR and mean humans
-  S.Cubic_Time_level_hum_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + hum_a)
-  
-  # Cubic trend in DSR and max humans
-  S.Cubic_Time_hum_m <-
-    list(formula = ~Time + Quadratic + Cubic + hum_m)
-  
-  # Cubic trend in DSR and mean humans
-  S.Cubic_Time_hum_a <-
-    list(formula = ~Time + Quadratic + Cubic + hum_a)
-  
-  # Cubic trend in DSR and max dogs
-  S.Cubic_Time_dog_m <-
-    list(formula = ~Time + Quadratic + Cubic + dog_m)
-  
-  # Cubic trend management-specific variation in DSR and avg dogs
-  S.Cubic_Time_level_dog_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + dog_a)
-  
-  # Cubic trend management-specific variation in DSR and max dogs
-  S.Cubic_Time_level_dog_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + dog_m)
-  
-  # Cubic trend in DSR and avg dogs
-  S.Cubic_Time_dog_a <-
-    list(formula = ~Time + Quadratic + Cubic + dog_a)
-  
-  # Cubic trend management-specific variation in DSR and max predatory birds
-  S.Cubic_Time_level_pbd_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + pbd_m)
-  
-  # Cubic trend management-specific variation in DSR and avg pred birds
-  S.Cubic_Time_level_pbd_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + pbd_a)
-  
-  # Cubic seasonal trend and max. pred. birds
-  S.Cubic_Time_pbd_m <-
-    list(formula = ~Time + Quadratic + Cubic + pbd_m)
-  
-  # Cubic seasonal trend and average pred. birds
-  S.Cubic_Time_pbd_a <-
-    list(formula = ~Time + Quadratic + Cubic + pbd_a)
+  # max gulls detected and management status
+  S.gul_m_x_status <-
+    list(formula = ~gul_m * status)
   
   # specify to run as a nest survival model in program MARK
   cml <- RMark::create.model.list("Nest")
@@ -4259,7 +4146,7 @@ nest_survival_run_FP
 nest_survival_FP <- 
   list(RMark_data = RMark_data_FP, 
        model_selection = nest_survival_run_FP)
-saveRDS(nest_survival_FP, file = "output/nest_survival_FP.rds")
+saveRDS(nest_survival_FP, file = "output/nest_survival_FP_threats&status.rds")
 ```
 
 
@@ -4268,71 +4155,23 @@ saveRDS(nest_survival_FP, file = "output/nest_survival_FP.rds")
 nest_survival_MP <- function()
 {
   # Specify models to test
+  
   # constant daily survival rate (DSR)
   S.dot <- 
     list(formula = ~1)
   
-  # Linear trend in DSR
-  S.Time <-
-    list(formula = ~Time)
-
-  # Quadratic trend in DSR
-  S.Quadratic_Time <-
-    list(formula = ~Time + Quadratic)
-
-  # Cubic trend in DSR
-  S.Cubic_Time <-
-    list(formula = ~Time + Quadratic + Cubic)
+  # fox print status
+  # S.fox_p <-
+  #   list(formula = ~fox_p)
   
-  # Linear trend of weekends and holidays on DSR
-  S.fundays <-
-    list(formula = ~fundays)
-  
-  # weekends and holidays and management levels
-  S.fundays_level <-
-    list(formula = ~fundays + level)
-  
-  #### average counts
-  # average humans detected
-  S.hum_a <-
-    list(formula = ~hum_a)
-  
-  # average vehicles detected
-  S.veh_a <-
-    list(formula = ~veh_a)
-  
-  # average dogs detected
-  S.dog_a <-
-    list(formula = ~dog_a)
-  
-  # average dogs off leash detected
-  S.dof_a <-
-    list(formula = ~dof_a)
-  
-  # average hoofed animals detected
-  S.hof_a <-
-    list(formula = ~hof_a)
-  
-  # average corvids detected
-  S.pbd_a <-
-    list(formula = ~pbd_a)
-  
-  # average gulls detected
-  S.gul_a <-
-    list(formula = ~gul_a)
-  
-  # fox print levels
-  S.fox_p <-
-    list(formula = ~fox_p)
-  
-  #### maximum counts
+  #### maximum counts of threats
   # max humans detected
   S.hum_m <-
     list(formula = ~hum_m)
   
   # max vehicles detected
-  S.veh_m <-
-    list(formula = ~veh_m)
+  # S.veh_m <-
+  #   list(formula = ~veh_m)
   
   # max dogs detected
   S.dog_m <-
@@ -4350,135 +4189,30 @@ nest_survival_MP <- function()
   S.gul_m <-
     list(formula = ~gul_m)
   
-  #### interaction with management levels
-  # average humans detected and management levels
-  S.hum_a_level <-
-    list(formula = ~hum_a + level)
-  
-  # average vehicles detected and management levels
-  S.veh_a_level <-
-    list(formula = ~veh_a + level)
-  
-  # average dogs detected and management levels
-  S.dog_a_level <-
-    list(formula = ~dog_a + level)
-  
-  # average dogs off leash detected and management levels
-  S.dof_a_level <-
-    list(formula = ~dof_a + level)
-  
-  # average corvids detected and management levels
-  S.pbd_a_level <-
-    list(formula = ~pbd_a + level)
-  
-  # average gulls detected and management levels
-  S.gul_a_level <-
-    list(formula = ~gul_a + level)
-  
-  #### interaction with management levels and management levels
+  #### interaction of max threat counts and management status 
   # max humans detected
-  S.hum_m_level <-
-    list(formula = ~hum_m + level)
+  S.hum_m_x_status <-
+    list(formula = ~hum_m * status)
   
-  # max vehicles detected and management levels
-  S.veh_m_level <-
-    list(formula = ~veh_m + level)
+  # max vehicles detected and management status
+  # S.veh_m_x_status <-
+  #   list(formula = ~veh_m * status)
   
-  # max dogs detected and management levels
-  S.dog_m_level <-
-    list(formula = ~dog_m + level)
+  # max dogs detected and management status
+  S.dog_m_x_status <-
+    list(formula = ~dog_m * status)
   
-  # max dogs off leash detected and management levels
-  S.dof_m_level <-
-    list(formula = ~dof_m + level)
+  # max dogs off leash detected and management status
+  S.dof_m_x_status <-
+    list(formula = ~dof_m * status)
   
-  # max corvids detected and management levels
-  S.pbd_m_level <-
-    list(formula = ~pbd_m + level)
+  # max corvids detected and management status
+  S.pbd_m_x_status <-
+    list(formula = ~pbd_m * status)
   
-  # max gulls detected and management levels
-  S.gul_m_level <-
-    list(formula = ~gul_m + level)
-  
-  # between-year variation in DSR
-  S.season <-
-    list(formula = ~season)
-
-  # Cubic trend and annual variation DSR among years
-  S.Cubic_Time_season <-
-    list(formula = ~Time + Quadratic + Cubic + season)
-
-  # habitat-specific variation in DSR
-  S.habitat <-
-    list(formula = ~nest_hab)
-
-  # Cubic trend habitat-specific variation in DSR
-  S.Cubic_Time_habitat <-
-    list(formula = ~Time + Quadratic + Cubic + nest_hab)
-  
-  # Cubic trend and interaction between habitat and management levels on DSR
-  S.Cubic_Time_level_habitat <-
-    list(formula = ~Time + Quadratic + Cubic + level + nest_hab)
-  
-  # habitat and management on DSR
-  S.status_habitat <-
-    list(formula = ~level + nest_hab)
-
-  # managsment-specific variation in DSR
-  S.level<-
-    list(formula = ~level)
-
-  # Cubic trend management-specific variation in DSR
-  S.Cubic_Time_level <-
-    list(formula = ~Time + Quadratic + Cubic + level)
-
-  # Cubic trend management-specific variation in DSR and max humans
-  S.Cubic_Time_level_hum_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + hum_m)
-  
-  # Cubic trend management-specific variation in DSR and mean humans
-  S.Cubic_Time_level_hum_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + hum_a)
-  
-  # Cubic trend in DSR and max humans
-  S.Cubic_Time_hum_m <-
-    list(formula = ~Time + Quadratic + Cubic + hum_m)
-  
-  # Cubic trend in DSR and mean humans
-  S.Cubic_Time_hum_a <-
-    list(formula = ~Time + Quadratic + Cubic + hum_a)
-  
-  # Cubic trend in DSR and max dogs
-  S.Cubic_Time_dog_m <-
-    list(formula = ~Time + Quadratic + Cubic + dog_m)
-  
-  # Cubic trend management-specific variation in DSR and avg dogs
-  S.Cubic_Time_level_dog_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + dog_a)
-  
-  # Cubic trend management-specific variation in DSR and max dogs
-  S.Cubic_Time_level_dog_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + dog_m)
-  
-  # Cubic trend in DSR and avg dogs
-  S.Cubic_Time_dog_a <-
-    list(formula = ~Time + Quadratic + Cubic + dog_a)
-  
-  # Cubic trend management-specific variation in DSR and max predatory birds
-  S.Cubic_Time_level_pbd_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + pbd_m)
-  
-  # Cubic trend management-specific variation in DSR and avg pred birds
-  S.Cubic_Time_level_pbd_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + pbd_a)
-  
-  # Cubic seasonal trend and max. pred. birds
-  S.Cubic_Time_pbd_m <-
-    list(formula = ~Time + Quadratic + Cubic + pbd_m)
-  
-  # Cubic seasonal trend and average pred. birds
-  S.Cubic_Time_pbd_a <-
-    list(formula = ~Time + Quadratic + Cubic + pbd_a)
+  # max gulls detected and management status
+  S.gul_m_x_status <-
+    list(formula = ~gul_m * status)
   
   # specify to run as a nest survival model in program MARK
   cml <- RMark::create.model.list("Nest")
@@ -4499,80 +4233,31 @@ nest_survival_run_MP
 nest_survival_MP <- 
   list(RMark_data = RMark_data_MP, 
        model_selection = nest_survival_run_MP)
-saveRDS(nest_survival_MP, file = "output/nest_survival_MP.rds")
+saveRDS(nest_survival_MP, file = "output/nest_survival_MP_threats&status.rds")
 ```
-
 
 ```{r, cache=TRUE, results='hide', message=FALSE, eval=FALSE}
 ### Bellarine / Surf Coast model selection
 nest_survival_BSC <- function()
 {
   # Specify models to test
+  
   # constant daily survival rate (DSR)
   S.dot <- 
     list(formula = ~1)
   
-  # Linear trend in DSR
-  S.Time <-
-    list(formula = ~Time)
-
-  # Quadratic trend in DSR
-  S.Quadratic_Time <-
-    list(formula = ~Time + Quadratic)
-
-  # Cubic trend in DSR
-  S.Cubic_Time <-
-    list(formula = ~Time + Quadratic + Cubic)
+  # fox print status
+  # S.fox_p <-
+  #   list(formula = ~fox_p)
   
-  # Linear trend of weekends and holidays on DSR
-  S.fundays <-
-    list(formula = ~fundays)
-  
-  # weekends and holidays and management levels
-  S.fundays_level <-
-    list(formula = ~fundays + level)
-  
-  #### average counts
-  # average humans detected
-  S.hum_a <-
-    list(formula = ~hum_a)
-  
-  # average vehicles detected
-  S.veh_a <-
-    list(formula = ~veh_a)
-  
-  # average dogs detected
-  S.dog_a <-
-    list(formula = ~dog_a)
-  
-  # average dogs off leash detected
-  S.dof_a <-
-    list(formula = ~dof_a)
-  
-  # average hoofed animals detected
-  S.hof_a <-
-    list(formula = ~hof_a)
-  
-  # average corvids detected
-  S.pbd_a <-
-    list(formula = ~pbd_a)
-  
-  # average gulls detected
-  S.gul_a <-
-    list(formula = ~gul_a)
-  
-  # fox print levels
-  S.fox_p <-
-    list(formula = ~fox_p)
-  
-  #### maximum counts
+  #### maximum counts of threats
   # max humans detected
   S.hum_m <-
     list(formula = ~hum_m)
   
   # max vehicles detected
-  S.veh_m <-
-    list(formula = ~veh_m)
+  # S.veh_m <-
+  #   list(formula = ~veh_m)
   
   # max dogs detected
   S.dog_m <-
@@ -4590,135 +4275,30 @@ nest_survival_BSC <- function()
   S.gul_m <-
     list(formula = ~gul_m)
   
-  #### interaction with management levels
-  # average humans detected and management levels
-  S.hum_a_level <-
-    list(formula = ~hum_a + level)
-  
-  # average vehicles detected and management levels
-  S.veh_a_level <-
-    list(formula = ~veh_a + level)
-  
-  # average dogs detected and management levels
-  S.dog_a_level <-
-    list(formula = ~dog_a + level)
-  
-  # average dogs off leash detected and management levels
-  S.dof_a_level <-
-    list(formula = ~dof_a + level)
-  
-  # average corvids detected and management levels
-  S.pbd_a_level <-
-    list(formula = ~pbd_a + level)
-  
-  # average gulls detected and management levels
-  S.gul_a_level <-
-    list(formula = ~gul_a + level)
-  
-  #### interaction with management levels and management levels
+  #### interaction of max threat counts and management status 
   # max humans detected
-  S.hum_m_level <-
-    list(formula = ~hum_m + level)
+  S.hum_m_x_status <-
+    list(formula = ~hum_m * status)
   
-  # max vehicles detected and management levels
-  S.veh_m_level <-
-    list(formula = ~veh_m + level)
+  # max vehicles detected and management status
+  # S.veh_m_x_status <-
+  #   list(formula = ~veh_m * status)
   
-  # max dogs detected and management levels
-  S.dog_m_level <-
-    list(formula = ~dog_m + level)
+  # max dogs detected and management status
+  S.dog_m_x_status <-
+    list(formula = ~dog_m * status)
   
-  # max dogs off leash detected and management levels
-  S.dof_m_level <-
-    list(formula = ~dof_m + level)
+  # max dogs off leash detected and management status
+  S.dof_m_x_status <-
+    list(formula = ~dof_m * status)
   
-  # max corvids detected and management levels
-  S.pbd_m_level <-
-    list(formula = ~pbd_m + level)
+  # max corvids detected and management status
+  S.pbd_m_x_status <-
+    list(formula = ~pbd_m * status)
   
-  # max gulls detected and management levels
-  S.gul_m_level <-
-    list(formula = ~gul_m + level)
-  
-  # between-year variation in DSR
-  S.season <-
-    list(formula = ~season)
-
-  # Cubic trend and annual variation DSR among years
-  S.Cubic_Time_season <-
-    list(formula = ~Time + Quadratic + Cubic + season)
-
-  # habitat-specific variation in DSR
-  S.habitat <-
-    list(formula = ~nest_hab)
-
-  # Cubic trend habitat-specific variation in DSR
-  S.Cubic_Time_habitat <-
-    list(formula = ~Time + Quadratic + Cubic + nest_hab)
-  
-  # Cubic trend and interaction between habitat and management levels on DSR
-  S.Cubic_Time_level_habitat <-
-    list(formula = ~Time + Quadratic + Cubic + level + nest_hab)
-  
-  # habitat and management on DSR
-  S.status_habitat <-
-    list(formula = ~level + nest_hab)
-
-  # managsment-specific variation in DSR
-  S.level<-
-    list(formula = ~level)
-
-  # Cubic trend management-specific variation in DSR
-  S.Cubic_Time_level <-
-    list(formula = ~Time + Quadratic + Cubic + level)
-
-  # Cubic trend management-specific variation in DSR and max humans
-  S.Cubic_Time_level_hum_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + hum_m)
-  
-  # Cubic trend management-specific variation in DSR and mean humans
-  S.Cubic_Time_level_hum_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + hum_a)
-  
-  # Cubic trend in DSR and max humans
-  S.Cubic_Time_hum_m <-
-    list(formula = ~Time + Quadratic + Cubic + hum_m)
-  
-  # Cubic trend in DSR and mean humans
-  S.Cubic_Time_hum_a <-
-    list(formula = ~Time + Quadratic + Cubic + hum_a)
-  
-  # Cubic trend in DSR and max dogs
-  S.Cubic_Time_dog_m <-
-    list(formula = ~Time + Quadratic + Cubic + dog_m)
-  
-  # Cubic trend management-specific variation in DSR and avg dogs
-  S.Cubic_Time_level_dog_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + dog_a)
-  
-  # Cubic trend management-specific variation in DSR and max dogs
-  S.Cubic_Time_level_dog_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + dog_m)
-  
-  # Cubic trend in DSR and avg dogs
-  S.Cubic_Time_dog_a <-
-    list(formula = ~Time + Quadratic + Cubic + dog_a)
-  
-  # Cubic trend management-specific variation in DSR and max predatory birds
-  S.Cubic_Time_level_pbd_m <-
-    list(formula = ~Time + Quadratic + Cubic + level + pbd_m)
-  
-  # Cubic trend management-specific variation in DSR and avg pred birds
-  S.Cubic_Time_level_pbd_a <-
-    list(formula = ~Time + Quadratic + Cubic + level + pbd_a)
-  
-  # Cubic seasonal trend and max. pred. birds
-  S.Cubic_Time_pbd_m <-
-    list(formula = ~Time + Quadratic + Cubic + pbd_m)
-  
-  # Cubic seasonal trend and average pred. birds
-  S.Cubic_Time_pbd_a <-
-    list(formula = ~Time + Quadratic + Cubic + pbd_a)
+  # max gulls detected and management status
+  S.gul_m_x_status <-
+    list(formula = ~gul_m * status)
   
   # specify to run as a nest survival model in program MARK
   cml <- RMark::create.model.list("Nest")
@@ -4734,25 +4314,23 @@ nest_survival_BSC <- function()
   # store completed model list
   return(model.list)
 }
+
 nest_survival_run_BSC <- nest_survival_BSC()
 nest_survival_run_BSC
 nest_survival_BSC <- 
   list(RMark_data = RMark_data_BSC, 
        model_selection = nest_survival_run_BSC)
-saveRDS(nest_survival_BSC, file = "output/nest_survival_BSC.rds")
+saveRDS(nest_survival_BSC, file = "output/nest_survival_BSC_threats&status.rds")
 ```
 
 # Results
-Only the top 10 models are shown here in each table for simplicity
+model selection results
 ```{r}
-nest_survival_FP <- readRDS(file = "output/nest_survival_FP.rds")
+nest_survival_FP <- readRDS(file = "output/nest_survival_FP_threats&status.rds")
 nest_survival_run_FP <- nest_survival_FP$model_selection
 
 nest_survival_run_FP$model.table %>% 
   dplyr::select(model, npar, DeltaAICc, weight) %>% 
-  slice(1:10) %>% 
-  # gt(rowname_col = "row",
-  #    groupname_col = "effect") %>% 
   gt() %>% 
   cols_label(model = html("<i>Fleurieu Peninsula</i>"),
              npar = "K",
@@ -4778,14 +4356,11 @@ nest_survival_run_FP$model.table %>%
               row_group.font.size = 12,
               table.width = pct(60))
 
-nest_survival_MP <- readRDS(file = "output/nest_survival_MP.rds")
+nest_survival_MP <- readRDS(file = "output/nest_survival_MP_threats&status.rds")
 nest_survival_run_MP <- nest_survival_MP$model_selection
 
 nest_survival_run_MP$model.table %>% 
   dplyr::select(model, npar, DeltaAICc, weight) %>% 
-  slice(1:10) %>% 
-  # gt(rowname_col = "row",
-  #    groupname_col = "effect") %>% 
   gt() %>% 
   cols_label(model = html("<i>Mornington Peninsula</i>"),
              npar = "K",
@@ -4811,14 +4386,11 @@ nest_survival_run_MP$model.table %>%
               row_group.font.size = 12,
               table.width = pct(60))
 
-nest_survival_BSC <- readRDS(file = "output/nest_survival_BSC.rds")
+nest_survival_BSC <- readRDS(file = "output/nest_survival_BSC_threats&status.rds")
 nest_survival_run_BSC <- nest_survival_BSC$model_selection
 
 nest_survival_run_BSC$model.table %>% 
   dplyr::select(model, npar, DeltaAICc, weight) %>% 
-  slice(1:10) %>% 
-  # gt(rowname_col = "row",
-  #    groupname_col = "effect") %>% 
   gt() %>% 
   cols_label(model = html("<i>Bellarine / Surf Coast</i>"),
              npar = "K",
@@ -4847,8 +4419,14 @@ nest_survival_run_BSC$model.table %>%
 
 ## Effect of weekends and holidays on nest survival
 ```{r}
-S.fundays <- nest_survival_run_FP[[28]]
-# S.fundays$results$beta
+S.fundays <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fundays)),
+       brief = TRUE, 
+       delete = TRUE)
+
 min.fundays = min(RMark_data_FP$nest_data.processed$data$fundays)
 max.fundays = max(RMark_data_FP$nest_data.processed$data$fundays)
 fundays.values = seq(from = min.fundays, to = max.fundays, length = 100)
@@ -4860,8 +4438,13 @@ pred.fundays_FP <-
   pred.fundays$estimates %>% 
   mutate(region = "FP")
 
-S.fundays <- nest_survival_run_MP[[28]]
-# S.fundays$results$beta
+S.fundays <-   
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fundays)),
+       brief = TRUE, 
+       delete = TRUE)
 min.fundays = min(RMark_data_MP$nest_data.processed$data$fundays)
 max.fundays = max(RMark_data_MP$nest_data.processed$data$fundays)
 fundays.values = seq(from = min.fundays, to = max.fundays, length = 100)
@@ -4874,8 +4457,13 @@ pred.fundays_MP <-
   pred.fundays$estimates %>% 
   mutate(region = "MP")
 
-S.fundays <- nest_survival_run_BSC[[28]]
-# S.fundays$results$beta
+S.fundays <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fundays)),
+       brief = TRUE, 
+       delete = TRUE)
 min.fundays = min(RMark_data_BSC$nest_data.processed$data$fundays)
 max.fundays = max(RMark_data_BSC$nest_data.processed$data$fundays)
 fundays.values = seq(from = min.fundays, to = max.fundays, length = 100)
@@ -4908,10 +4496,103 @@ ggplot(pred.fundays,
   facet_grid(. ~ region, labeller = as_labeller(region_names))
 ```
 
+## Effect of management on mitigating the impact of weekends and holidays on nest survival
+```{r}
+S.fundays_status <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fundays + status)),
+       brief = TRUE, 
+       delete = TRUE)
+
+min.fundays_status = min(RMark_data_FP$nest_data.processed$data$fundays)
+max.fundays_status = max(RMark_data_FP$nest_data.processed$data$fundays)
+fundays.values = seq(from = min.fundays_status, to = max.fundays_status, length = 100)
+pred.fundays_status <- 
+  covariate.predictions(model = S.fundays_status, 
+                        data = data.frame(fundays = fundays.values),
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.fundays_status_FP <- 
+  pred.fundays_status$estimates %>% 
+  mutate(region = "FP",
+         status = ifelse(par.index == 1, "N", "Y"))
+
+S.fundays_status <-   
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fundays + status)),
+       brief = TRUE, 
+       delete = TRUE)
+min.fundays_status = min(RMark_data_MP$nest_data.processed$data$fundays)
+max.fundays_status = max(RMark_data_MP$nest_data.processed$data$fundays)
+fundays.values = seq(from = min.fundays_status, to = max.fundays_status, length = 100)
+pred.fundays_status <- 
+  covariate.predictions(model = S.fundays_status, 
+                        data = data.frame(fundays = fundays.values),
+                        indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.fundays_status_MP <- 
+  pred.fundays_status$estimates %>% 
+  mutate(region = "MP",
+         status = ifelse(par.index == 1, "N", "Y"))
+
+S.fundays_status <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fundays + status)),
+       brief = TRUE, 
+       delete = TRUE)
+min.fundays_status = min(RMark_data_BSC$nest_data.processed$data$fundays)
+max.fundays_status = max(RMark_data_BSC$nest_data.processed$data$fundays)
+fundays.values = seq(from = min.fundays_status, to = max.fundays_status, length = 100)
+pred.fundays_status <- 
+  covariate.predictions(model = S.fundays_status, 
+                        data = data.frame(fundays = fundays.values),
+                        indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.fundays_status_BSC <- 
+  pred.fundays_status$estimates %>% 
+  mutate(region = "BSC",
+         status = ifelse(par.index == 1, "N", "Y"))
+
+pred.fundays_status <- 
+  bind_rows(pred.fundays_status_FP, pred.fundays_status_MP, pred.fundays_status_BSC)
+
+ggplot(pred.fundays_status, 
+       aes(x = covdata, y = estimate, color = status, fill = status)) +
+  geom_line(size = 1.5) +
+  geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_x_continuous(breaks = c(0, 5, 10, 15, 20, 25)) +
+  luke_theme +
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
+        legend.justification = c(1, 0),
+        strip.background = element_blank()) +
+  xlab("number of weekend days and holidays exposed to") + 
+  ylab("estimated daily survival rate (± 95% CI)") +
+  ylim(c(0, 1)) +
+  facet_grid(. ~ region, labeller = as_labeller(region_names))
+```
+
 ## Effect of management Levels on nest survival
 ```{r}
+S.levels <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ level)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_FP_levels <- 
-  nest_survival_run_FP[[40]]$results$real
+  S.levels$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_FP_levels), " ", n = 4))
 nest_survival_reals_FP_levels <- cbind(Groups, nest_survival_reals_FP_levels)
@@ -4925,8 +4606,15 @@ nest_survival_reals_FP_levels <-
   mutate(region = "FP")
 row.names(nest_survival_reals_FP_levels) <- NULL
 
+S.levels <- 
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ level)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_MP_levels <- 
-  nest_survival_run_MP[[40]]$results$real
+  S.levels$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_levels), " ", n = 4))
 nest_survival_reals_MP_levels <- cbind(Groups, nest_survival_reals_MP_levels)
@@ -4940,8 +4628,15 @@ nest_survival_reals_MP_levels <-
   mutate(region = "MP")
 row.names(nest_survival_reals_MP_levels) <- NULL
 
+S.levels <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ level)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_BSC_levels <- 
-  nest_survival_run_BSC[[40]]$results$real
+  S.levels$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_BSC_levels), " ", n = 4))
 nest_survival_reals_BSC_levels <- cbind(Groups, nest_survival_reals_BSC_levels)
@@ -4963,7 +4658,7 @@ nest_survival_reals_levels <-
 ggplot() +
   geom_line(data = nest_survival_reals_levels, 
             aes(x = management_level, y = estimate, color = region, group = region),
-            position = position_dodge(width = 0.5), alpha = 0.2) +
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
   geom_errorbar(data = nest_survival_reals_levels, 
                 aes(ymin = lcl, ymax = ucl, 
                     x = management_level, 
@@ -4971,7 +4666,7 @@ ggplot() +
                 alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
   geom_point(data = nest_survival_reals_levels, 
              aes(x = management_level, y = estimate, fill = region),
-             shape = 21, size = 2, position = position_dodge(width = 0.5)) +
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   scale_colour_brewer(palette = "Set1") +
   luke_theme +
   theme(legend.position = c(0.8, 0.2),
@@ -4988,10 +4683,121 @@ ggplot() +
                     labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula"))
 ```
 
+## Effect of management status on nest survival
+```{r}
+S.status <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ status)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_FP_status <- 
+  S.status$results$real
+Groups <- data.frame(
+  str_split_fixed(rownames(nest_survival_reals_FP_status), " ", n = 4))
+nest_survival_reals_FP_status <- cbind(Groups, nest_survival_reals_FP_status)
+nest_survival_reals_FP_status$rows <-  rownames(nest_survival_reals_FP_status)
+nest_survival_reals_FP_status$status <- 
+  as.factor(str_sub(nest_survival_reals_FP_status$rows, 
+                    nchar(nest_survival_reals_FP_status$rows) - 9, nchar(nest_survival_reals_FP_status$rows) - 9))
+nest_survival_reals_FP_status <- 
+  nest_survival_reals_FP_status %>% 
+  dplyr::select(status, estimate, se, lcl, ucl) %>% 
+  mutate(region = "FP")
+row.names(nest_survival_reals_FP_status) <- NULL
+
+S.status <- 
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ status)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_MP_status <- 
+  S.status$results$real
+Groups <- data.frame(
+  str_split_fixed(rownames(nest_survival_reals_MP_status), " ", n = 4))
+nest_survival_reals_MP_status <- cbind(Groups, nest_survival_reals_MP_status)
+nest_survival_reals_MP_status$rows <-  rownames(nest_survival_reals_MP_status)
+nest_survival_reals_MP_status$status <- 
+  as.factor(str_sub(nest_survival_reals_MP_status$rows, 
+                    nchar(nest_survival_reals_MP_status$rows) - 9, nchar(nest_survival_reals_MP_status$rows) - 9))
+nest_survival_reals_MP_status <- 
+  nest_survival_reals_MP_status %>% 
+  dplyr::select(status, estimate, se, lcl, ucl) %>% 
+  mutate(region = "MP")
+row.names(nest_survival_reals_MP_status) <- NULL
+
+S.status <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ status)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_BSC_status <- 
+  S.status$results$real
+Groups <- data.frame(
+  str_split_fixed(rownames(nest_survival_reals_BSC_status), " ", n = 4))
+nest_survival_reals_BSC_status <- cbind(Groups, nest_survival_reals_BSC_status)
+nest_survival_reals_BSC_status$rows <-  rownames(nest_survival_reals_BSC_status)
+nest_survival_reals_BSC_status$status <- 
+  as.factor(str_sub(nest_survival_reals_BSC_status$rows, 
+                    nchar(nest_survival_reals_BSC_status$rows) - 9, nchar(nest_survival_reals_BSC_status$rows) - 9))
+nest_survival_reals_BSC_status <- 
+  nest_survival_reals_BSC_status %>% 
+  dplyr::select(status, estimate, se, lcl, ucl) %>% 
+  mutate(region = "BSC")
+row.names(nest_survival_reals_BSC_status) <- NULL
+
+nest_survival_reals_status <- 
+  bind_rows(nest_survival_reals_FP_status, 
+            nest_survival_reals_MP_status, 
+            nest_survival_reals_BSC_status)
+
+ggplot() +
+  geom_line(data = nest_survival_reals_status, 
+            aes(x = status, y = estimate, color = region, group = region),
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
+  geom_errorbar(data = nest_survival_reals_status, 
+                aes(ymin = lcl, ymax = ucl, 
+                    x = status, 
+                    y = estimate, group = region), position = position_dodge(width = 0.5),
+                alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
+  geom_point(data = nest_survival_reals_status, 
+             aes(x = status, y = estimate, fill = region),
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
+  # scale_colour_brewer(palette = "Set1") +
+  luke_theme +
+  theme(legend.position = c(0.8, 0.2),
+        legend.justification = c(1, 0),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 10)) +
+  xlab("management level") + 
+  ylab("estimated daily survival rate (± 95% CI)") +
+  ylim(c(0.4, 1)) +
+  scale_colour_brewer(palette = "Dark2", 
+                      name = "Region", 
+                      labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Region", 
+                    labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_x_discrete(labels = c("No management", "management"))
+```
+
 ## Effect of Habitat on nest survival
 ```{r}
+S.habitat <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ nest_hab)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_FP_habitat <- 
-  nest_survival_run_FP[[34]]$results$real
+  S.habitat$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_FP_habitat), " ", n = 4))
 nest_survival_reals_FP_habitat <- cbind(Groups, nest_survival_reals_FP_habitat)
@@ -5002,8 +4808,15 @@ nest_survival_reals_FP_habitat <-
   mutate(region = "FP")
 row.names(nest_survival_reals_FP_habitat) <- NULL
 
+S.habitat <- 
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ nest_hab)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_MP_habitat <- 
-  nest_survival_run_MP[[34]]$results$real
+  S.habitat$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_habitat), " ", n = 4))
 nest_survival_reals_MP_habitat <- cbind(Groups, nest_survival_reals_MP_habitat)
@@ -5014,8 +4827,15 @@ nest_survival_reals_MP_habitat <-
   mutate(region = "MP")
 row.names(nest_survival_reals_MP_habitat) <- NULL
 
+S.habitat <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ nest_hab)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_BSC_habitat <- 
-  nest_survival_run_BSC[[34]]$results$real
+  S.habitat$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_BSC_habitat), " ", n = 4))
 nest_survival_reals_BSC_habitat <- cbind(Groups, nest_survival_reals_BSC_habitat)
@@ -5039,8 +4859,8 @@ ggplot() +
                 alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
   geom_point(data = nest_survival_reals_habitat, 
              aes(x = habitat, y = estimate, fill = region),
-             shape = 21, size = 2, position = position_dodge(width = 0.5)) +
-  scale_colour_brewer(palette = "Set1") +
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
+  # scale_colour_brewer(palette = "Set1") +
   luke_theme +
   theme(legend.position = c(0.5, 0.2),
         legend.justification = c(1, 0),
@@ -5058,59 +4878,63 @@ ggplot() +
 
 ## Effect of dogs on nest survival (max counted)
 ```{r}
-S.dog_m <- nest_survival_run_FP[[24]]
-# S.dog_m$results$beta
+S.dog_m <- nest_survival_run_FP[[4]]
 min.dog_m = min(RMark_data_FP$nest_data.processed$data$dog_m)
 max.dog_m = max(RMark_data_FP$nest_data.processed$data$dog_m)
 dog_m.values = seq(from = min.dog_m, to = max.dog_m, length = 100)
-pred.dog_m <- 
+pred.dog_m_status <- 
   covariate.predictions(model = S.dog_m, 
                         data = data.frame(dog_m = dog_m.values),
-                        indices = 1)
-pred.dog_m_FP <- 
-  pred.dog_m$estimates %>% 
-  mutate(region = "FP")
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.dog_m_status_FP <- 
+  pred.dog_m_status$estimates %>% 
+  mutate(region = "FP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-S.dog_m <- nest_survival_run_MP[[24]]
-# S.dog_m$results$beta
+S.dog_m <- nest_survival_run_MP[[4]]
 min.dog_m = min(RMark_data_MP$nest_data.processed$data$dog_m)
 max.dog_m = max(RMark_data_MP$nest_data.processed$data$dog_m)
 dog_m.values = seq(from = min.dog_m, to = max.dog_m, length = 100)
-pred.dog_m <- 
+pred.dog_m_status <- 
   covariate.predictions(model = S.dog_m, 
                         data = data.frame(dog_m = dog_m.values),
-                        indices = 1)
+                        indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.dog_m_status_MP <- 
+  pred.dog_m_status$estimates %>% 
+  mutate(region = "MP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-pred.dog_m_MP <- 
-  pred.dog_m$estimates %>% 
-  mutate(region = "MP")
-
-S.dog_m <- nest_survival_run_BSC[[24]]
-# S.dog_m$results$beta
+S.dog_m <- nest_survival_run_BSC[[4]]
 min.dog_m = min(RMark_data_BSC$nest_data.processed$data$dog_m)
 max.dog_m = max(RMark_data_BSC$nest_data.processed$data$dog_m)
 dog_m.values = seq(from = min.dog_m, to = max.dog_m, length = 100)
-pred.dog_m <- 
+pred.dog_m_status <- 
   covariate.predictions(model = S.dog_m, 
                         data = data.frame(dog_m = dog_m.values),
-                        indices = 1)
-
-pred.dog_m_BSC <- 
-  pred.dog_m$estimates %>% 
-  mutate(region = "BSC")
+                        indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.dog_m_status_BSC <- 
+  pred.dog_m_status$estimates %>% 
+  mutate(region = "BSC",
+         status = ifelse(par.index == 1, "N", "Y"))
 
 pred.dog_m <- 
-  bind_rows(pred.dog_m_FP, pred.dog_m_MP, pred.dog_m_BSC)
+  bind_rows(pred.dog_m_status_FP, pred.dog_m_status_MP, pred.dog_m_status_BSC)
 
 ggplot(pred.dog_m, 
-       aes(x = covdata, y = estimate, color = region, fill = region)) +
+       aes(x = covdata, y = estimate, color = status, fill = status)) +
   geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
-  scale_colour_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
   scale_x_continuous(breaks = c(0, 5, 10, 15, 20, 25)) +
   luke_theme +
-  theme(legend.position = "none",
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
         legend.justification = c(1, 0),
         strip.background = element_blank()) +
   xlab("maximum number of dogs exposed to") + 
@@ -5121,59 +4945,63 @@ ggplot(pred.dog_m,
 
 ## Effect of Dogs off leash on nest survival (max counted)
 ```{r}
-S.dof_m <- nest_survival_run_FP[[20]]
-# S.dof_m$results$beta
+S.dof_m <- nest_survival_run_FP[[2]]
 min.dof_m = min(RMark_data_FP$nest_data.processed$data$dof_m)
 max.dof_m = max(RMark_data_FP$nest_data.processed$data$dof_m)
 dof_m.values = seq(from = min.dof_m, to = max.dof_m, length = 100)
-pred.dof_m <- 
+pred.dof_m_status <- 
   covariate.predictions(model = S.dof_m, 
                         data = data.frame(dof_m = dof_m.values),
-                        indices = 1)
-pred.dof_m_FP <- 
-  pred.dof_m$estimates %>% 
-  mutate(region = "FP")
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.dof_m_status_FP <- 
+  pred.dof_m_status$estimates %>% 
+  mutate(region = "FP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-S.dof_m <- nest_survival_run_MP[[19]]
-# S.dof_m$results$beta
+S.dof_m <- nest_survival_run_MP[[2]]
 min.dof_m = min(RMark_data_MP$nest_data.processed$data$dof_m)
 max.dof_m = max(RMark_data_MP$nest_data.processed$data$dof_m)
 dof_m.values = seq(from = min.dof_m, to = max.dof_m, length = 100)
-pred.dof_m <- 
+pred.dof_m_status <- 
   covariate.predictions(model = S.dof_m, 
                         data = data.frame(dof_m = dof_m.values),
-                        indices = 1)
+                        indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.dof_m_status_MP <- 
+  pred.dof_m_status$estimates %>% 
+  mutate(region = "MP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-pred.dof_m_MP <- 
-  pred.dof_m$estimates %>% 
-  mutate(region = "MP")
-
-S.dof_m <- nest_survival_run_BSC[[20]]
-# S.dof_m$results$beta
+S.dof_m <- nest_survival_run_BSC[[2]]
 min.dof_m = min(RMark_data_BSC$nest_data.processed$data$dof_m)
 max.dof_m = max(RMark_data_BSC$nest_data.processed$data$dof_m)
 dof_m.values = seq(from = min.dof_m, to = max.dof_m, length = 100)
-pred.dof_m <- 
+pred.dof_m_status <- 
   covariate.predictions(model = S.dof_m, 
                         data = data.frame(dof_m = dof_m.values),
-                        indices = 1)
-
-pred.dof_m_BSC <- 
-  pred.dof_m$estimates %>% 
-  mutate(region = "BSC")
+                        indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.dof_m_status_BSC <- 
+  pred.dof_m_status$estimates %>% 
+  mutate(region = "BSC",
+         status = ifelse(par.index == 1, "N", "Y"))
 
 pred.dof_m <- 
-  bind_rows(pred.dof_m_FP, pred.dof_m_MP, pred.dof_m_BSC)
+  bind_rows(pred.dof_m_status_FP, pred.dof_m_status_MP, pred.dof_m_status_BSC)
 
 ggplot(pred.dof_m, 
-       aes(x = covdata, y = estimate, color = region, fill = region)) +
+       aes(x = covdata, y = estimate, color = status, fill = status)) +
   geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
-  scale_colour_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
   scale_x_continuous(breaks = c(0, 5, 10, 15, 20, 25)) +
   luke_theme +
-  theme(legend.position = "none",
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
         legend.justification = c(1, 0),
         strip.background = element_blank()) +
   xlab("maximum number of dogs off leash exposed to") + 
@@ -5184,59 +5012,63 @@ ggplot(pred.dof_m,
 
 ## Effect of humans on nest survival (max counted)
 ```{r}
-S.hum_m <- nest_survival_run_FP[[38]]
-# S.hum_m$results$beta
+S.hum_m <- nest_survival_run_FP[[9]]
 min.hum_m = min(RMark_data_FP$nest_data.processed$data$hum_m)
 max.hum_m = max(RMark_data_FP$nest_data.processed$data$hum_m)
 hum_m.values = seq(from = min.hum_m, to = max.hum_m, length = 100)
-pred.hum_m <- 
+pred.hum_m_status <- 
   covariate.predictions(model = S.hum_m, 
                         data = data.frame(hum_m = hum_m.values),
-                        indices = 1)
-pred.hum_m_FP <- 
-  pred.hum_m$estimates %>% 
-  mutate(region = "FP")
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.hum_m_status_FP <- 
+  pred.hum_m_status$estimates %>% 
+  mutate(region = "FP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-S.hum_m <- nest_survival_run_MP[[38]]
-# S.hum_m$results$beta
+S.hum_m <- nest_survival_run_MP[[9]]
 min.hum_m = min(RMark_data_MP$nest_data.processed$data$hum_m)
 max.hum_m = max(RMark_data_MP$nest_data.processed$data$hum_m)
 hum_m.values = seq(from = min.hum_m, to = max.hum_m, length = 100)
-pred.hum_m <- 
+pred.hum_m_status <- 
   covariate.predictions(model = S.hum_m, 
                         data = data.frame(hum_m = hum_m.values),
-                        indices = 1)
+                        indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.hum_m_status_MP <- 
+  pred.hum_m_status$estimates %>% 
+  mutate(region = "MP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-pred.hum_m_MP <- 
-  pred.hum_m$estimates %>% 
-  mutate(region = "MP")
-
-S.hum_m <- nest_survival_run_BSC[[38]]
-# S.hum_m$results$beta
+S.hum_m <- nest_survival_run_BSC[[9]]
 min.hum_m = min(RMark_data_BSC$nest_data.processed$data$hum_m)
 max.hum_m = max(RMark_data_BSC$nest_data.processed$data$hum_m)
 hum_m.values = seq(from = min.hum_m, to = max.hum_m, length = 100)
-pred.hum_m <- 
+pred.hum_m_status <- 
   covariate.predictions(model = S.hum_m, 
                         data = data.frame(hum_m = hum_m.values),
-                        indices = 1)
-
-pred.hum_m_BSC <- 
-  pred.hum_m$estimates %>% 
-  mutate(region = "BSC")
+                        indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.hum_m_status_BSC <- 
+  pred.hum_m_status$estimates %>% 
+  mutate(region = "BSC",
+         status = ifelse(par.index == 1, "N", "Y"))
 
 pred.hum_m <- 
-  bind_rows(pred.hum_m_FP, pred.hum_m_MP, pred.hum_m_BSC)
+  bind_rows(pred.hum_m_status_FP, pred.hum_m_status_MP, pred.hum_m_status_BSC)
 
 ggplot(pred.hum_m, 
-       aes(x = covdata, y = estimate, color = region, fill = region)) +
+       aes(x = covdata, y = estimate, color = status, fill = status)) +
   geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
-  scale_colour_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_continuous(breaks = c(0, 10, 20, 30, 40)) +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_x_continuous(breaks = c(0, 10, 20, 30, 40, 50)) +
   luke_theme +
-  theme(legend.position = "none",
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
         legend.justification = c(1, 0),
         strip.background = element_blank()) +
   xlab("maximum number of humans exposed to") + 
@@ -5247,59 +5079,63 @@ ggplot(pred.hum_m,
 
 ## Effect of corvids on nest survival (max counted)
 ```{r}
-S.pbd_m <- nest_survival_run_FP[[43]]
-# S.pbd_m$results$beta
+S.pbd_m <- nest_survival_run_FP[[11]]
 min.pbd_m = min(RMark_data_FP$nest_data.processed$data$pbd_m)
 max.pbd_m = max(RMark_data_FP$nest_data.processed$data$pbd_m)
 pbd_m.values = seq(from = min.pbd_m, to = max.pbd_m, length = 100)
-pred.pbd_m <- 
+pred.pbd_m_status <- 
   covariate.predictions(model = S.pbd_m, 
                         data = data.frame(pbd_m = pbd_m.values),
-                        indices = 1)
-pred.pbd_m_FP <- 
-  pred.pbd_m$estimates %>% 
-  mutate(region = "FP")
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.pbd_m_status_FP <- 
+  pred.pbd_m_status$estimates %>% 
+  mutate(region = "FP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-S.pbd_m <- nest_survival_run_MP[[43]]
-# S.pbd_m$results$beta
+S.pbd_m <- nest_survival_run_MP[[11]]
 min.pbd_m = min(RMark_data_MP$nest_data.processed$data$pbd_m)
 max.pbd_m = max(RMark_data_MP$nest_data.processed$data$pbd_m)
 pbd_m.values = seq(from = min.pbd_m, to = max.pbd_m, length = 100)
-pred.pbd_m <- 
+pred.pbd_m_status <- 
   covariate.predictions(model = S.pbd_m, 
                         data = data.frame(pbd_m = pbd_m.values),
-                        indices = 1)
+                        indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.pbd_m_status_MP <- 
+  pred.pbd_m_status$estimates %>% 
+  mutate(region = "MP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-pred.pbd_m_MP <- 
-  pred.pbd_m$estimates %>% 
-  mutate(region = "MP")
-
-S.pbd_m <- nest_survival_run_BSC[[43]]
-# S.pbd_m$results$beta
+S.pbd_m <- nest_survival_run_BSC[[11]]
 min.pbd_m = min(RMark_data_BSC$nest_data.processed$data$pbd_m)
 max.pbd_m = max(RMark_data_BSC$nest_data.processed$data$pbd_m)
 pbd_m.values = seq(from = min.pbd_m, to = max.pbd_m, length = 100)
-pred.pbd_m <- 
+pred.pbd_m_status <- 
   covariate.predictions(model = S.pbd_m, 
                         data = data.frame(pbd_m = pbd_m.values),
-                        indices = 1)
-
-pred.pbd_m_BSC <- 
-  pred.pbd_m$estimates %>% 
-  mutate(region = "BSC")
+                        indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.pbd_m_status_BSC <- 
+  pred.pbd_m_status$estimates %>% 
+  mutate(region = "BSC",
+         status = ifelse(par.index == 1, "N", "Y"))
 
 pred.pbd_m <- 
-  bind_rows(pred.pbd_m_FP, pred.pbd_m_MP, pred.pbd_m_BSC)
+  bind_rows(pred.pbd_m_status_FP, pred.pbd_m_status_MP, pred.pbd_m_status_BSC)
 
 ggplot(pred.pbd_m, 
-       aes(x = covdata, y = estimate, color = region, fill = region)) +
+       aes(x = covdata, y = estimate, color = status, fill = status)) +
   geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
-  scale_colour_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_continuous(breaks = c(0, 10, 20, 30)) +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_x_continuous(breaks = c(0, 5, 10, 15, 20, 25)) +
   luke_theme +
-  theme(legend.position = "none",
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
         legend.justification = c(1, 0),
         strip.background = element_blank()) +
   xlab("maximum number of ravens and magpies exposed to") + 
@@ -5310,62 +5146,66 @@ ggplot(pred.pbd_m,
 
 ## Effect of gulls on nest survival (max counted)
 ```{r}
-S.gul_m <- nest_survival_run_FP[[32]]
-# S.gul_m$results$beta
+S.gul_m <- nest_survival_run_FP[[7]]
 min.gul_m = min(RMark_data_FP$nest_data.processed$data$gul_m)
 max.gul_m = max(RMark_data_FP$nest_data.processed$data$gul_m)
 gul_m.values = seq(from = min.gul_m, to = max.gul_m, length = 100)
-pred.gul_m <- 
+pred.gul_m_status <- 
   covariate.predictions(model = S.gul_m, 
                         data = data.frame(gul_m = gul_m.values),
-                        indices = 1)
-pred.gul_m_FP <- 
-  pred.gul_m$estimates %>% 
-  mutate(region = "FP")
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.gul_m_status_FP <- 
+  pred.gul_m_status$estimates %>% 
+  mutate(region = "FP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-S.gul_m <- nest_survival_run_MP[[32]]
-# S.gul_m$results$beta
+S.gul_m <- nest_survival_run_MP[[7]]
 min.gul_m = min(RMark_data_MP$nest_data.processed$data$gul_m)
 max.gul_m = max(RMark_data_MP$nest_data.processed$data$gul_m)
 gul_m.values = seq(from = min.gul_m, to = max.gul_m, length = 100)
-pred.gul_m <- 
+pred.gul_m_status <- 
   covariate.predictions(model = S.gul_m, 
                         data = data.frame(gul_m = gul_m.values),
-                        indices = 1)
+                        indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.gul_m_status_MP <- 
+  pred.gul_m_status$estimates %>% 
+  mutate(region = "MP",
+         status = ifelse(par.index == 1, "N", "Y"))
 
-pred.gul_m_MP <- 
-  pred.gul_m$estimates %>% 
-  mutate(region = "MP")
-
-S.gul_m <- nest_survival_run_BSC[[32]]
-# S.gul_m$results$beta
+S.gul_m <- nest_survival_run_BSC[[7]]
 min.gul_m = min(RMark_data_BSC$nest_data.processed$data$gul_m)
 max.gul_m = max(RMark_data_BSC$nest_data.processed$data$gul_m)
 gul_m.values = seq(from = min.gul_m, to = max.gul_m, length = 100)
-pred.gul_m <- 
+pred.gul_m_status <- 
   covariate.predictions(model = S.gul_m, 
                         data = data.frame(gul_m = gul_m.values),
-                        indices = 1)
-
-pred.gul_m_BSC <- 
-  pred.gul_m$estimates %>% 
-  mutate(region = "BSC")
+                        indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,])), 
+                                    as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "Y")[1,]))))
+pred.gul_m_status_BSC <- 
+  pred.gul_m_status$estimates %>% 
+  mutate(region = "BSC",
+         status = ifelse(par.index == 1, "N", "Y"))
 
 pred.gul_m <- 
-  bind_rows(pred.gul_m_FP, pred.gul_m_MP, pred.gul_m_BSC)
+  bind_rows(pred.gul_m_status_FP, pred.gul_m_status_MP, pred.gul_m_status_BSC)
 
 ggplot(pred.gul_m, 
-       aes(x = covdata, y = estimate, color = region, fill = region)) +
+       aes(x = covdata, y = estimate, color = status, fill = status)) +
   geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
-  scale_colour_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_continuous(breaks = c(0, 50, 100, 150, 200)) +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_x_continuous(breaks = c(0, 10, 20, 30, 40, 50, 60, 70)) +
   luke_theme +
-  theme(legend.position = "none",
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
         legend.justification = c(1, 0),
         strip.background = element_blank()) +
-  xlab("maximum number of ravens and magpies exposed to") + 
+  xlab("maximum number of gulls exposed to") + 
   ylab("estimated daily survival rate (± 95% CI)") +
   ylim(c(0, 1)) +
   facet_grid(. ~ region, labeller = as_labeller(region_names))
@@ -5373,8 +5213,15 @@ ggplot(pred.gul_m,
 
 ## Effect of Fox activity on nest survival (max print level)
 ```{r}
+S.fox_prints <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fox_p)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_FP_fox_p <- 
-  nest_survival_run_FP[[27]]$results$real
+  S.fox_prints$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_FP_fox_p), " ", n = 4))
 nest_survival_reals_FP_fox_p <- cbind(Groups, nest_survival_reals_FP_fox_p)
@@ -5392,8 +5239,15 @@ nest_survival_reals_FP_fox_p <-
   slice(-1)
 row.names(nest_survival_reals_FP_fox_p) <- NULL
 
+S.fox_prints <- 
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fox_p)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_MP_fox_p <- 
-  nest_survival_run_MP[[27]]$results$real
+  S.fox_prints$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_MP_fox_p), " ", n = 4))
 nest_survival_reals_MP_fox_p <- cbind(Groups, nest_survival_reals_MP_fox_p)
@@ -5411,8 +5265,15 @@ nest_survival_reals_MP_fox_p <-
   slice(-1)
 row.names(nest_survival_reals_MP_fox_p) <- NULL
 
+S.fox_prints <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ fox_p)),
+       brief = TRUE, 
+       delete = TRUE)
 nest_survival_reals_BSC_fox_p <- 
-  nest_survival_run_BSC[[27]]$results$real
+  S.fox_prints$results$real
 Groups <- data.frame(
   str_split_fixed(rownames(nest_survival_reals_BSC_fox_p), " ", n = 4))
 nest_survival_reals_BSC_fox_p <- cbind(Groups, nest_survival_reals_BSC_fox_p)
@@ -5436,7 +5297,7 @@ nest_survival_reals_levels <-
 ggplot() +
   geom_line(data = nest_survival_reals_levels, 
             aes(x = fox_p, y = estimate, color = region, group = region),
-            position = position_dodge(width = 0.5), alpha = 0.2) +
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
   geom_errorbar(data = nest_survival_reals_levels, 
                 aes(ymin = lcl, ymax = ucl, 
                     x = fox_p, 
@@ -5444,8 +5305,7 @@ ggplot() +
                 alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
   geom_point(data = nest_survival_reals_levels, 
              aes(x = fox_p, y = estimate, fill = region),
-             shape = 21, size = 2, position = position_dodge(width = 0.5)) +
-  scale_colour_brewer(palette = "Set1") +
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   luke_theme +
   theme(legend.position = c(0.9, 0.1),
         legend.justification = c(1, 0),
@@ -5463,59 +5323,57 @@ ggplot() +
 
 ## Effect of vehicles on nest survival (max)
 ```{r}
-S.veh_m <- nest_survival_run_FP[[51]]
-# S.veh_m$results$beta
+S.veh_m <- nest_survival_run_FP[[12]]
 min.veh_m = min(RMark_data_FP$nest_data.processed$data$veh_m)
 max.veh_m = max(RMark_data_FP$nest_data.processed$data$veh_m)
 veh_m.values = seq(from = min.veh_m, to = max.veh_m, length = 100)
-pred.veh_m <- 
+pred.veh_m_status <- 
   covariate.predictions(model = S.veh_m, 
                         data = data.frame(veh_m = veh_m.values),
-                        indices = 1)
-pred.veh_m_FP <- 
-  pred.veh_m$estimates %>% 
+                        indices = c(as.numeric(row.names(filter(RMark_data_FP$nest_fate.ddl$S, status == "N")[1,]))))
+pred.veh_m_status_FP <- 
+  pred.veh_m_status$estimates %>% 
   mutate(region = "FP")
 
-S.veh_m <- nest_survival_run_MP[[51]]
-# S.veh_m$results$beta
-min.veh_m = min(RMark_data_MP$nest_data.processed$data$veh_m)
-max.veh_m = max(RMark_data_MP$nest_data.processed$data$veh_m)
-veh_m.values = seq(from = min.veh_m, to = max.veh_m, length = 100)
-pred.veh_m <- 
-  covariate.predictions(model = S.veh_m, 
-                        data = data.frame(veh_m = veh_m.values),
-                        indices = 1)
+# S.veh_m <- nest_survival_run_MP[[13]]
+# min.veh_m = min(RMark_data_MP$nest_data.processed$data$veh_m)
+# max.veh_m = max(RMark_data_MP$nest_data.processed$data$veh_m)
+# veh_m.values = seq(from = min.veh_m, to = max.veh_m, length = 100)
+# pred.veh_m_status <- 
+#   covariate.predictions(model = S.veh_m, 
+#                         data = data.frame(veh_m = veh_m.values),
+#                         indices = c(as.numeric(row.names(filter(RMark_data_MP$nest_fate.ddl$S, status == "N")[1,]))))
+# pred.veh_m_status_MP <- 
+#   pred.veh_m_status$estimates %>% 
+#   mutate(region = "MP")
+# 
+# S.veh_m <- nest_survival_run_BSC[[13]]
+# min.veh_m = min(RMark_data_BSC$nest_data.processed$data$veh_m)
+# max.veh_m = max(RMark_data_BSC$nest_data.processed$data$veh_m)
+# veh_m.values = seq(from = min.veh_m, to = max.veh_m, length = 100)
+# pred.veh_m_status <- 
+#   covariate.predictions(model = S.veh_m, 
+#                         data = data.frame(veh_m = veh_m.values),
+#                         indices = c(as.numeric(row.names(filter(RMark_data_BSC$nest_fate.ddl$S, status == "N")[1,]))))
+# pred.veh_m_status_BSC <- 
+#   pred.veh_m_status$estimates %>% 
+#   mutate(region = "BSC")
+# 
+# pred.veh_m <- 
+#   bind_rows(pred.veh_m_status_FP, pred.veh_m_status_MP, pred.veh_m_status_BSC)
 
-pred.veh_m_MP <- 
-  pred.veh_m$estimates %>% 
-  mutate(region = "MP")
-
-S.veh_m <- nest_survival_run_BSC[[51]]
-# S.veh_m$results$beta
-min.veh_m = min(RMark_data_BSC$nest_data.processed$data$veh_m)
-max.veh_m = max(RMark_data_BSC$nest_data.processed$data$veh_m)
-veh_m.values = seq(from = min.veh_m, to = max.veh_m, length = 100)
-pred.veh_m <- 
-  covariate.predictions(model = S.veh_m, 
-                        data = data.frame(veh_m = veh_m.values),
-                        indices = 1)
-
-pred.veh_m_BSC <- 
-  pred.veh_m$estimates %>% 
-  mutate(region = "BSC")
-
-pred.veh_m <- 
-  bind_rows(pred.veh_m_FP, pred.veh_m_MP, pred.veh_m_BSC)
-
-ggplot(pred.veh_m, 
-       aes(x = covdata, y = estimate, color = region, fill = region)) +
+ggplot(pred.veh_m_status_FP, 
+       aes(x = covdata, y = estimate)) +
   geom_line(size = 1.5) +
   geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.2) +
-  scale_colour_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2") +
-  scale_x_continuous(breaks = c(0, 1, 2, 3)) +
+  scale_colour_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_fill_brewer(palette = "Dark2", 
+                      labels = c("No management", "Management")) +
+  scale_x_continuous(breaks = c(0, 1, 2, 3, 4, 5)) +
   luke_theme +
-  theme(legend.position = "none",
+  theme(legend.position = c(0.25, 0.1),
+        legend.title = element_blank(),
         legend.justification = c(1, 0),
         strip.background = element_blank()) +
   xlab("maximum number of vehicles exposed to") + 
@@ -5525,66 +5383,87 @@ ggplot(pred.veh_m,
 ```
 
 ## Annual variation in nest survival
-```{r}
-nest_survival_reals_FP_season <- 
-  nest_survival_run_FP[[46]]$results$real
+```{r, fig.height=8}
+S.year <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ season)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_FP_year <- 
+  S.year$results$real
 Groups <- data.frame(
-  str_split_fixed(rownames(nest_survival_reals_FP_season), " ", n = 4))
-nest_survival_reals_FP_season <- cbind(Groups, nest_survival_reals_FP_season)
-nest_survival_reals_FP_season$season <- 
-  as.numeric(str_sub(nest_survival_reals_FP_season$X2, 2, 5))
-nest_survival_reals_FP_season$season <- paste(nest_survival_reals_FP_season$season, nest_survival_reals_FP_season$season + 1, sep = " - ")
-nest_survival_reals_FP_season <- 
-  nest_survival_reals_FP_season %>% 
+  str_split_fixed(rownames(nest_survival_reals_FP_year), " ", n = 4))
+nest_survival_reals_FP_year <- cbind(Groups, nest_survival_reals_FP_year)
+nest_survival_reals_FP_year$season <- 
+  as.numeric(str_sub(nest_survival_reals_FP_year$X2, 2, 5))
+nest_survival_reals_FP_year$season <- paste(nest_survival_reals_FP_year$season, nest_survival_reals_FP_year$season + 1, sep = " - ")
+nest_survival_reals_FP_year <- 
+  nest_survival_reals_FP_year %>% 
   dplyr::select(season, estimate, se, lcl, ucl) %>% 
   mutate(region = "FP")
-row.names(nest_survival_reals_FP_season) <- NULL
+row.names(nest_survival_reals_FP_year) <- NULL
 
-nest_survival_reals_MP_season <- 
-  nest_survival_run_MP[[46]]$results$real
+S.year <- 
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ season)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_MP_year <- 
+  S.year$results$real
 Groups <- data.frame(
-  str_split_fixed(rownames(nest_survival_reals_MP_season), " ", n = 4))
-nest_survival_reals_MP_season <- cbind(Groups, nest_survival_reals_MP_season)
-nest_survival_reals_MP_season$season <- 
-  as.numeric(str_sub(nest_survival_reals_MP_season$X2, 2, 5))
-nest_survival_reals_MP_season$season <- paste(nest_survival_reals_MP_season$season, nest_survival_reals_MP_season$season + 1, sep = " - ")
-nest_survival_reals_MP_season <- 
-  nest_survival_reals_MP_season %>% 
+  str_split_fixed(rownames(nest_survival_reals_MP_year), " ", n = 4))
+nest_survival_reals_MP_year <- cbind(Groups, nest_survival_reals_MP_year)
+nest_survival_reals_MP_year$season <- 
+  as.numeric(str_sub(nest_survival_reals_MP_year$X2, 2, 5))
+nest_survival_reals_MP_year$season <- paste(nest_survival_reals_MP_year$season, nest_survival_reals_MP_year$season + 1, sep = " - ")
+nest_survival_reals_MP_year <- 
+  nest_survival_reals_MP_year %>% 
   dplyr::select(season, estimate, se, lcl, ucl) %>% 
   mutate(region = "MP")
-row.names(nest_survival_reals_MP_season) <- NULL
+row.names(nest_survival_reals_MP_year) <- NULL
 
-nest_survival_reals_BSC_season <- 
-  nest_survival_run_BSC[[46]]$results$real
+S.year <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ season)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_BSC_year <- 
+  S.year$results$real
 Groups <- data.frame(
-  str_split_fixed(rownames(nest_survival_reals_BSC_season), " ", n = 4))
-nest_survival_reals_BSC_season <- cbind(Groups, nest_survival_reals_BSC_season)
-nest_survival_reals_BSC_season$season <- 
-  as.numeric(str_sub(nest_survival_reals_BSC_season$X2, 2, 5))
-nest_survival_reals_BSC_season$season <- paste(nest_survival_reals_BSC_season$season, nest_survival_reals_BSC_season$season + 1, sep = " - ")
-nest_survival_reals_BSC_season <- 
-  nest_survival_reals_BSC_season %>% 
+  str_split_fixed(rownames(nest_survival_reals_BSC_year), " ", n = 4))
+nest_survival_reals_BSC_year <- cbind(Groups, nest_survival_reals_BSC_year)
+nest_survival_reals_BSC_year$season <- 
+  as.numeric(str_sub(nest_survival_reals_BSC_year$X2, 2, 5))
+nest_survival_reals_BSC_year$season <- paste(nest_survival_reals_BSC_year$season, nest_survival_reals_BSC_year$season + 1, sep = " - ")
+nest_survival_reals_BSC_year <- 
+  nest_survival_reals_BSC_year %>% 
   dplyr::select(season, estimate, se, lcl, ucl) %>% 
   mutate(region = "BSC")
-row.names(nest_survival_reals_BSC_season) <- NULL
+row.names(nest_survival_reals_BSC_year) <- NULL
 
-nest_survival_reals_season <- 
-  bind_rows(nest_survival_reals_FP_season, 
-            nest_survival_reals_MP_season, 
-            nest_survival_reals_BSC_season)
+nest_survival_reals_year <- 
+  bind_rows(nest_survival_reals_FP_year, 
+            nest_survival_reals_MP_year, 
+            nest_survival_reals_BSC_year)
 
 ggplot() +
-  geom_line(data = nest_survival_reals_season, 
+  geom_line(data = nest_survival_reals_year, 
             aes(x = season, y = estimate, color = region, group = region),
             position = position_dodge(width = 0.5), alpha = 0.2) +
-  geom_errorbar(data = nest_survival_reals_season, 
+  geom_errorbar(data = nest_survival_reals_year, 
                 aes(ymin = lcl, ymax = ucl, 
                     x = season, 
                     y = estimate, group = region), position = position_dodge(width = 0.5),
                 alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
-  geom_point(data = nest_survival_reals_season, 
+  geom_point(data = nest_survival_reals_year, 
              aes(x = season, y = estimate, fill = region),
-             shape = 21, size = 2, position = position_dodge(width = 0.5)) +
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   scale_colour_brewer(palette = "Set1") +
   luke_theme +
   theme(legend.position = "none",
@@ -5603,37 +5482,58 @@ ggplot() +
 ```{r, fig.height=8}
 # Extract estimates of survival from Cubic model with management 
 # (non-linear season variation and management effect)
-nest_survival_reals_MP <- 
-  nest_survival_run_MP[[1]]$results$real
+S.season <- 
+  mark(data = RMark_data_MP$nest_data.processed, 
+       ddl = RMark_data_MP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ Time + Quadratic + Cubic)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_MP_season <- 
+  S.season$results$real
 Groups <- data.frame(
-  str_split_fixed(rownames(nest_survival_reals_MP), " ", n = 4))
-nest_survival_reals_MP <- cbind(Groups, nest_survival_reals_MP)
-nest_survival_reals_MP$day_of_season <- 
-  unlist(str_extract_all(nest_survival_reals_MP$X4, "\\d+")) %>% unique() %>% as.numeric()
-nest_survival_reals_MP$region = "MP"
+  str_split_fixed(rownames(nest_survival_reals_MP_season), " ", n = 4))
+nest_survival_reals_MP_season <- cbind(Groups, nest_survival_reals_MP_season)
+nest_survival_reals_MP_season$day_of_season <- 
+  unlist(str_extract_all(nest_survival_reals_MP_season$X4, "\\d+")) %>% unique() %>% as.numeric()
+nest_survival_reals_MP_season$region = "MP"
 
-nest_survival_reals_BSC <- 
-  nest_survival_run_BSC[[1]]$results$real
+S.season <- 
+  mark(data = RMark_data_BSC$nest_data.processed, 
+       ddl = RMark_data_BSC$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ Time + Quadratic + Cubic)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_BSC_season <- 
+  S.season$results$real
 Groups <- data.frame(
-  str_split_fixed(rownames(nest_survival_reals_BSC), " ", n = 4))
-nest_survival_reals_BSC <- cbind(Groups, nest_survival_reals_BSC)
-nest_survival_reals_BSC$day_of_season <- 
-  unlist(str_extract_all(nest_survival_reals_BSC$X4, "\\d+")) %>% unique() %>% as.numeric()
-nest_survival_reals_BSC$region = "BSC"
+  str_split_fixed(rownames(nest_survival_reals_BSC_season), " ", n = 4))
+nest_survival_reals_BSC_season <- cbind(Groups, nest_survival_reals_BSC_season)
+nest_survival_reals_BSC_season$day_of_season <- 
+  unlist(str_extract_all(nest_survival_reals_BSC_season$X4, "\\d+")) %>% unique() %>% as.numeric()
+nest_survival_reals_BSC_season$region = "BSC"
 
-nest_survival_reals_FP <- 
-  nest_survival_run_FP[[1]]$results$real
+S.season <- 
+  mark(data = RMark_data_FP$nest_data.processed, 
+       ddl = RMark_data_FP$nest_fate.ddl, 
+       model = "Nest",
+       model.parameters = list("S" = list(formula =  ~ Time + Quadratic + Cubic)),
+       brief = TRUE, 
+       delete = TRUE)
+nest_survival_reals_FP_season <- 
+  S.season$results$real
 Groups <- data.frame(
-  str_split_fixed(rownames(nest_survival_reals_FP), " ", n = 4))
-nest_survival_reals_FP <- cbind(Groups, nest_survival_reals_FP)
-nest_survival_reals_FP$day_of_season <- 
-  unlist(str_extract_all(nest_survival_reals_FP$X4, "\\d+")) %>% unique() %>% as.numeric()
-nest_survival_reals_FP$region = "FP"
+  str_split_fixed(rownames(nest_survival_reals_FP_season), " ", n = 4))
+nest_survival_reals_FP_season <- cbind(Groups, nest_survival_reals_FP_season)
+nest_survival_reals_FP_season$day_of_season <- 
+  unlist(str_extract_all(nest_survival_reals_FP_season$X4, "\\d+")) %>% unique() %>% as.numeric()
+nest_survival_reals_FP_season$region = "FP"
 
-nest_survival_reals <- 
-  bind_rows(nest_survival_reals_MP, nest_survival_reals_BSC, nest_survival_reals_MP) %>% 
+nest_survival_reals_season <- 
+  bind_rows(nest_survival_reals_MP_season, nest_survival_reals_BSC_season, nest_survival_reals_FP_season) %>% 
   dplyr::select(region, day_of_season, estimate, lcl, ucl)
-row.names(nest_survival_reals) <- NULL
+row.names(nest_survival_reals_season) <- NULL
 
 # FP
 dates_for_plot_FP <- 
@@ -5646,7 +5546,7 @@ dates_for_plot_FP <-
                                     min(as.numeric(RMark_data_FP$nest_data.processed$data$FirstFound)))))
 
 nest_survival_reals_dates_FP <- 
-  left_join(nest_survival_reals_FP, dates_for_plot_FP, by = "day_of_season")
+  left_join(nest_survival_reals_FP_season, dates_for_plot_FP, by = "day_of_season")
 
 nest_survival_season_plot_FP <- 
   ggplot(data = nest_survival_reals_dates_FP) +
@@ -5713,7 +5613,7 @@ dates_for_plot_MP <-
                                     min(as.numeric(RMark_data_MP$nest_data.processed$data$FirstFound)))))
 
 nest_survival_reals_dates_MP <- 
-  left_join(nest_survival_reals_MP, dates_for_plot_MP, by = "day_of_season")
+  left_join(nest_survival_reals_MP_season, dates_for_plot_MP, by = "day_of_season")
 
 nest_survival_season_plot_MP <- 
   ggplot(data = nest_survival_reals_dates_MP) +
@@ -5780,7 +5680,7 @@ dates_for_plot_BSC <-
                                     min(as.numeric(RMark_data_BSC$nest_data.processed$data$FirstFound)))))
 
 nest_survival_reals_dates_BSC <- 
-  left_join(nest_survival_reals_BSC, dates_for_plot_BSC, by = "day_of_season")
+  left_join(nest_survival_reals_BSC_season, dates_for_plot_BSC, by = "day_of_season")
 
 nest_survival_season_plot_BSC <- 
   ggplot(data = nest_survival_reals_dates_BSC) +
@@ -5891,673 +5791,477 @@ threat_data__scaled_BSC <-
 ### Humans and fun days relationships at the three regions
 strong relationship between the number of humans detected and the occurrence of a weekend or a holiday at all 3 regions
 ```{r}
-humans_fun_day_FP <-
-  glmer(cbind(fun, no_fun) ~ 
+humans_fun_day_FP_ <-
+  glmer(humans_ ~ 
           poly(obs_date2, 3) + 
-          humans_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_FP,
-        family = "binomial")
+        family = "poisson")
 
-humans_fun_day_MP <-
-  glmer(cbind(fun, no_fun) ~ 
+humans_fun_day_MP_ <-
+  glmer(humans_ ~ 
           poly(obs_date2, 3) + 
-          humans_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_MP,
-        family = "binomial")
+        family = "poisson")
 
-humans_fun_day_BSC <-
-  glmer(cbind(fun, no_fun) ~ 
+humans_fun_day_BSC_ <-
+  glmer(humans_ ~ 
           poly(obs_date2, 3) + 
-          humans_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_BSC,
-        family = "binomial")
+        family = "poisson")
 ```
 
 Fleurieu Peninsula
 ```{r}
-tbl_regression(humans_fun_day_FP, intercept = TRUE)
+tbl_regression(humans_fun_day_FP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Mornington Peninsula
 ```{r}
-tbl_regression(humans_fun_day_MP, intercept = TRUE)
+tbl_regression(humans_fun_day_MP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Bellarine / Surf Coast
 ```{r}
-tbl_regression(humans_fun_day_BSC, intercept = TRUE)
+tbl_regression(humans_fun_day_BSC_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
-```{r, fig.width=10}
-humans_fun_day_FP_fits <-
-  as.data.frame(effect(term = "humans_", mod = humans_fun_day_FP,
-                       xlevels = list(humans_ = seq(min(threat_data__scaled_FP[, "humans_"], na.rm = TRUE), max(threat_data__scaled_FP[, "humans_"], na.rm = TRUE), 1))))
+```{r}
+humans_fun_day_FP__fits <-
+  as.data.frame(effect(term = "funday", mod = humans_fun_day_FP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_FP[, "funday"], na.rm = TRUE), max(threat_data__scaled_FP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "FP")
 
-humans_fun_day_FP_plot <-
-  threat_data__scaled_FP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = humans_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = humans_fun_day_FP_fits,
-            aes(x = humans_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = humans_fun_day_FP_fits,
-              aes(x = humans_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+humans_fun_day_MP__fits <-
+  as.data.frame(effect(term = "funday", mod = humans_fun_day_MP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_MP[, "funday"], na.rm = TRUE), max(threat_data__scaled_MP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "MP")
+
+humans_fun_day_BSC__fits <-
+  as.data.frame(effect(term = "funday", mod = humans_fun_day_BSC_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), max(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "BSC")
+
+humans_fun_day__fits <- 
+  bind_rows(humans_fun_day_FP__fits, 
+            humans_fun_day_MP__fits, 
+            humans_fun_day_BSC__fits) %>% 
+  mutate(funday = ifelse(funday == 0, "no", "yes"))
+
+row.names(humans_fun_day__fits) <- NULL
+
+ggplot() +
+  geom_line(data = humans_fun_day__fits, 
+            aes(x = funday, y = fit, color = region, group = region),
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
+  geom_errorbar(data = humans_fun_day__fits, 
+                aes(ymin = lower, ymax = upper, 
+                    x = funday, 
+                    y = fit, group = region), position = position_dodge(width = 0.5),
+                alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
+  geom_point(data = humans_fun_day__fits, 
+             aes(x = funday, y = fit, fill = region),
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5)) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of humans detected") +
-  ggtitle("Fleurieu Peninsula")
-
-humans_fun_day_MP_fits <-
-  as.data.frame(effect(term = "humans_", mod = humans_fun_day_MP,
-                       xlevels = list(humans_ = seq(min(threat_data__scaled_MP[, "humans_"], na.rm = TRUE), max(threat_data__scaled_MP[, "humans_"], na.rm = TRUE), 1))))
-
-humans_fun_day_MP_plot <-
-  threat_data__scaled_MP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = humans_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = humans_fun_day_MP_fits,
-            aes(x = humans_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = humans_fun_day_MP_fits,
-              aes(x = humans_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of humans detected") +
-  ggtitle("Mornington Peninsula")
-
-humans_fun_day_BSC_fits <-
-  as.data.frame(effect(term = "humans_", mod = humans_fun_day_BSC,
-                       xlevels = list(humans_ = seq(min(threat_data__scaled_BSC[, "humans_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "humans_"], na.rm = TRUE), 1))))
-
-humans_fun_day_BSC_plot <-
-  threat_data__scaled_BSC %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = humans_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = humans_fun_day_BSC_fits,
-            aes(x = humans_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = humans_fun_day_BSC_fits,
-              aes(x = humans_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of humans detected") +
-  ggtitle("Bellarine / Surf Coast")
-
-humans_fun_day_FP_plot + humans_fun_day_MP_plot + humans_fun_day_BSC_plot +
-  plot_layout(ncol = 3,
-              heights = unit(c(8), 'cm'),
-              widths = unit(c(8, 8, 8), 'cm'))
+  theme(legend.position = "top",
+        legend.justification = c(1, 0),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 10)) +
+  ylab("number of humans detected (± 95% CI)") +
+  scale_colour_brewer(palette = "Dark2", 
+                      name = "Region", 
+                      labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Region", 
+                    labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_x_discrete(labels = c("weekday", "weekend/holiday"))
 ```
 
 ### Dogs and fun days relationships at the three regions
 strong relationship between the number of dogs detected and the occurrence of a weekend or a holiday at all 3 regions
 ```{r}
-dogs_fun_day_FP <-
-  glmer(cbind(fun, no_fun) ~ 
+dogs_fun_day_FP_ <-
+  glmer(dogs_ ~ 
           poly(obs_date2, 3) + 
-          dogs_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_FP,
-        family = "binomial")
+        family = "poisson")
 
-dogs_fun_day_MP <-
-  glmer(cbind(fun, no_fun) ~ 
+dogs_fun_day_MP_ <-
+  glmer(dogs_ ~ 
           poly(obs_date2, 3) + 
-          dogs_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_MP,
-        family = "binomial")
+        family = "poisson")
 
-dogs_fun_day_BSC <-
-  glmer(cbind(fun, no_fun) ~ 
+dogs_fun_day_BSC_ <-
+  glmer(dogs_ ~ 
           poly(obs_date2, 3) + 
-          dogs_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_BSC,
-        family = "binomial")
+        family = "poisson")
 ```
 
 Fleurieu Peninsula
 ```{r}
-tbl_regression(dogs_fun_day_FP, intercept = TRUE)
+tbl_regression(dogs_fun_day_FP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Mornington Peninsula
 ```{r}
-tbl_regression(dogs_fun_day_MP, intercept = TRUE)
+tbl_regression(dogs_fun_day_MP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Bellarine / Surf Coast
 ```{r}
-tbl_regression(dogs_fun_day_BSC, intercept = TRUE)
+tbl_regression(dogs_fun_day_BSC_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
-```{r, fig.width=10}
-dogs_fun_day_FP_fits <-
-  as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_FP,
-                       xlevels = list(dogs_ = seq(min(threat_data__scaled_FP[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_FP[, "dogs_"], na.rm = TRUE), 1))))
+```{r}
+dogs_fun_day_FP__fits <-
+  as.data.frame(effect(term = "funday", mod = dogs_fun_day_FP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_FP[, "funday"], na.rm = TRUE), max(threat_data__scaled_FP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "FP")
 
-dogs_fun_day_FP_plot <-
-  threat_data__scaled_FP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = dogs_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = dogs_fun_day_FP_fits,
-            aes(x = dogs_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = dogs_fun_day_FP_fits,
-              aes(x = dogs_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+dogs_fun_day_MP__fits <-
+  as.data.frame(effect(term = "funday", mod = dogs_fun_day_MP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_MP[, "funday"], na.rm = TRUE), max(threat_data__scaled_MP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "MP")
+
+dogs_fun_day_BSC__fits <-
+  as.data.frame(effect(term = "funday", mod = dogs_fun_day_BSC_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), max(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "BSC")
+
+dogs_fun_day__fits <- 
+  bind_rows(dogs_fun_day_FP__fits, 
+            dogs_fun_day_MP__fits, 
+            dogs_fun_day_BSC__fits) %>% 
+  mutate(funday = ifelse(funday == 0, "no", "yes"))
+
+row.names(dogs_fun_day__fits) <- NULL
+
+ggplot() +
+  geom_line(data = dogs_fun_day__fits, 
+            aes(x = funday, y = fit, color = region, group = region),
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
+  geom_errorbar(data = dogs_fun_day__fits, 
+                aes(ymin = lower, ymax = upper, 
+                    x = funday, 
+                    y = fit, group = region), position = position_dodge(width = 0.5),
+                alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
+  geom_point(data = dogs_fun_day__fits, 
+             aes(x = funday, y = fit, fill = region),
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5)) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of dogs detected") +
-  ggtitle("Fleurieu Peninsula")
-
-dogs_fun_day_MP_fits <-
-  as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_MP,
-                       xlevels = list(dogs_ = seq(min(threat_data__scaled_MP[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_MP[, "dogs_"], na.rm = TRUE), 1))))
-
-dogs_fun_day_MP_plot <-
-  threat_data__scaled_MP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = dogs_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = dogs_fun_day_MP_fits,
-            aes(x = dogs_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = dogs_fun_day_MP_fits,
-              aes(x = dogs_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of dogs detected") +
-  ggtitle("Mornington Peninsula")
-
-dogs_fun_day_BSC_fits <-
-  as.data.frame(effect(term = "dogs_", mod = dogs_fun_day_BSC,
-                       xlevels = list(dogs_ = seq(min(threat_data__scaled_BSC[, "dogs_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "dogs_"], na.rm = TRUE), 1))))
-
-dogs_fun_day_BSC_plot <-
-  threat_data__scaled_BSC %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = dogs_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = dogs_fun_day_BSC_fits,
-            aes(x = dogs_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = dogs_fun_day_BSC_fits,
-              aes(x = dogs_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of dogs detected") +
-  ggtitle("Bellarine / Surf Coast")
-
-dogs_fun_day_FP_plot + dogs_fun_day_MP_plot + dogs_fun_day_BSC_plot +
-  plot_layout(ncol = 3,
-              heights = unit(c(8), 'cm'),
-              widths = unit(c(7, 7, 7), 'cm'))
+  theme(legend.position = "top",
+        legend.justification = c(1, 0),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 10)) +
+  ylab("number of dogs detected (± 95% CI)") +
+  scale_colour_brewer(palette = "Dark2", 
+                      name = "Region", 
+                      labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Region", 
+                    labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_x_discrete(labels = c("weekday", "weekend/holiday"))
 ```
 
 ### Dogs off leashes and fun days relationships at the three regions
 strong relationship between the number of dogs off leash detected and the occurrence of a weekend or a holiday at all 3 regions
 ```{r}
-dogs_off_fun_day_FP <-
-  glmer(cbind(fun, no_fun) ~ 
+dogs_off_fun_day_FP_ <-
+  glmer(dogs_off_ ~ 
           poly(obs_date2, 3) + 
-          dogs_off_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_FP,
-        family = "binomial")
+        family = "poisson")
 
-dogs_off_fun_day_MP <-
-  glmer(cbind(fun, no_fun) ~ 
+dogs_off_fun_day_MP_ <-
+  glmer(dogs_off_ ~ 
           poly(obs_date2, 3) + 
-          dogs_off_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_MP,
-        family = "binomial")
+        family = "poisson")
 
-dogs_off_fun_day_BSC <-
-  glmer(cbind(fun, no_fun) ~ 
+dogs_off_fun_day_BSC_ <-
+  glmer(dogs_off_ ~ 
           poly(obs_date2, 3) + 
-          dogs_off_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_BSC,
-        family = "binomial")
+        family = "poisson")
 ```
 
 Fleurieu Peninsula
 ```{r}
-tbl_regression(dogs_off_fun_day_FP, intercept = TRUE)
+tbl_regression(dogs_off_fun_day_FP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Mornington Peninsula
 ```{r}
-tbl_regression(dogs_off_fun_day_MP, intercept = TRUE)
+tbl_regression(dogs_off_fun_day_MP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Bellarine / Surf Coast
 ```{r}
-tbl_regression(dogs_off_fun_day_BSC, intercept = TRUE)
+tbl_regression(dogs_off_fun_day_BSC_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
-```{r, fig.width=10}
-dogs_off_fun_day_FP_fits <-
-  as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_FP,
-                       xlevels = list(dogs_off_ = seq(min(threat_data__scaled_FP[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_FP[, "dogs_off_"], na.rm = TRUE), 1))))
+```{r}
+dogs_off_fun_day_FP__fits <-
+  as.data.frame(effect(term = "funday", mod = dogs_off_fun_day_FP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_FP[, "funday"], na.rm = TRUE), max(threat_data__scaled_FP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "FP")
 
-dogs_off_fun_day_FP_plot <-
-  threat_data__scaled_FP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = dogs_off_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = dogs_off_fun_day_FP_fits,
-            aes(x = dogs_off_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = dogs_off_fun_day_FP_fits,
-              aes(x = dogs_off_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+dogs_off_fun_day_MP__fits <-
+  as.data.frame(effect(term = "funday", mod = dogs_off_fun_day_MP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_MP[, "funday"], na.rm = TRUE), max(threat_data__scaled_MP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "MP")
+
+dogs_off_fun_day_BSC__fits <-
+  as.data.frame(effect(term = "funday", mod = dogs_off_fun_day_BSC_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), max(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "BSC")
+
+dogs_off_fun_day__fits <- 
+  bind_rows(dogs_off_fun_day_FP__fits, 
+            dogs_off_fun_day_MP__fits, 
+            dogs_off_fun_day_BSC__fits) %>% 
+  mutate(funday = ifelse(funday == 0, "no", "yes"))
+
+row.names(dogs_off_fun_day__fits) <- NULL
+
+ggplot() +
+  geom_line(data = dogs_off_fun_day__fits, 
+            aes(x = funday, y = fit, color = region, group = region),
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
+  geom_errorbar(data = dogs_off_fun_day__fits, 
+                aes(ymin = lower, ymax = upper, 
+                    x = funday, 
+                    y = fit, group = region), position = position_dodge(width = 0.5),
+                alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
+  geom_point(data = dogs_off_fun_day__fits, 
+             aes(x = funday, y = fit, fill = region),
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5)) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of dogs off leash detected") +
-  ggtitle("Fleurieu Peninsula")
-
-dogs_off_fun_day_MP_fits <-
-  as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_MP,
-                       xlevels = list(dogs_off_ = seq(min(threat_data__scaled_MP[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_MP[, "dogs_off_"], na.rm = TRUE), 1))))
-
-dogs_off_fun_day_MP_plot <-
-  threat_data__scaled_MP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = dogs_off_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = dogs_off_fun_day_MP_fits,
-            aes(x = dogs_off_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = dogs_off_fun_day_MP_fits,
-              aes(x = dogs_off_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of dogs off leash detected") +
-  ggtitle("Mornington Peninsula")
-
-dogs_off_fun_day_BSC_fits <-
-  as.data.frame(effect(term = "dogs_off_", mod = dogs_off_fun_day_BSC,
-                       xlevels = list(dogs_off_ = seq(min(threat_data__scaled_BSC[, "dogs_off_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "dogs_off_"], na.rm = TRUE), 1))))
-
-dogs_off_fun_day_BSC_plot <-
-  threat_data__scaled_BSC %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = dogs_off_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = dogs_off_fun_day_BSC_fits,
-            aes(x = dogs_off_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = dogs_off_fun_day_BSC_fits,
-              aes(x = dogs_off_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of dogs off leash detected") +
-  ggtitle("Bellarine / Surf Coast")
-
-dogs_off_fun_day_FP_plot + dogs_off_fun_day_MP_plot + dogs_off_fun_day_BSC_plot +
-  plot_layout(ncol = 3,
-              heights = unit(c(8), 'cm'),
-              widths = unit(c(7, 7, 7), 'cm'))
+  theme(legend.position = "top",
+        legend.justification = c(1, 0),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 10)) +
+  ylab("number of dogs off leash detected (± 95% CI)") +
+  scale_colour_brewer(palette = "Dark2", 
+                      name = "Region", 
+                      labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Region", 
+                    labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_x_discrete(labels = c("weekday", "weekend/holiday"))
 ```
 
 ### Ravens and Magpies and fun days relationships at the three regions
 weak negative relationship at Fleurieu Peninsula and Mornington Peninsula between the number of corvids detected and the occurrence of a weekend or a holiday
 ```{r}
-pred_birds_fun_day_FP <-
-  glmer(cbind(fun, no_fun) ~ 
+pred_birds_fun_day_FP_ <-
+  glmer(pred_birds_ ~ 
           poly(obs_date2, 3) + 
-          pred_birds_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_FP,
-        family = "binomial")
+        family = "poisson")
 
-pred_birds_fun_day_MP <-
-  glmer(cbind(fun, no_fun) ~ 
+pred_birds_fun_day_MP_ <-
+  glmer(pred_birds_ ~ 
           poly(obs_date2, 3) + 
-          pred_birds_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_MP,
-        family = "binomial")
+        family = "poisson")
 
-pred_birds_fun_day_BSC <-
-  glmer(cbind(fun, no_fun) ~ 
+pred_birds_fun_day_BSC_ <-
+  glmer(pred_birds_ ~ 
           poly(obs_date2, 3) + 
-          pred_birds_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_BSC,
-        family = "binomial")
+        family = "poisson")
 ```
 
 Fleurieu Peninsula
 ```{r}
-tbl_regression(pred_birds_fun_day_FP, intercept = TRUE)
+tbl_regression(pred_birds_fun_day_FP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Mornington Peninsula
 ```{r}
-tbl_regression(pred_birds_fun_day_MP, intercept = TRUE)
+tbl_regression(pred_birds_fun_day_MP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Bellarine / Surf Coast
 ```{r}
-tbl_regression(pred_birds_fun_day_BSC, intercept = TRUE)
+tbl_regression(pred_birds_fun_day_BSC_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
-```{r, fig.width=10}
-pred_birds_fun_day_FP_fits <-
-  as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_FP,
-                       xlevels = list(pred_birds_ = seq(min(threat_data__scaled_FP[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_FP[, "pred_birds_"], na.rm = TRUE), 1))))
+```{r}
+pred_birds_fun_day_FP__fits <-
+  as.data.frame(effect(term = "funday", mod = pred_birds_fun_day_FP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_FP[, "funday"], na.rm = TRUE), max(threat_data__scaled_FP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "FP")
 
-pred_birds_fun_day_FP_plot <-
-  threat_data__scaled_FP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = pred_birds_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = pred_birds_fun_day_FP_fits,
-            aes(x = pred_birds_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = pred_birds_fun_day_FP_fits,
-              aes(x = pred_birds_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+pred_birds_fun_day_MP__fits <-
+  as.data.frame(effect(term = "funday", mod = pred_birds_fun_day_MP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_MP[, "funday"], na.rm = TRUE), max(threat_data__scaled_MP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "MP")
+
+pred_birds_fun_day_BSC__fits <-
+  as.data.frame(effect(term = "funday", mod = pred_birds_fun_day_BSC_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), max(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "BSC")
+
+pred_birds_fun_day__fits <- 
+  bind_rows(pred_birds_fun_day_FP__fits, 
+            pred_birds_fun_day_MP__fits, 
+            pred_birds_fun_day_BSC__fits) %>% 
+  mutate(funday = ifelse(funday == 0, "no", "yes"))
+
+row.names(pred_birds_fun_day__fits) <- NULL
+
+ggplot() +
+  geom_line(data = pred_birds_fun_day__fits, 
+            aes(x = funday, y = fit, color = region, group = region),
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
+  geom_errorbar(data = pred_birds_fun_day__fits, 
+                aes(ymin = lower, ymax = upper, 
+                    x = funday, 
+                    y = fit, group = region), position = position_dodge(width = 0.5),
+                alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
+  geom_point(data = pred_birds_fun_day__fits, 
+             aes(x = funday, y = fit, fill = region),
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5)) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of ravens or magpies detected") +
-  ggtitle("Fleurieu Peninsula")
-
-pred_birds_fun_day_MP_fits <-
-  as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_MP,
-                       xlevels = list(pred_birds_ = seq(min(threat_data__scaled_MP[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_MP[, "pred_birds_"], na.rm = TRUE), 1))))
-
-pred_birds_fun_day_MP_plot <-
-  threat_data__scaled_MP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = pred_birds_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = pred_birds_fun_day_MP_fits,
-            aes(x = pred_birds_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = pred_birds_fun_day_MP_fits,
-              aes(x = pred_birds_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of ravens or magpies detected") +
-  ggtitle("Mornington Peninsula")
-
-pred_birds_fun_day_BSC_fits <-
-  as.data.frame(effect(term = "pred_birds_", mod = pred_birds_fun_day_BSC,
-                       xlevels = list(pred_birds_ = seq(min(threat_data__scaled_BSC[, "pred_birds_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "pred_birds_"], na.rm = TRUE), 1))))
-
-pred_birds_fun_day_BSC_plot <-
-  threat_data__scaled_BSC %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = pred_birds_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = pred_birds_fun_day_BSC_fits,
-            aes(x = pred_birds_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = pred_birds_fun_day_BSC_fits,
-              aes(x = pred_birds_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of ravens or magpies detected") +
-  ggtitle("Bellarine / Surf Coast")
-
-pred_birds_fun_day_FP_plot + pred_birds_fun_day_MP_plot + pred_birds_fun_day_BSC_plot +
-  plot_layout(ncol = 3,
-              heights = unit(c(8), 'cm'),
-              widths = unit(c(7, 7, 7), 'cm'))
+  theme(legend.position = "top",
+        legend.justification = c(1, 0),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 10)) +
+  ylab("number of magpies and ravens detected (± 95% CI)") +
+  scale_colour_brewer(palette = "Dark2", 
+                      name = "Region", 
+                      labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Region", 
+                    labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_x_discrete(labels = c("weekday", "weekend/holiday"))
 ```
 
 ### Gulls and fun days relationships at the three regions
 negative relationship (albeit only significant at Mornington Peninsula) between the number of corvids detected and the occurrence of a weekend or a holiday
 ```{r}
-gulls_fun_day_FP <-
-  glmer(cbind(fun, no_fun) ~ 
+gulls_fun_day_FP_ <-
+  glmer(gulls_ ~ 
           poly(obs_date2, 3) + 
-          gulls_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_FP,
-        family = "binomial")
+        family = "poisson")
 
-gulls_fun_day_MP <-
-  glmer(cbind(fun, no_fun) ~ 
+gulls_fun_day_MP_ <-
+  glmer(gulls_ ~ 
           poly(obs_date2, 3) + 
-          gulls_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_MP,
-        family = "binomial")
+        family = "poisson")
 
-gulls_fun_day_BSC <-
-  glmer(cbind(fun, no_fun) ~ 
+gulls_fun_day_BSC_ <-
+  glmer(gulls_ ~ 
           poly(obs_date2, 3) + 
-          gulls_ + (1 | season) + (1 | site),
+          funday + (1 | season) + (1 | site),
         data = threat_data__scaled_BSC,
-        family = "binomial")
+        family = "poisson")
 ```
 
 Fleurieu Peninsula
 ```{r}
-tbl_regression(gulls_fun_day_FP, intercept = TRUE)
+tbl_regression(gulls_fun_day_FP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Mornington Peninsula
 ```{r}
-tbl_regression(gulls_fun_day_MP, intercept = TRUE)
+tbl_regression(gulls_fun_day_MP_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
 Bellarine / Surf Coast
 ```{r}
-tbl_regression(gulls_fun_day_BSC, intercept = TRUE)
+tbl_regression(gulls_fun_day_BSC_, intercept = TRUE, 
+               label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
 ```
 
-```{r, fig.width=10}
-gulls_fun_day_FP_fits <-
-  as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_FP,
-                       xlevels = list(gulls_ = seq(min(threat_data__scaled_FP[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_FP[, "gulls_"], na.rm = TRUE), 1))))
+```{r}
+gulls_fun_day_FP__fits <-
+  as.data.frame(effect(term = "funday", mod = gulls_fun_day_FP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_FP[, "funday"], na.rm = TRUE), max(threat_data__scaled_FP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "FP")
 
-gulls_fun_day_FP_plot <-
-  threat_data__scaled_FP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = gulls_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = gulls_fun_day_FP_fits,
-            aes(x = gulls_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = gulls_fun_day_FP_fits,
-              aes(x = gulls_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
+gulls_fun_day_MP__fits <-
+  as.data.frame(effect(term = "funday", mod = gulls_fun_day_MP_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_MP[, "funday"], na.rm = TRUE), max(threat_data__scaled_MP[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "MP")
+
+gulls_fun_day_BSC__fits <-
+  as.data.frame(effect(term = "funday", mod = gulls_fun_day_BSC_,
+                       xlevels = list(funday = seq(min(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), max(threat_data__scaled_BSC[, "funday"], na.rm = TRUE), 1)))) %>% 
+  mutate(region = "BSC")
+
+gulls_fun_day__fits <- 
+  bind_rows(gulls_fun_day_FP__fits, 
+            gulls_fun_day_MP__fits, 
+            gulls_fun_day_BSC__fits) %>% 
+  mutate(funday = ifelse(funday == 0, "no", "yes"))
+
+row.names(gulls_fun_day__fits) <- NULL
+
+ggplot() +
+  geom_line(data = gulls_fun_day__fits, 
+            aes(x = funday, y = fit, color = region, group = region),
+            position = position_dodge(width = 0.5), alpha = 0.2, size = 2) +
+  geom_errorbar(data = gulls_fun_day__fits, 
+                aes(ymin = lower, ymax = upper, 
+                    x = funday, 
+                    y = fit, group = region), position = position_dodge(width = 0.5),
+                alpha = 0.5, color = "black", width = 0.3, lwd = 0.5) +
+  geom_point(data = gulls_fun_day__fits, 
+             aes(x = funday, y = fit, fill = region),
+             shape = 21, size = 4, position = position_dodge(width = 0.5)) +
   luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5)) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of gulls detected") +
-  ggtitle("Fleurieu Peninsula")
-
-gulls_fun_day_MP_fits <-
-  as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_MP,
-                       xlevels = list(gulls_ = seq(min(threat_data__scaled_MP[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_MP[, "gulls_"], na.rm = TRUE), 1))))
-
-gulls_fun_day_MP_plot <-
-  threat_data__scaled_MP %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = gulls_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = gulls_fun_day_MP_fits,
-            aes(x = gulls_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = gulls_fun_day_MP_fits,
-              aes(x = gulls_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of gulls detected") +
-  ggtitle("Mornington Peninsula")
-
-gulls_fun_day_BSC_fits <-
-  as.data.frame(effect(term = "gulls_", mod = gulls_fun_day_BSC,
-                       xlevels = list(gulls_ = seq(min(threat_data__scaled_BSC[, "gulls_"], na.rm = TRUE), max(threat_data__scaled_BSC[, "gulls_"], na.rm = TRUE), 1))))
-
-gulls_fun_day_BSC_plot <-
-  threat_data__scaled_BSC %>%
-  ungroup() %>%
-  ggplot() +
-  geom_jitter(aes(x = gulls_, y = fun),
-             alpha = 0.4, height = 0.05,
-             shape = 19,
-             color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_line(data = gulls_fun_day_BSC_fits,
-            aes(x = gulls_, y = fit),
-            lwd = 1,
-            color = brewer.pal(9, "Set1")[c(2)]) +
-  geom_ribbon(data = gulls_fun_day_BSC_fits,
-              aes(x = gulls_, ymax = upper, ymin = lower),
-              lwd = 1, alpha = 0.25, fill = brewer.pal(9, "Set1")[c(2)]) +
-  luke_theme +
-  theme(panel.border = element_blank(),
-        plot.margin = margin(0, 0, 0.5, 0.5, "cm"),
-        plot.title = element_text(hjust = 0.5),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank()) +
-  ylab("probability of being a weekend or holiday") +
-  xlab("number of gulls detected") +
-  ggtitle("Bellarine / Surf Coast")
-
-gulls_fun_day_FP_plot + gulls_fun_day_MP_plot + gulls_fun_day_BSC_plot +
-  plot_layout(ncol = 3,
-              heights = unit(c(8), 'cm'),
-              widths = unit(c(7, 7, 7), 'cm'))
+  theme(legend.position = "top",
+        legend.justification = c(1, 0),
+        strip.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 10)) +
+  ylab("number of gulls detected (± 95% CI)") +
+  scale_colour_brewer(palette = "Dark2", 
+                      name = "Region", 
+                      labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_fill_brewer(palette = "Dark2",
+                    name = "Region", 
+                    labels = c("Bellarine/Surf Coast", "Fleurieu Peninsula", "Mornington Peninsula")) +
+  scale_x_discrete(labels = c("weekday", "weekend/holiday"))
 ```
-
 
 ```{r, evaluate = FALSE, echo=FALSE}
 # S.fundays_level <- nest_survival_run_FP[[28]]
