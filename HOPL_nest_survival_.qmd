@@ -1596,12 +1596,52 @@ nest_data_BSC <-
 
 ## Importing and checking threat data
 ```{r}
+# FP_threat_data <-
+#   read_excel("data/final/final_final/Merged threat data_FP_MP.xlsx",
+#              sheet = "FP Threat DATA",
+#              col_types = "text") %>%
+#   mutate(season = str_remove(Season, "/")) %>%
+#   filter(Region %in% c("Fleurieu Peninsula")) %>%
+#   rename(obs_lon = `Observation Longitude`,
+#          obs_lat = `Observation Latitude`,
+#          obs_date = `Observation Date`) %>%
+#   mutate(obs_date = as.Date(as.numeric(obs_date),
+#                             origin = "1899-12-30")) %>%
+#   mutate(obs_date2 = as.numeric(format(obs_date + 180, "%j"))) %>%
+#   mutate(region = "FP")
+# 
+# MP_threat_data <-
+#   read_excel("data/final/final_final/Merged threat data_FP_MP.xlsx",
+#              sheet = "MP Threat DATA",
+#              col_types = "text") %>%
+#   mutate(season = str_remove(Season, "/")) %>%
+#   filter(Region %in% c("Mornington Peninsula")) %>%
+#   rename(obs_lon = `Observation Longitude`,
+#          obs_lat = `Observation Latitude`,
+#          obs_date = `Observation Date`) %>%
+#   mutate(obs_date = as.Date(as.numeric(obs_date),
+#                             origin = "1899-12-30")) %>%
+#   mutate(obs_date2 = as.numeric(format(obs_date + 180, "%j"))) %>%
+#   mutate(region = "MP")
+# 
+# BSC_threat_data <-
+#   read_excel("data/final/final_final/Merged threat data_BSC.xlsx",
+#              sheet = "BellSurf Threat DATA",
+#              col_types = "text") %>%
+#   mutate(season = str_remove(Season, "/")) %>%
+#   rename(obs_lon = `Observation Longitude`,
+#          obs_lat = `Observation Latitude`,
+#          obs_date = `Observation date`) %>%
+#   mutate(obs_date = as.Date(as.numeric(obs_date),
+#                             origin = "1899-12-30")) %>%
+#   mutate(obs_date2 = as.numeric(format(obs_date + 180, "%j"))) %>%
+#   mutate(region = "BSC")
+
 FP_threat_data <- 
-  read_excel("data/final/final_final/Merged threat data_FP_MP.xlsx",
+  read_excel("data/final/final_final/final_final_final/Merged threat data.xlsx",
              sheet = "FP Threat DATA", 
              col_types = "text") %>% 
   mutate(season = str_remove(Season, "/")) %>%
-  filter(Region %in% c("Fleurieu Peninsula")) %>% 
   rename(obs_lon = `Observation Longitude`,
          obs_lat = `Observation Latitude`,
          obs_date = `Observation Date`) %>% 
@@ -1611,11 +1651,10 @@ FP_threat_data <-
   mutate(region = "FP")
 
 MP_threat_data <- 
-  read_excel("data/final/final_final/Merged threat data_FP_MP.xlsx",
+  read_excel("data/final/final_final/final_final_final/Merged threat data.xlsx",
              sheet = "MP Threat DATA", 
              col_types = "text") %>% 
   mutate(season = str_remove(Season, "/")) %>%
-  filter(Region %in% c("Mornington Peninsula")) %>% 
   rename(obs_lon = `Observation Longitude`,
          obs_lat = `Observation Latitude`,
          obs_date = `Observation Date`) %>% 
@@ -1625,7 +1664,7 @@ MP_threat_data <-
   mutate(region = "MP")
 
 BSC_threat_data <- 
-  read_excel("data/final/final_final/Merged threat data_BSC.xlsx",
+  read_excel("data/final/final_final/final_final_final/Merged threat data.xlsx",
              sheet = "BellSurf Threat DATA", 
              col_types = "text") %>% 
   mutate(season = str_remove(Season, "/")) %>%
@@ -6209,7 +6248,7 @@ Bellarine / Surf Coast
 ```{r}
 tbl_regression(gulls_fun_day_BSC_, intercept = TRUE, 
                label = list(obs_date2 ~ "Date", funday ~ "Weekends & Holidays"))
-```
+  ```
 
 ```{r}
 gulls_fun_day_FP__fits <-
