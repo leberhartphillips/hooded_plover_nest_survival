@@ -75,7 +75,10 @@ packages_required_in_project <- c("tidyverse",
                                   "pscl",
                                   "gamlss",
                                   "gt",
-                                  "lme4")
+                                  "lme4",
+                                  "timeDate",
+                                  "circular",
+                                  "openxlsx")
                                   
 # of the required packages, check if some need to be installed
 new.packages <- 
@@ -3018,6 +3021,127 @@ sites_intersect_BSC <-
   mutate(season_site = paste(season, site, sep = "_"))
 ```
 
+### determine which site names are not mutually recognized between the nest and the threat data
+```{r}
+# FP
+# Combine and classify unique season_site values
+sites_diff_FP <- full_join(nest_data_FP %>% ungroup() %>% 
+                             mutate(season_site = paste(season, site, sep = "_")) %>% 
+                             select(season_site) %>% distinct() %>% mutate(source = "nest_data_FP"),
+                           threat_data__ %>% ungroup() %>% filter(region == "FP")  %>%
+                             mutate(season_site = paste(season, site, sep = "_")) %>% 
+                             select(season_site) %>% distinct() %>% mutate(source = "threat_data_FP"),
+                           by = "season_site")
+
+# Find unique values in each dataframe
+only_in_nest_data_FP <- 
+  sites_diff_FP %>% 
+  filter(is.na(source.y)) %>% 
+  select(season_site) %>%
+  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  mutate(issue = "only in nest survival data")
+
+only_in_threat_data_FP <-
+  sites_diff_FP %>% 
+  filter(is.na(source.x)) %>% 
+  select(season_site) %>%
+  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  mutate(issue = "only in threat data")
+
+nrow(only_in_nest_data_FP) + nrow(only_in_threat_data_FP) +
+nrow(only_in_nest_data_MP) + nrow(only_in_threat_data_MP) +
+nrow(only_in_nest_data_BSC) + nrow(only_in_threat_data_BSC)
+
+# Create a new workbook
+sites_diff_FP_xl <- createWorkbook()
+
+# Add each dataframe as a sheet
+addWorksheet(sites_diff_FP_xl, "only_in_nest_data_FP")
+writeData(sites_diff_FP_xl, "only_in_nest_data_FP", only_in_nest_data_FP)
+
+addWorksheet(sites_diff_FP_xl, "only_in_threat_data_FP")
+writeData(sites_diff_FP_xl, "only_in_threat_data_FP", only_in_threat_data_FP)
+
+# Save the workbook
+saveWorkbook(sites_diff_FP_xl, here("data/sites_diff_FP_xl.xlsx"), overwrite = TRUE)
+
+# MP
+# Combine and classify unique season_site values
+sites_diff_MP <- full_join(nest_data_MP %>% ungroup() %>% 
+                             mutate(season_site = paste(season, site, sep = "_")) %>% 
+                             select(season_site) %>% distinct() %>% mutate(source = "nest_data_MP"),
+                           threat_data__ %>% ungroup() %>% filter(region == "MP")  %>%
+                             mutate(season_site = paste(season, site, sep = "_")) %>% 
+                             select(season_site) %>% distinct() %>% mutate(source = "threat_data_MP"),
+                           by = "season_site")
+
+# Find unique values in each dataframe
+only_in_nest_data_MP <- 
+  sites_diff_MP %>% 
+  filter(is.na(source.y)) %>% 
+  select(season_site) %>%
+  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  mutate(issue = "only in nest survival data")
+
+only_in_threat_data_MP <-
+  sites_diff_MP %>% 
+  filter(is.na(source.x)) %>% 
+  select(season_site) %>%
+  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  mutate(issue = "only in threat data")
+
+# Create a new workbook
+sites_diff_MP_xl <- createWorkbook()
+
+# Add each dataframe as a sheet
+addWorksheet(sites_diff_MP_xl, "only_in_nest_data_MP")
+writeData(sites_diff_MP_xl, "only_in_nest_data_MP", only_in_nest_data_MP)
+
+addWorksheet(sites_diff_MP_xl, "only_in_threat_data_MP")
+writeData(sites_diff_MP_xl, "only_in_threat_data_MP", only_in_threat_data_MP)
+
+# Save the workbook
+saveWorkbook(sites_diff_MP_xl, here("data/sites_diff_MP_xl.xlsx"), overwrite = TRUE)
+
+# BSC
+# Combine and classify unique season_site values
+sites_diff_BSC <- full_join(nest_data_BSC %>% ungroup() %>% 
+                             mutate(season_site = paste(season, site, sep = "_")) %>% 
+                             select(season_site) %>% distinct() %>% mutate(source = "nest_data_BSC"),
+                           threat_data__ %>% ungroup() %>% filter(region == "BSC")  %>%
+                             mutate(season_site = paste(season, site, sep = "_")) %>% 
+                             select(season_site) %>% distinct() %>% mutate(source = "threat_data_BSC"),
+                           by = "season_site")
+
+# Find unique values in each dataframe
+only_in_nest_data_BSC <- 
+  sites_diff_BSC %>% 
+  filter(is.na(source.y)) %>% 
+  select(season_site) %>%
+  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  mutate(issue = "only in nest survival data")
+
+only_in_threat_data_BSC <-
+  sites_diff_BSC %>% 
+  filter(is.na(source.x)) %>% 
+  select(season_site) %>%
+  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  mutate(issue = "only in threat data")
+
+# Create a new workbook
+sites_diff_BSC_xl <- createWorkbook()
+
+# Add each dataframe as a sheet
+addWorksheet(sites_diff_BSC_xl, "only_in_nest_data_BSC")
+writeData(sites_diff_BSC_xl, "only_in_nest_data_BSC", only_in_nest_data_BSC)
+
+addWorksheet(sites_diff_BSC_xl, "only_in_threat_data_BSC")
+writeData(sites_diff_BSC_xl, "only_in_threat_data_BSC", only_in_threat_data_BSC)
+
+# Save the workbook
+saveWorkbook(sites_diff_BSC_xl, here("data/sites_diff_BSC_xl.xlsx"), overwrite = TRUE)
+```
+
 ```{r}
 ##### Fleurieu Peninsula: summarise threat data
 nest_data_FP_with_threat_data <- 
@@ -3945,6 +4069,17 @@ nest_data_with_threat_data_7d_ <-
   filter(dog_p <= ceiling(as.numeric(threat_data_99_ql_$dog_p[1]))) %>% 
   filter(hof_p <= ceiling(as.numeric(threat_data_99_ql_$hof_p[1]))) %>%
   mutate(fox_p = ifelse(is.infinite(fox_p), 0, fox_p) %>% as.factor())
+```
+
+```{r}
+nest_data_with_threat_data_7d_ %>% mutate(season_site = paste(season, site, sep = "_")) %>% 
+  filter(str_detect(site, "Middleton")) %>% pull(season_site)
+
+only_in_nest_data_FP %>% mutate(season_site = paste(season, site, sep = "_")) %>% 
+  filter(str_detect(site, "Middleton")) %>% pull(season_site)
+
+only_in_threat_data_FP %>% mutate(season_site = paste(season, site, sep = "_")) %>% 
+  filter(str_detect(site, "Middleton")) %>% pull(season_site)
 ```
 
 ### Sample size summary
