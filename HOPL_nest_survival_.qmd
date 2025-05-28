@@ -227,13 +227,13 @@ lucinda_nest_import <-
            first_found_date_col, last_alive_date_col, last_checked_col) {
     if(is.null(extra_text)){
       file <- 
-        read_excel(paste0("data/final/final_final/final_final_final/", file_name), 
+        read_excel(paste0("data/Jasmin/", file_name), 
                    sheet = paste0(site, " ", year_1, "_", str_sub(year_2, 3, 4)), 
                    col_types = "text", na = "n/a")
     }
     else{
     file <- 
-      read_excel(paste0("data/final/final_final/final_final_final/", file_name), 
+      read_excel(paste0("data/Jasmin/", file_name), 
                  sheet = paste0(site, " ", year_1, "_", str_sub(year_2, 3, 4), extra_text), 
                  col_types = "text", na = "n/a")
     }
@@ -244,7 +244,8 @@ lucinda_nest_import <-
              last_checked = last_checked_col,
              Fate = `Hatch?`,
              season = Season,
-             site = Site,
+             # site = Site,
+             site = `Suggested update to site name`,
              nest_ID = `Nest ID`,
              nest_hab = `Nest habitat`,
              management_status = `Nest managed?`,
@@ -254,7 +255,7 @@ lucinda_nest_import <-
       
       # consolidate columns
       dplyr::select(season, site, nest_ID, first_found, last_alive, last_checked, Fate, nest_hab, 
-                    management_status, management_type, nest_lat, nest_lon, site) %>% 
+                    management_status, management_type, nest_lat, nest_lon) %>% 
       
       # wrangle: clean up Fate column for consistency
       mutate(Fate = ifelse(Fate == "?", "Unk", Fate)) %>% 
@@ -336,8 +337,8 @@ lucinda_nest_import <-
                     #-wardens, -none, 
                     -other,
                     -sign_nest_no_sign_access, -fence_no_sign,
-                    -wardens_no_sign, -wardens_no_fence, -just_wardens) %>% 
-      mutate(site = str_extract(nest_ID, "_([^_]+)_") %>% str_remove_all("_"))
+                    -wardens_no_sign, -wardens_no_fence, -just_wardens) #%>% 
+      # mutate(site = str_extract(nest_ID, "_([^_]+)_") %>% str_remove_all("_"))
     }
 
 ```
@@ -376,60 +377,71 @@ First we import the data and run a few checks to assess if there are any rows wi
 13. Last Checked date is before Last Alive date (should be greater or equal)
 
 ```{r}
+MP_nest_data_issues <- 
 suppressMessages(
   bind_rows(
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
+             sheet = paste0("MP", " ", "2023", "_", str_sub("2024", 3, 4)), 
+             col_types = "text", na = "n/a"),
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
+             sheet = paste0("MP", " ", "2022", "_", str_sub("2023", 3, 4)), 
+             col_types = "text", na = "n/a"),
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
+             sheet = paste0("MP", " ", "2021", "_", str_sub("2022", 3, 4)), 
+             col_types = "text", na = "n/a"),
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2020", "_", str_sub("2021", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2019", "_", str_sub("2020", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2018", "_", str_sub("2019", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2017", "_", str_sub("2018", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2016", "_", str_sub("2017", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2015", "_", str_sub("2016", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2014", "_", str_sub("2015", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2013", "_", str_sub("2014", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2012", "_", str_sub("2013", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2011", "_", str_sub("2012", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2010", "_", str_sub("2011", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2009", "_", str_sub("2010", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2008", "_", str_sub("2009", 3, 4)), 
              col_types = "text", na = "n/a"),
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2007", "_", str_sub("2008", 3, 4)), 
              col_types = "text", na = "n/a"), 
-  read_excel(paste0("data/final/final_final/final_final_final/", "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx"), 
+  read_excel(paste0("data/Jasmin/", "MP Nesting Summary All Years - final.xlsx"), 
              sheet = paste0("MP", " ", "2006", "_", str_sub("2007", 3, 4)), 
              col_types = "text", na = "n/a"))) %>% 
     filter(!is.na(Season)) %>% 
-    rename(first_found = 10,
-           last_alive = 27,
-           last_checked = 32,
+    rename(first_found = 12,
+           last_alive = 32,
+           last_checked = 38,
            Fate = `Hatch?`,
            season = Season,
-           site = Site,
+           # site = Site,
+           site = `Suggested update to site name`,
            nest_ID = `Nest ID`,
            nest_hab = `Nest habitat`,
            management_status = `Nest managed?`,
@@ -512,9 +524,9 @@ suppressMessages(
     mutate(issue9 = ifelse(is.na(management_level), "Management type is not sufficient for making levels; ", NA)) %>%
     mutate(found_and_alive_diff = last_alive2 - first_found2) %>% 
     mutate(issue10 = ifelse(found_and_alive_diff > 35 , "Double check dates because incubation time greater than 35 days; ", NA)) %>% 
-    mutate(issue11 = ifelse(FirstFound > LastPresent, "Found date is after Last Alive date (should be greater or equal); ", NA)) %>% 
-    mutate(issue12 = ifelse(FirstFound > LastChecked, "Found date is after Last Checked date (should be greater or equal); ", NA)) %>%
-    mutate(issue13 = ifelse(LastChecked < LastPresent, "Last Checked date is before Last Alive date (should be greater or equal); ", NA)) %>% 
+    mutate(issue11 = ifelse(first_found2 > last_alive2, "Found date is after Last Alive date (should be greater or equal); ", NA)) %>% 
+    mutate(issue12 = ifelse(first_found2 > last_checked2, "Found date is after Last Checked date (should be greater or equal); ", NA)) %>%
+    mutate(issue13 = ifelse(last_checked2 < last_alive2, "Last Checked date is before Last Alive date (should be greater or equal); ", NA)) %>% 
     mutate(issues = ifelse(is.na(issue1) & is.na(issue2) & is.na(issue3) & 
                              is.na(issue4) & is.na(issue5) & is.na(issue6) & 
                              is.na(issue7) & is.na(issue8) & is.na(issue9) & 
@@ -530,95 +542,148 @@ suppressMessages(
                   -issue7, -issue8, -issue9, 
                   -issue10, -issue11, -issue12, -issue13) %>% 
     filter(issues != "usable") %>% 
-    arrange(issues) %>%
-  filter(first_found != "Not found" & last_alive != "Not seen" & last_checked != "Not seen" & last_checked != "Not revisited") %>% 
-  filter(str_detect(issues, "date")) %>% 
-  mutate(issues = str_remove_all(issues, "Management type is not sufficient for making levels; ")) %>% 
-  mutate(issues = str_remove_all(issues, "Nest habitat is not Beach, Dune, Foredune/face, Estuary/spit, or Rocks; ")) %>% 
-  dplyr::select(season, nest_ID, first_found, first_found2, last_alive, last_alive2, last_checked, last_checked2, Fate, found_and_alive_diff, issues) %>%
+    arrange(issues)
+```
+
+#### all issues (probably most of these can't be resolved)
+```{r}
+# Create a new workbook to store issues as two sheets
+MP_nest_issues <- createWorkbook()
+
+# Add all_issues sheet
+addWorksheet(MP_nest_issues, "all_issues")
+
+# view issues interactively in RStudio Viewer
+MP_nest_data_issues %>%
   datatable(class = 'cell-border stripe', rownames = FALSE, filter = 'top')
-  # write_csv(., "data/final/final_final/final_final_final/nest_issues_commented/MP Nesting Summary 2020_21 to 2006_07 site names match threat data_nests_w_issues_commented.csv", col_names = TRUE, append = FALSE, quote = "all")
+
+# write MP_nest_data_check
+writeData(MP_nest_issues, sheet = "all_issues", MP_nest_data_issues)
+```
+
+#### date-specific issues (probably most of these CAN be resolved)
+```{r}
+# Add date_issues
+addWorksheet(MP_nest_issues, "date_issues")
+
+# view issues interactively in RStudio Viewer
+MP_nest_data_issues %>% 
+  filter(first_found != "Not found" & last_alive != "Not seen" & last_checked != "Not seen" & last_checked != "Not revisited") %>%
+  filter(str_detect(issues, "date")) %>%
+  mutate(issues = str_remove_all(issues, "Management type is not sufficient for making levels; ")) %>%
+  mutate(issues = str_remove_all(issues, "Nest habitat is not Beach, Dune, Foredune/face, Estuary/spit, or Rocks; ")) %>%
+  dplyr::select(season, nest_ID, first_found, first_found2, last_alive, last_alive2, last_checked, last_checked2, 
+                Fate, found_and_alive_diff, issues)  %>%
+  datatable(class = 'cell-border stripe', rownames = FALSE, filter = 'top')
+
+# write MP_nest_data_check
+MP_nest_data_issues %>% 
+  filter(first_found != "Not found" & last_alive != "Not seen" & last_checked != "Not seen" & last_checked != "Not revisited") %>%
+  filter(str_detect(issues, "date")) %>%
+  mutate(issues = str_remove_all(issues, "Management type is not sufficient for making levels; ")) %>%
+  mutate(issues = str_remove_all(issues, "Nest habitat is not Beach, Dune, Foredune/face, Estuary/spit, or Rocks; ")) %>%
+  dplyr::select(season, nest_ID, first_found, first_found2, last_alive, last_alive2, last_checked, last_checked2, 
+                Fate, found_and_alive_diff, issues) %>% 
+  writeData(MP_nest_issues, sheet = "date_issues", .)
+
+# Save the workbook
+saveWorkbook(MP_nest_issues, here("data/Jasmin/nest_issues_commented/MP_nest_data_issues_280525.xlsx"), overwrite = TRUE)
 ```
 
 #### Import data
 ```{r}
 nest_data_MP <-
   bind_rows(
+    lucinda_nest_import(year_1 = "2023", year_2 = "2024", 
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 12, 
+                        last_alive_date_col = 32, 
+                        last_checked_col = 38),
+    lucinda_nest_import(year_1 = "2022", year_2 = "2023", 
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 12, 
+                        last_alive_date_col = 32, 
+                        last_checked_col = 38),
+    lucinda_nest_import(year_1 = "2021", year_2 = "2022", 
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 12, 
+                        last_alive_date_col = 32, 
+                        last_checked_col = 38),
     lucinda_nest_import(year_1 = "2020", year_2 = "2021", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2019", year_2 = "2020", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2018", year_2 = "2019", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2017", year_2 = "2018", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2016", year_2 = "2017", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2015", year_2 = "2016", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2014", year_2 = "2015", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2013", year_2 = "2014", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2012", year_2 = "2013", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2011", year_2 = "2012", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2010", year_2 = "2011", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2009", year_2 = "2010", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2008", year_2 = "2009", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2007", year_2 = "2008", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32),
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35),
     lucinda_nest_import(year_1 = "2006", year_2 = "2007", 
-                        file_name = "MP Nesting Summary 2020_21 to 2006_07 fix ups post email from Luke 27_2_24.xlsx", site = "MP",
-                        first_found_date_col = 10, 
-                        last_alive_date_col = 27, 
-                        last_checked_col = 32)) %>% 
+                        file_name = "MP Nesting Summary All Years - final.xlsx", site = "MP",
+                        first_found_date_col = 11, 
+                        last_alive_date_col = 30, 
+                        last_checked_col = 35)) %>% 
   group_by(season) %>% 
   mutate(nocc = max(max(LastChecked, na.rm = TRUE), max(LastPresent, na.rm = TRUE)),
          season = as.factor(season),
@@ -629,7 +694,12 @@ nest_data_MP <-
   filter(nest_hab %in% c("Beach", "Dune", "Foredune/face", "Estuary/spit", "Rocks")) %>%
   filter(!is.na(management_level)) %>% 
   mutate(region = "MP") %>% 
-  mutate(site = as.factor(site)) %>% 
+  mutate(site = as.factor(site)) %>%
+  group_by(season, site) %>%
+  arrange(first_found2, .by_group = TRUE) %>%
+  mutate(rank = row_number()) %>%
+  ungroup() %>%
+  mutate(nest_ID_new = paste(season, site, rank, sep = "_")) %>% 
   ungroup()
 ```
 
@@ -650,23 +720,28 @@ nest_data_MP_check <-
   mutate(first_found2_trans = as.Date(paste("2020", first_found2_md, sep = "-"), format = "%Y-%m-%d") - 179,
          last_alive2_trans = as.Date(paste("2020", last_alive2_md, sep = "-"), format = "%Y-%m-%d") - 179,
          last_checked2_trans = as.Date(paste("2020", last_checked2_md, sep = "-"), format = "%Y-%m-%d") - 179) %>% 
-  mutate(season_label = paste0("season ", str_sub(season, 1, 4), " to ", str_sub(season, 5, 6)),
+  mutate(season_label = paste0(str_sub(season, 1, 4), " to ", str_sub(season, 5, 6)),
          Fate = as.factor(Fate))
 ```
 
 ##### Spatial distribution of data
-Note that this map only shows data that are in a decimal degrees format (e.g., `-38.31`), NOT degree minute seconds (e.g., `38 27.59`). The map is interactive, so click on an outlier to see its metadata
+Note that this map only shows data that are in a decimal degrees format (e.g., `-38.31`), NOT degree minute seconds (e.g., `38 27.59`). The map is interactive, so click on an outlier to see its metadata. Note that all nests in the 200607 and 200708 seasons are missing coordinates
 ```{r}
-nest_data_MP %>% 
+nest_data_MP_sf <-
+  nest_data_MP %>% 
+  as.data.frame() %>% 
   mutate(nest_lon = as.numeric(nest_lon),
          nest_lat = as.numeric(nest_lat)) %>% 
   filter(!is.na(nest_lon) & !is.na(nest_lat)) %>%
   st_as_sf(coords = c("nest_lon", "nest_lat"), 
-           crs = 4326) %>%
-  mapview(popup = popupTable(.,
-                             zcol = c("season",
-                                      "site",
-                                      "nest_ID")))
+           crs = 4326)
+
+mapview(nest_data_MP_sf,
+        zcol = "season", 
+        popup = popupTable(nest_data_MP_sf,
+                           zcol = c("season",
+                                    "site",
+                                    "nest_ID")))
 ```
 
 ##### Year-specific Found Date Distributions
@@ -724,9 +799,9 @@ ggplot(nest_data_MP_check, aes(last_alive2_trans, fill = as.factor(Fate))) +
                     name = "Nest Fate",
                     labels = c("Hatched", "Failed")) +
   ylab("weekly number of nests") +
-  scale_x_date(date_labels = "%B", 
-               expand = c(0.01, 0.01), 
-               date_breaks = "1 months", limits = c(min(nest_data_MP_check$first_found2_trans, na.rm = TRUE), 
+  scale_x_date(date_labels = "%B",
+               expand = c(0.01, 0.01),
+               date_breaks = "1 months", limits = c(min(nest_data_MP_check$first_found2_trans, na.rm = TRUE),
                                                     max(nest_data_MP_check$last_checked2_trans, na.rm = TRUE))) +
   facet_wrap("season_label") +
   scale_y_continuous(limits = c(0, 12), breaks = c(2, 4, 6, 8, 10, 12)) +
@@ -793,8 +868,11 @@ MP_nests_with_issues <-
                 -issue4, -issue5, -issue6, 
                 -issue7, -issue8, -issue9, 
                 -issue10, -issue11, -issue12, -issue13) %>% 
-  filter(issues != "usable") %>% dplyr::select(nest_ID, issues)
+  filter(issues != "usable") %>% #dplyr::select(nest_ID, issues) %>% 
+  arrange(issues)
   
+MP_nest_data_issues %>% filter(nest_ID %in% MP_nests_with_issues$nest_ID)
+
 # remove nests with issues
 nest_data_MP <- 
   nest_data_MP %>% 
@@ -964,62 +1042,62 @@ nest_data_FP <-
   bind_rows(
     lucinda_nest_import(year_1 = "2020", year_2 = "2021", 
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2019", year_2 = "2020", 
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2018", year_2 = "2019", 
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2017", year_2 = "2018",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2016", year_2 = "2017",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2015", year_2 = "2016",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2014", year_2 = "2015",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2013", year_2 = "2014",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2012", year_2 = "2013",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2011", year_2 = "2012",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2010", year_2 = "2011",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36),
     lucinda_nest_import(year_1 = "2009", year_2 = "2010",
                         file_name = "FP Nesting summary 2020_21 to 2009_10 FINAL- no changes made post email from luke 27_2_24.xlsx", site = "FP", extra_text = " Nest summary",
-                        first_found_date_col = 10, 
+                        first_found_date_col = 11, 
                         last_alive_date_col = 29, 
                         last_checked_col = 36)) %>% 
   group_by(season) %>% 
@@ -1373,49 +1451,49 @@ suppressMessages(bind_rows(
 nest_data_BSC <-
   bind_rows(
     lucinda_nest_import(year_1 = "2020", year_2 = "2021", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2019", year_2 = "2020", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2018", year_2 = "2019", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2017", year_2 = "2018", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2016", year_2 = "2017", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2015", year_2 = "2016", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2014", year_2 = "2015", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2013", year_2 = "2014", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2012", year_2 = "2013", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2011", year_2 = "2012", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2010", year_2 = "2011", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2009", year_2 = "2010", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2008", year_2 = "2009", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2007", year_2 = "2008", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
     lucinda_nest_import(year_1 = "2006", year_2 = "2007", 
-                        first_found_date_col = 10, last_alive_date_col = 29, last_checked_col = 36,
+                        first_found_date_col = 11, last_alive_date_col = 29, last_checked_col = 36,
                         file_name = "Bellarine_Surf Coast Nesting 2006_2021 fix ups post email from Luke 27_2_24.xlsx", site = "BellSurfCoast"),
   ) %>%
   group_by(season) %>%
@@ -2305,7 +2383,10 @@ FP_holidays <-
     holiday_aus(2018, state = "SA"),
     holiday_aus(2019, state = "SA"),
     holiday_aus(2020, state = "SA"),
-    holiday_aus(2021, state = "SA")) %>% 
+    holiday_aus(2021, state = "SA"),
+    holiday_aus(2022, state = "SA"),
+    holiday_aus(2023, state = "SA"),
+    holiday_aus(2024, state = "SA")) %>% 
   mutate(event = holiday) %>% 
   mutate(region = "FP",
          end_date = date) %>% 
@@ -2400,7 +2481,10 @@ MP_holidays <-
     holiday_aus(2018, state = "VIC"),
     holiday_aus(2019, state = "VIC"),
     holiday_aus(2020, state = "VIC"),
-    holiday_aus(2021, state = "VIC")) %>% 
+    holiday_aus(2021, state = "VIC"),
+    holiday_aus(2022, state = "VIC"),
+    holiday_aus(2023, state = "VIC"),
+    holiday_aus(2024, state = "VIC")) %>% 
   mutate(event = holiday) %>% 
   mutate(region = "MP",
          end_date = date) %>% 
@@ -3038,19 +3122,57 @@ only_in_nest_data_FP <-
   sites_diff_FP %>% 
   filter(is.na(source.y)) %>% 
   select(season_site) %>%
-  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  # separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
   mutate(issue = "only in nest survival data")
 
 only_in_threat_data_FP <-
   sites_diff_FP %>% 
   filter(is.na(source.x)) %>% 
   select(season_site) %>%
-  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  # separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
   mutate(issue = "only in threat data")
+  
+# fuzzy matching and data cleaning
+library(fuzzyjoin)
+clean_text <- function(x) {
+  x %>%
+    str_replace_all("[^a-zA-Z0-9 _]", "") %>%  # Remove special characters but keep letters, numbers, and spaces
+    str_replace_all("\\s+", "_") %>%         # Replace spaces with underscores
+    tolower()                                 # Convert to lowercase
+}
 
-nrow(only_in_nest_data_FP) + nrow(only_in_threat_data_FP) +
-nrow(only_in_nest_data_MP) + nrow(only_in_threat_data_MP) +
-nrow(only_in_nest_data_BSC) + nrow(only_in_threat_data_BSC)
+# Perform fuzzy join
+fuzzy_result_FP <-
+  stringdist_full_join(
+    nest_data_FP %>% 
+    ungroup() %>% 
+    mutate(season_site = paste(season, site, sep = "_")) %>% 
+    select(season_site) %>% distinct() %>% mutate(source = "nest_data_FP") %>% 
+    mutate(season_site_clean = clean_text(season_site)), 
+    threat_data__ %>% 
+    ungroup() %>% 
+    filter(region == "FP")  %>%
+    mutate(season_site = paste(season, site, sep = "_")) %>% 
+    select(season_site) %>% distinct() %>% mutate(source = "threat_data_FP") %>% 
+    mutate(season_site_clean = clean_text(season_site)), 
+    by = "season_site_clean", 
+    method = "jw", # Jaro-Winkler distance
+    max_dist = 0.2, # Adjust for optimal matching
+    distance_col = "dist") %>% 
+  left_join(., only_in_nest_data_FP, by = c("season_site.x" = "season_site")) %>% 
+  left_join(., only_in_threat_data_FP, by = c("season_site.y" = "season_site")) %>% 
+  mutate(nest_season = str_extract(season_site.x, "^\\d{6}"),
+         threat_season = str_extract(season_site.y, "^\\d{6}")) %>% 
+  filter(nest_season == threat_season) %>% 
+  group_by(season_site.x) %>%
+  slice_min(order_by = dist) %>%  # Keep only the best fuzzy match per season
+  ungroup() %>% 
+  mutate(site_nest_data = str_remove(season_site.x, "^\\d{6}_?"),
+         site_threat_data = str_remove(season_site.y, "^\\d{6}_?")) %>% 
+  filter(issue.x == "only in nest survival data") %>% 
+  select(nest_season, site_nest_data, site_threat_data, dist) %>% 
+  arrange(desc(dist)) %>% 
+  rename(season = nest_season)
 
 # Create a new workbook
 sites_diff_FP_xl <- createWorkbook()
@@ -3061,6 +3183,9 @@ writeData(sites_diff_FP_xl, "only_in_nest_data_FP", only_in_nest_data_FP)
 
 addWorksheet(sites_diff_FP_xl, "only_in_threat_data_FP")
 writeData(sites_diff_FP_xl, "only_in_threat_data_FP", only_in_threat_data_FP)
+
+addWorksheet(sites_diff_FP_xl, "fuzzy_matches_to_consider")
+writeData(sites_diff_FP_xl, "fuzzy_matches_to_consider", fuzzy_result_FP)
 
 # Save the workbook
 saveWorkbook(sites_diff_FP_xl, here("data/sites_diff_FP_xl.xlsx"), overwrite = TRUE)
@@ -3080,15 +3205,48 @@ only_in_nest_data_MP <-
   sites_diff_MP %>% 
   filter(is.na(source.y)) %>% 
   select(season_site) %>%
-  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  # separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
   mutate(issue = "only in nest survival data")
 
 only_in_threat_data_MP <-
   sites_diff_MP %>% 
   filter(is.na(source.x)) %>% 
   select(season_site) %>%
-  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  # separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
   mutate(issue = "only in threat data")
+
+# Perform fuzzy join
+fuzzy_result_MP <-
+  stringdist_full_join(
+    nest_data_MP %>% 
+    ungroup() %>% 
+    mutate(season_site = paste(season, site, sep = "_")) %>% 
+    select(season_site) %>% distinct() %>% mutate(source = "nest_data_MP") %>% 
+    mutate(season_site_clean = clean_text(season_site)), 
+    threat_data__ %>% 
+    ungroup() %>% 
+    filter(region == "MP")  %>%
+    mutate(season_site = paste(season, site, sep = "_")) %>% 
+    select(season_site) %>% distinct() %>% mutate(source = "threat_data_MP") %>% 
+    mutate(season_site_clean = clean_text(season_site)), 
+    by = "season_site_clean", 
+    method = "jw", # Jaro-Winkler distance
+    max_dist = 0.2, # Adjust for optimal matching
+    distance_col = "dist") %>% 
+  left_join(., only_in_nest_data_MP, by = c("season_site.x" = "season_site")) %>% 
+  left_join(., only_in_threat_data_MP, by = c("season_site.y" = "season_site")) %>% 
+  mutate(nest_season = str_extract(season_site.x, "^\\d{6}"),
+         threat_season = str_extract(season_site.y, "^\\d{6}")) %>% 
+  filter(nest_season == threat_season) %>% 
+  group_by(season_site.x) %>%
+  slice_min(order_by = dist) %>%  # Keep only the best fuzzy match per season
+  ungroup() %>% 
+  mutate(site_nest_data = str_remove(season_site.x, "^\\d{6}_?"),
+         site_threat_data = str_remove(season_site.y, "^\\d{6}_?")) %>% 
+  filter(issue.x == "only in nest survival data") %>% 
+  select(nest_season, site_nest_data, site_threat_data, dist) %>% 
+  arrange(desc(dist)) %>% 
+  rename(season = nest_season)
 
 # Create a new workbook
 sites_diff_MP_xl <- createWorkbook()
@@ -3099,6 +3257,9 @@ writeData(sites_diff_MP_xl, "only_in_nest_data_MP", only_in_nest_data_MP)
 
 addWorksheet(sites_diff_MP_xl, "only_in_threat_data_MP")
 writeData(sites_diff_MP_xl, "only_in_threat_data_MP", only_in_threat_data_MP)
+
+addWorksheet(sites_diff_MP_xl, "fuzzy_matches_to_consider")
+writeData(sites_diff_MP_xl, "fuzzy_matches_to_consider", fuzzy_result_MP)
 
 # Save the workbook
 saveWorkbook(sites_diff_MP_xl, here("data/sites_diff_MP_xl.xlsx"), overwrite = TRUE)
@@ -3118,15 +3279,48 @@ only_in_nest_data_BSC <-
   sites_diff_BSC %>% 
   filter(is.na(source.y)) %>% 
   select(season_site) %>%
-  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  # separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
   mutate(issue = "only in nest survival data")
 
 only_in_threat_data_BSC <-
   sites_diff_BSC %>% 
   filter(is.na(source.x)) %>% 
   select(season_site) %>%
-  separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
+  # separate(season_site, into = c("season", "site"), sep = "_", extra = "merge") %>% 
   mutate(issue = "only in threat data")
+
+# Perform fuzzy join
+fuzzy_result_BSC <-
+  stringdist_full_join(
+    nest_data_BSC %>% 
+    ungroup() %>% 
+    mutate(season_site = paste(season, site, sep = "_")) %>% 
+    select(season_site) %>% distinct() %>% mutate(source = "nest_data_BSC") %>% 
+    mutate(season_site_clean = clean_text(season_site)), 
+    threat_data__ %>% 
+    ungroup() %>% 
+    filter(region == "BSC")  %>%
+    mutate(season_site = paste(season, site, sep = "_")) %>% 
+    select(season_site) %>% distinct() %>% mutate(source = "threat_data_BSC") %>% 
+    mutate(season_site_clean = clean_text(season_site)), 
+    by = "season_site_clean", 
+    method = "jw", # Jaro-Winkler distance
+    max_dist = 0.2, # Adjust for optimal matching
+    distance_col = "dist") %>% 
+  left_join(., only_in_nest_data_BSC, by = c("season_site.x" = "season_site")) %>% 
+  left_join(., only_in_threat_data_BSC, by = c("season_site.y" = "season_site")) %>% 
+  mutate(nest_season = str_extract(season_site.x, "^\\d{6}"),
+         threat_season = str_extract(season_site.y, "^\\d{6}")) %>% 
+  filter(nest_season == threat_season) %>% 
+  group_by(season_site.x) %>%
+  slice_min(order_by = dist) %>%  # Keep only the best fuzzy match per season
+  ungroup() %>% 
+  mutate(site_nest_data = str_remove(season_site.x, "^\\d{6}_?"),
+         site_threat_data = str_remove(season_site.y, "^\\d{6}_?")) %>% 
+  filter(issue.x == "only in nest survival data") %>% 
+  select(nest_season, site_nest_data, site_threat_data, dist) %>% 
+  arrange(desc(dist)) %>% 
+  rename(season = nest_season)
 
 # Create a new workbook
 sites_diff_BSC_xl <- createWorkbook()
@@ -3138,8 +3332,13 @@ writeData(sites_diff_BSC_xl, "only_in_nest_data_BSC", only_in_nest_data_BSC)
 addWorksheet(sites_diff_BSC_xl, "only_in_threat_data_BSC")
 writeData(sites_diff_BSC_xl, "only_in_threat_data_BSC", only_in_threat_data_BSC)
 
+addWorksheet(sites_diff_BSC_xl, "fuzzy_matches_to_consider")
+writeData(sites_diff_BSC_xl, "fuzzy_matches_to_consider", fuzzy_result_BSC)
+
 # Save the workbook
 saveWorkbook(sites_diff_BSC_xl, here("data/sites_diff_BSC_xl.xlsx"), overwrite = TRUE)
+  
+nrow(fuzzy_result_BSC) + nrow(fuzzy_result_FP) + nrow(fuzzy_result_MP)
 ```
 
 ```{r}
@@ -3629,6 +3828,9 @@ nest_data_MP_with_threat_data <- readRDS(file = "output/nest_data_MP_with_threat
 nest_data_BSC_with_threat_data <- 
   nest_data_BSC %>% 
   mutate(season_site = paste(season, site, sep = "_")) %>% 
+  ####
+  
+  ####
   filter(season_site %in% sites_intersect_BSC$season_site) %>%
   dplyr::select(season, site, region, nest_ID, 
                 FirstFound, LastPresent, LastChecked,
